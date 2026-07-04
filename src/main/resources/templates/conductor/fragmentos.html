@@ -1,33 +1,24 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<!-- # Declara HTML5 y habilita el uso de atributos th: de Thymeleaf en todo este archivo -->
 
 <!-- ===================== TABLA DE CONDUCTORES ===================== -->
 <section th:fragment="tablaConductores" class="container py-4">
-<!-- # Define este bloque como el fragmento reutilizable llamado "tablaConductores" -->
-<!-- # Se invoca desde otro archivo con: th:replace="~{conductor/fragmentos :: tablaConductores}" -->
 
     <div class="card shadow">
-    <!-- # Contenedor visual tipo "tarjeta" de Bootstrap, con sombra -->
 
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-        <!-- # Cabecera azul de la tarjeta: título a la izquierda, botón a la derecha (flex) -->
             <h4 class="mb-0">Gestión de Conductores</h4>
             <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalConductor">
-            <!-- # Al hacer clic, abre el modal cuyo id="modalConductor" (definido más abajo) -->
                 + Nuevo Conductor
             </button>
         </div>
 
         <div class="card-body">
-        <!-- # Cuerpo de la tarjeta: acá va toda la tabla -->
 
             <table class="table table-hover align-middle">
-            <!-- # Tabla de Bootstrap con efecto hover y celdas centradas verticalmente -->
 
                 <thead class="table-dark">
-                <!-- # Encabezado de la tabla, con fondo oscuro -->
                     <tr>
                         <th>ID</th>
                         <th>Nombre</th>
@@ -41,24 +32,16 @@
 
                 <tbody>
                     <tr th:each="c : ${conductores}">
-                    <!-- # BUCLE: repite esta fila una vez por cada elemento de la lista "conductores" -->
-                    <!-- # "conductores" viene del Model del controller: model.addAttribute("conductores", ...) -->
-                    <!-- # "c" es el nombre que le damos a cada conductor individual dentro del bucle -->
 
                         <td th:text="${c.idConductor}"></td>
-                        <!-- # Muestra c.getIdConductor() como texto de la celda -->
 
                         <td th:text="${c.nombre}"></td>
-                        <!-- # Muestra c.getNombre() -->
 
                         <td th:text="${c.telefono}"></td>
-                        <!-- # Muestra c.getTelefono() -->
 
                         <td th:text="${c.numeroLicencia}"></td>
-                        <!-- # Muestra c.getNumeroLicencia() -->
 
                         <td th:text="${c.fechaVencimientoLicencia}"></td>
-                        <!-- # Muestra c.getFechaVencimientoLicencia() -->
 
                         <td>
                             <span th:if="${c.estado}" class="badge bg-success">Activo</span>
@@ -70,20 +53,13 @@
                         <td class="text-center">
                             <a class="btn btn-warning btn-sm"
                                th:href="@{/conductor/modificar/{id}(id=${c.idConductor})}">
-                            <!-- # Arma dinámicamente la URL: /conductor/modificar/5 (usando el ID de este conductor) -->
-                            <!-- # @{ } se usa para construir RUTAS, a diferencia de ${ } que trae DATOS -->
                                 Editar
                             </a>
 
-                            <form th:action="@{/conductor/eliminar}" method="post" class="d-inline">
-                            <!-- # Formulario que envía POST a /conductor/eliminar -->
-                            <!-- # class="d-inline" hace que el form se vea en la misma línea que el botón Editar -->
-                                <input type="hidden" name="idConductor" th:value="${c.idConductor}"/>
-                                <!-- # Campo invisible que viaja con el ID del conductor a eliminar -->
-                                <!-- # "name" debe coincidir con el @RequestParam del controller -->
+                            <form th:action="@{/conductor/eliminar}" method="post" class="d-inline">                            
+                                <input type="hidden" name="idConductor" th:value="${c.idConductor}"/>                  
                                 <button type="submit" class="btn btn-danger btn-sm"
                                         onclick="return confirm('¿Eliminar este conductor?')">
-                                <!-- # onclick es JavaScript puro: pide confirmación antes de enviar el form -->
                                     Eliminar
                                 </button>
                             </form>
@@ -101,28 +77,21 @@
 
 <!-- ===================== MODAL CREAR CONDUCTOR ===================== -->
 <div class="modal fade" id="modalConductor" tabindex="-1" aria-hidden="true">
-<!-- # Estructura de ventana emergente (modal) de Bootstrap -->
-<!-- # id="modalConductor" es lo que lo conecta con el botón "+ Nuevo Conductor" de arriba -->
     <div class="modal-dialog">
         <div class="modal-content">
 
             <div class="modal-header bg-primary text-white">
                 <h5 class="modal-title">Registrar Conductor</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                <!-- # Botón "X" para cerrar el modal sin enviar nada -->
             </div>
 
             <form th:action="@{/conductor/guardar}" method="post">
-            <!-- # Este formulario envía POST a /conductor/guardar -->
-            <!-- # Coincide con: @PostMapping("/guardar") en ConductorController -->
 
                 <div class="modal-body">
 
                     <div class="mb-3">
                         <label class="form-label">Nombre</label>
                         <input type="text" name="nombre" class="form-control" maxlength="100" required>
-                        <!-- # "name" debe coincidir EXACTO con el atributo "nombre" de la entidad Conductor -->
-                        <!-- # required = validación del navegador (extra a las de @Valid en el backend) -->
                     </div>
 
                     <div class="mb-3">
@@ -133,7 +102,6 @@
                     <div class="mb-3">
                         <label class="form-label">Número de licencia</label>
                         <input type="text" name="numeroLicencia" class="form-control" maxlength="50" required>
-                        <!-- # "numeroLicencia" en camelCase, igual que el atributo Java -->
                     </div>
 
                     <div class="mb-3">
@@ -158,11 +126,9 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         Cancelar
                     </button>
-                    <!-- # type="button" (NO "submit") evita que este botón envíe el formulario -->
                     <button type="submit" class="btn btn-primary">
                         Guardar conductor
                     </button>
-                    <!-- # Este SÍ envía el formulario, al ser type="submit" -->
                 </div>
 
             </form>
