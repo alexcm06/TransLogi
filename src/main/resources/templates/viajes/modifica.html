@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{general/fragmentos :: head}"></head>
+
+<body>
+
+<!-- HEADER -->
+<header th:replace="~{general/fragmentos :: header}"></header>
+
+<div class="container py-4">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-warning">
+            <h4>Modificar Viaje</h4>
+        </div>
+
+        <div class="card-body">
+
+            <form th:action="@{/viaje/guardar}" method="post">
+
+                <!-- ID oculto -->
+                <input type="hidden" name="idViaje" th:value="${viaje.idViaje}"/>
+
+                <!-- FECHA -->
+                <div class="mb-3">
+                    <label class="form-label">Fecha programada</label>
+                    <input type="date"
+                           name="fechaProgramada"
+                           class="form-control"
+                           th:value="${viaje.fechaProgramada}"
+                           required>
+                </div>
+
+                <!-- HORA -->
+                <div class="mb-3">
+                    <label class="form-label">Hora programada</label>
+                    <input type="time"
+                           name="horaProgramada"
+                           class="form-control"
+                           th:value="${viaje.horaProgramada}"
+                           required>
+                </div>
+
+                <!-- PASAJEROS -->
+                <div class="mb-3">
+                    <label class="form-label">Cantidad de pasajeros</label>
+                    <input type="number"
+                           name="cantidadPasajeros"
+                           class="form-control"
+                           th:value="${viaje.cantidadPasajeros}"
+                           min="1"
+                           required>
+                </div>
+
+                <!-- EMPRESA -->
+                <div class="mb-3">
+                    <label class="form-label">Empresa</label>
+                    <select name="empresa" class="form-select">
+                        <option th:each="e : ${empresas}"
+                                th:value="${e.idEmpresa}"
+                                th:text="${e.nombre}"
+                                th:selected="${viaje.empresa.idEmpresa == e.idEmpresa}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- CONDUCTOR -->
+                <div class="mb-3">
+                    <label class="form-label">Conductor</label>
+                    <select name="conductor" class="form-select">
+                        <option th:each="c : ${conductores}"
+                                th:value="${c.idConductor}"
+                                th:text="${c.nombre}"
+                                th:selected="${viaje.conductor.idConductor == c.idConductor}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- ORIGEN -->
+                <div class="mb-3">
+                    <label class="form-label">Origen</label>
+                    <select name="origen" class="form-select">
+                        <option th:each="u : ${ubicaciones}"
+                                th:value="${u.idUbicacion}"
+                                th:text="${u.nombre}"
+                                th:selected="${viaje.origen.idUbicacion == u.idUbicacion}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- DESTINO -->
+                <div class="mb-3">
+                    <label class="form-label">Destino</label>
+                    <select name="destino" class="form-select">
+                        <option th:each="u : ${ubicaciones}"
+                                th:value="${u.idUbicacion}"
+                                th:text="${u.nombre}"
+                                th:selected="${viaje.destino.idUbicacion == u.idUbicacion}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- ESTADO -->
+                <div class="mb-3">
+                    <label class="form-label">Estado del viaje</label>
+                    <select name="estadoViaje" class="form-select">
+                        <option th:each="e : ${estados}"
+                                th:value="${e.idEstadoViaje}"
+                                th:text="${e.nombreEstado}"
+                                th:selected="${viaje.estadoViaje.idEstadoViaje == e.idEstadoViaje}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- OBSERVACIONES -->
+                <div class="mb-3">
+                    <label class="form-label">Observaciones</label>
+                    <textarea name="observaciones"
+                              class="form-control"
+                              maxlength="500"
+                              th:text="${viaje.observaciones}">
+                    </textarea>
+                </div>
+
+                <!-- BOTONES -->
+                <div class="d-flex justify-content-between">
+
+                    <a th:href="@{/viaje/listado}" class="btn btn-secondary">
+                        Cancelar
+                    </a>
+
+                    <button type="submit" class="btn btn-primary">
+                        Guardar cambios
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+
+</body>
+</html>
