@@ -39,6 +39,7 @@ public class EmpresaController {
         var empresas = empresaService.getEmpresas(false);
         model.addAttribute("empresas", empresas);
         model.addAttribute("totalEmpresas", empresas.size());
+        model.addAttribute("empresa", new Empresa());
         return "/empresa/listado";
     }
 

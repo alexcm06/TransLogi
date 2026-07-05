@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{general/fragmentos :: head}"></head>
+
+    <body>
+
+        <div th:replace="~{general/fragmentos :: sidebar}"></div>
+
+        <main class="main-content">
+
+            <div th:replace="~{empresa/fragmentos :: titulo}"></div>
+
+            <div th:replace="~{empresa/fragmentos :: tablaEmpresas}"></div>
+
+        </main>
+        <div th:replace="~{empresa/fragmentos :: modalAgregar}"></div>
+        <div th:replace="~{empresa/fragmentos :: modalEliminar}"></div>
+        <footer th:replace="~{general/fragmentos :: scripts}"></footer>
+
+    </body>
+</html>

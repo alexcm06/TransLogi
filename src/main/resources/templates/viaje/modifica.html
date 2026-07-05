@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <head th:replace="~{general/fragmentos :: head}"></head>
+
+    <body>
+
+        <aside th:replace="~{general/fragmentos :: sidebar}"></aside>
+
+        <main class="main-content">
+
+            <div class="container-fluid">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+
+                    <div>
+                        <h2 class="page-title">Modificar Viaje</h2>
+                        <p class="page-subtitle">
+                            Actualice la información del viaje.
+                        </p>
+                    </div>
+
+                    <a th:href="@{/viaje/listado}"
+                       class="btn btn-outline-secondary">
+
+                        <i class="bi bi-arrow-left"></i>
+                        Volver
+
+                    </a>
+
+                </div>
+
+                <div class="card shadow-sm">
+
+                    <div class="card-body">
+
+                        <form th:action="@{/viaje/guardar}"
+                              method="post">
+
+                            <input type="hidden"
+                                   name="idViaje"
+                                   th:value="${viaje.idViaje}">
+
+                            <div class="row">
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label class="form-label">Fecha</label>
+
+                                    <input type="date"
+                                           class="form-control"
+                                           name="fechaProgramada"
+                                           th:value="${viaje.fechaProgramada}"
+                                           required>
+
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label class="form-label">Hora</label>
+
+                                    <input type="time"
+                                           class="form-control"
+                                           name="horaProgramada"
+                                           th:value="${viaje.horaProgramada}"
+                                           required>
+
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label class="form-label">Empresa</label>
+
+                                    <select class="form-select"
+                                            name="empresa">
+
+                                        <option th:each="e : ${empresas}"
+                                                th:value="${e.idEmpresa}"
+                                                th:text="${e.nombre}"
+                                                th:selected="${e.idEmpresa==viaje.empresa.idEmpresa}">
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label class="form-label">Conductor</label>
+
+                                    <select class="form-select"
+                                            name="conductor">
+
+                                        <option th:each="c:${conductores}"
+                                                th:value="${c.idConductor}"
+                                                th:text="${c.nombre}"
+                                                th:selected="${c.idConductor==viaje.conductor.idConductor}">
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label class="form-label">Origen</label>
+
+                                    <select class="form-select"
+                                            name="origen">
+
+                                        <option th:each="o:${ubicaciones}"
+                                                th:value="${o.idUbicacion}"
+                                                th:text="${o.nombre}"
+                                                th:selected="${o.idUbicacion==viaje.origen.idUbicacion}">
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label class="form-label">Destino</label>
+
+                                    <select class="form-select"
+                                            name="destino">
+
+                                        <option th:each="d:${ubicaciones}"
+                                                th:value="${d.idUbicacion}"
+                                                th:text="${d.nombre}"
+                                                th:selected="${d.idUbicacion==viaje.destino.idUbicacion}">
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label class="form-label">Estado</label>
+
+                                    <select class="form-select"
+                                            name="estadoViaje">
+
+                                        <option th:each="e:${estados}"
+                                                th:value="${e.idEstadoViaje}"
+                                                th:text="${e.nombreEstado}"
+                                                th:selected="${e.idEstadoViaje==viaje.estadoViaje.idEstadoViaje}">
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label class="form-label">
+                                        Cantidad de pasajeros
+                                    </label>
+
+                                    <input type="number"
+                                           class="form-control"
+                                           name="cantidadPasajeros"
+                                           min="1"
+                                           th:value="${viaje.cantidadPasajeros}">
+
+                                </div>
+
+                                <div class="col-12 mb-4">
+
+                                    <label class="form-label">
+                                        Observaciones
+                                    </label>
+
+                                    <textarea class="form-control"
+                                              rows="4"
+                                              name="observaciones"
+                                              th:text="${viaje.observaciones}">
+                                    </textarea>
+
+                                </div>
+
+                            </div>
+
+                            <div class="text-end">
+
+                                <a th:href="@{/viaje/listado}"
+                                   class="btn btn-secondary">
+
+                                    Cancelar
+
+                                </a>
+
+                                <button type="submit"
+                                        class="btn btn-primary">
+
+                                    <i class="bi bi-check-lg"></i>
+                                    Guardar cambios
+
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+        <footer th:replace="~{general/fragmentos :: footer}"></footer>
+
+        <div th:replace="~{general/fragmentos :: scripts}"></div>
+
+    </body>
+</html>

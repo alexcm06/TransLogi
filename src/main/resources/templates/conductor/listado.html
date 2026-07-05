@@ -1,16 +1,23 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 
-    <head th:replace="~{general/fragmentos :: head}"></head>
-    
+<head th:replace="~{general/fragmentos :: head}"></head>
+
 <body>
 
-<header th:replace="~{general/fragmentos :: header}"></header>
+    <aside th:replace="~{general/fragmentos :: sidebar}"></aside>
 
-<section th:replace="~{conductor/fragmentos :: tablaConductores}"></section>
+    <main class="main-content">
 
-<footer th:replace="~{general/fragmentos :: footer}"></footer>
+        <section th:replace="~{conductor/fragmentos :: titulo}"></section>
+
+        <section th:replace="~{conductor/fragmentos :: tablaConductores}"></section>
+
+    </main>
+    <div th:replace="~{conductor/fragmentos :: modalAgregar}"></div>
+    <div th:replace="~{conductor/fragmentos :: modalEliminar}"></div>
+    <footer th:replace="~{general/fragmentos :: scripts}"></footer>
 
 </body>
+
 </html>

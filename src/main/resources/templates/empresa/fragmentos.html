@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <!-- TÍTULO -->
+    <section th:fragment="titulo">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <div>
+
+                <h2 class="fw-bold mb-1">
+                <i class="bi bi-buildings-fill text-primary"></i>
+                Empresas
+                </h2>
+
+                <p class="page-subtitle">
+                    Gestión de empresas clientes
+                </p>
+
+            </div>
+
+            <button class="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalAgregarEmpresa">
+
+                <i class="bi bi-plus-circle"></i>
+                Nueva empresa
+
+            </button>
+
+        </div>
+
+    </section>
+    <!-- TABLA -->
+    <section th:fragment="tablaEmpresas">
+
+        <div class="card shadow-sm">
+
+            <div class="card-header d-flex justify-content-between align-items-center">
+
+                <h5 class="mb-0">
+                    Empresas registradas
+                </h5>
+
+                <span class="badge bg-primary"
+                      th:text="${totalEmpresas}">
+                    0
+                </span>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Empresa</th>
+                                <th>Teléfono</th>
+                                <th>Correo</th>
+                                <th>Estado</th>
+                                <th class="text-center">Acciones</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr th:each="empresa : ${empresas}">
+
+                                <td th:text="${empresa.nombre}"></td>
+
+                                <td th:text="${empresa.telefono}"></td>
+
+                                <td th:text="${empresa.correoContacto}"></td>
+
+                                <td>
+
+                                    <span class="badge"
+                                          th:classappend="${empresa.estado} ? ' bg-success' : ' bg-danger'"
+                                          th:text="${empresa.estado} ? 'Activa' : 'Inactiva'">
+                                    </span>
+
+                                </td>
+
+                                <td class="text-center">
+
+                                    <a class="btn btn-warning btn-sm"
+                                       th:href="@{/empresa/modificar/{id}(id=${empresa.idEmpresa})}">
+
+                                        <i class="bi bi-pencil-square"></i>
+
+                                    </a>
+
+                                    <button class="btn btn-danger btn-sm"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modalEliminarEmpresa"
+                                            th:data-id="${empresa.idEmpresa}"
+                                            th:data-nombre="${empresa.nombre}">
+
+                                        <i class="bi bi-trash"></i>
+
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+    <!-- MODAL AGREGAR EMPRESA -->
+    <div class="modal fade"
+         id="modalAgregarEmpresa"
+         tabindex="-1"
+         aria-hidden="true"
+         th:fragment="modalAgregar">
+
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+
+                <form th:action="@{/empresa/guardar}"
+                      method="post"
+                      th:object="${empresa}">
+
+                    <div class="modal-header">
+
+                        <h5 class="modal-title">
+                            <i class="bi bi-building-add me-2"></i>
+                            Nueva empresa
+                        </h5>
+
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal">
+                        </button>
+
+                    </div>
+
+                    <div class="modal-body">
+
+                        <input type="hidden"
+                               th:field="*{idEmpresa}">
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Nombre
+                            </label>
+
+                            <input class="form-control"
+                                   th:field="*{nombre}"
+                                   required>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Teléfono
+                            </label>
+
+                            <input class="form-control"
+                                   th:field="*{telefono}">
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Correo de contacto
+                            </label>
+
+                            <input type="email"
+                                   class="form-control"
+                                   th:field="*{correoContacto}">
+
+                        </div>
+
+                        <div class="form-check form-switch">
+
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   th:field="*{estado}">
+
+                            <label class="form-check-label">
+                                Empresa activa
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <button type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal">
+                            Cancelar
+                        </button>
+
+                        <button type="submit"
+                                class="btn btn-primary">
+
+                            <i class="bi bi-check-circle-fill me-1"></i>
+                            Guardar
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div th:fragment="modalEliminar"
+         class="modal fade"
+         id="modalEliminarEmpresa"
+         tabindex="-1">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+
+                <div class="modal-header bg-danger text-white">
+
+                    <h5 class="modal-title">
+
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+
+                        Confirmar eliminación
+
+                    </h5>
+
+                    <button class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"></button>
+
+                </div>
+
+                <form th:action="@{/empresa/eliminar}"
+                      method="post">
+
+                    <div class="modal-body">
+
+                        <input type="hidden"
+                               id="idEmpresaEliminar"
+                               name="idEmpresa">
+
+                        <p class="mb-0">
+
+                            ¿Deseas eliminar la empresa
+
+                            <strong id="nombreEmpresa"></strong>?
+
+                        </p>
+
+                        <small class="text-danger">
+
+                            Esta acción no se puede deshacer.
+
+                        </small>
+
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+
+                            Cancelar
+
+                        </button>
+
+                        <button
+                            class="btn btn-danger"
+                            type="submit">
+
+                            <i class="bi bi-trash"></i>
+
+                            Eliminar
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+</body>
+</html>

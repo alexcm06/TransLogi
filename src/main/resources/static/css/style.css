@@ -1,0 +1,196 @@
+:root{
+    --sidebar-width: 260px;
+    --sidebar-bg: #1E293B;
+    --sidebar-hover: #334155;
+    --primary: #2563EB;
+    --background: #F8FAFC;
+    --card-radius: 16px;
+}
+
+body{
+    background: var(--background);
+    font-family: "Segoe UI", sans-serif;
+    overflow-x: hidden;
+}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--sidebar-width);
+    height: 100vh;
+    background: var(--sidebar-bg);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+.logo{
+    padding: 28px 24px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.logo h3{
+    margin:0;
+    font-weight:700;
+}
+
+.logo p{
+    margin:0;
+    color:#CBD5E1;
+    font-size:.9rem;
+}
+
+.sidebar-menu{
+    flex:1;
+    padding:20px 0;
+}
+
+.sidebar-menu a{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    color:#E2E8F0;
+    text-decoration:none;
+    padding:14px 24px;
+    transition:.25s;
+    font-weight:500;
+}
+
+.sidebar-menu a:hover{
+    background:var(--sidebar-hover);
+    color:white;
+}
+
+.sidebar-menu a.active{
+    background:var(--primary);
+    color:white;
+}
+
+.sidebar-footer{
+    padding:20px;
+    border-top:1px solid rgba(255,255,255,.08);
+}
+
+/* ================= CONTENIDO ================= */
+
+.main-content{
+    margin-left: var(--sidebar-width);
+    min-height:100vh;
+    padding:35px;
+}
+
+.page-title{
+    font-size:2rem;
+    font-weight:700;
+    margin-bottom:5px;
+}
+
+.page-subtitle{
+    color:#64748B;
+    margin-bottom:30px;
+}
+
+/* ================= CARDS ================= */
+
+.card{
+    border:none;
+    border-radius:var(--card-radius);
+    box-shadow:0 5px 15px rgba(0,0,0,.05);
+}
+
+.stat-card{
+    padding:22px;
+}
+
+.stat-number{
+    font-size:2rem;
+    font-weight:bold;
+    color:var(--primary);
+}
+
+.stat-title{
+    color:#64748B;
+}
+
+/* ================= TABLAS ================= */
+
+.table{
+    margin-bottom:0;
+}
+
+.table thead{
+    background:#F1F5F9;
+}
+
+.table thead th{
+    border:none;
+    color:#475569;
+    font-weight:600;
+}
+
+.table tbody td{
+    vertical-align:middle;
+}
+
+/* ================= BOTONES ================= */
+
+.btn{
+    border-radius:10px;
+}
+
+.btn-primary{
+    background:#2563EB;
+    border:none;
+}
+
+.btn-success{
+    border:none;
+}
+
+.btn-danger{
+    border:none;
+}
+
+/* ================= FORMULARIOS ================= */
+
+.form-control,
+.form-select{
+    border-radius:10px;
+    min-height:46px;
+}
+
+textarea.form-control{
+    min-height:120px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:992px){
+
+    .sidebar{
+        width:220px;
+    }
+
+    .main-content{
+        margin-left:220px;
+    }
+
+}
+
+@media(max-width:768px){
+
+    .sidebar{
+        position:relative;
+        width:100%;
+        height:auto;
+    }
+
+    .main-content{
+        margin-left:0;
+    }
+
+}
