@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<!-- ===================== TABLA DE CONDUCTORES ===================== -->
+<section th:fragment="tablaConductores" class="container py-4">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Gestión de Conductores</h4>
+            <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalConductor">
+                + Nuevo Conductor
+            </button>
+        </div>
+
+        <div class="card-body">
+
+            <table class="table table-hover align-middle">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Teléfono</th>
+                        <th>Número de licencia</th>
+                        <th>Vencimiento licencia</th>
+                        <th>Estado</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr th:each="c : ${conductores}">
+
+                        <td th:text="${c.idConductor}"></td>
+
+                        <td th:text="${c.nombre}"></td>
+
+                        <td th:text="${c.telefono}"></td>
+
+                        <td th:text="${c.numeroLicencia}"></td>
+
+                        <td th:text="${c.fechaVencimientoLicencia}"></td>
+
+                        <td>
+                            <span th:if="${c.estado}" class="badge bg-success">Activo</span>
+                            <!-- # Se muestra SOLO SI c.estado es true -->
+                            <span th:unless="${c.estado}" class="badge bg-secondary">Inactivo</span>
+                            <!-- # Se muestra SOLO SI c.estado es false (th:unless = "a menos que") -->
+                        </td>
+
+                        <td class="text-center">
+                            <a class="btn btn-warning btn-sm"
+                               th:href="@{/conductor/modificar/{id}(id=${c.idConductor})}">
+                                Editar
+                            </a>
+
+                            <form th:action="@{/conductor/eliminar}" method="post" class="d-inline">                            
+                                <input type="hidden" name="idConductor" th:value="${c.idConductor}"/>                  
+                                <button type="submit" class="btn btn-danger btn-sm"
+                                        onclick="return confirm('¿Eliminar este conductor?')">
+                                    Eliminar
+                                </button>
+                            </form>
+                        </td>
+
+                    </tr>
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+</section>
+
+<!-- ===================== MODAL CREAR CONDUCTOR ===================== -->
+<div class="modal fade" id="modalConductor" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Registrar Conductor</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <form th:action="@{/conductor/guardar}" method="post">
+
+                <div class="modal-body">
+
+                    <div class="mb-3">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" name="nombre" class="form-control" maxlength="100" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Teléfono</label>
+                        <input type="text" name="telefono" class="form-control" maxlength="20" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Número de licencia</label>
+                        <input type="text" name="numeroLicencia" class="form-control" maxlength="50" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Fecha de vencimiento de licencia</label>
+                        <input type="date" name="fechaVencimientoLicencia" class="form-control" required>
+                        <!-- # type="date" muestra un selector de calendario nativo del navegador -->
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Estado</label>
+                        <select name="estado" class="form-select">
+                        <!-- # Select con opciones FIJAS (no viene de una lista de la BD, por eso no hay th:each) -->
+                            <option value="true" selected>Activo</option>
+                            <!-- # Spring convierte automáticamente el texto "true" al boolean true -->
+                            <option value="false">Inactivo</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Guardar conductor
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>

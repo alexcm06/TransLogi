@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+    <head th:replace="~{general/fragmentos :: head}"></head>
+
+    <body>
+
+        <header th:replace="~{general/fragmentos :: header}"></header>
+
+        <div class="container py-4">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-warning">
+                    <!-- # Cabecera amarilla (distinta al azul del listado), para diferenciar visualmente que estás EDITANDO -->
+                    <h4>Modificar Conductor</h4>
+                </div>
+
+                <div class="card-body">
+
+                    <form th:action="@{/conductor/guardar}" method="post">
+
+                        <input type="hidden" name="idConductor" th:value="${conductor.idConductor}"/>
+
+                        <div class="mb-3">
+                            <label class="form-label">Nombre</label>
+                            <input type="text"
+                                   name="nombre"
+                                   class="form-control"
+                                   th:value="${conductor.nombre}"
+                                   maxlength="100"
+                                   required>
+                                <!-- # th:value PRECARGA el campo con el dato actual (a diferencia del modal de crear, que estaba vacío) -->
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Teléfono</label>
+                            <input type="text"
+                                   name="telefono"
+                                   class="form-control"
+                                   th:value="${conductor.telefono}"
+                                   maxlength="20"
+                                   required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Número de licencia</label>
+                            <input type="text"
+                                   name="numeroLicencia"
+                                   class="form-control"
+                                   th:value="${conductor.numeroLicencia}"
+                                   maxlength="50"
+                                   required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Fecha de vencimiento de licencia</label>
+                            <input type="date"
+                                   name="fechaVencimientoLicencia"
+                                   class="form-control"
+                                   th:value="${conductor.fechaVencimientoLicencia}"
+                                   required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Estado</label>
+                            <select name="estado" class="form-select">
+                                <option value="true" th:selected="${conductor.estado}">Activo</option>
+                                <!-- # Si conductor.estado es true, esta opción queda pre-seleccionada al abrir el formulario -->
+                                <option value="false" th:selected="${!conductor.estado}">Inactivo</option>
+                                <!-- # El signo ! significa "negación": si estado es false, aquí !false = true, y esta queda seleccionada -->
+                            </select>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+
+                            <a th:href="@{/conductor/listado}" class="btn btn-secondary">
+                                Cancelar
+                            </a>
+
+                            <button type="submit" class="btn btn-primary">
+                                Guardar cambios
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <footer th:replace="~{general/fragmentos :: footer}"></footer>
+
+    </body>
+</html>
