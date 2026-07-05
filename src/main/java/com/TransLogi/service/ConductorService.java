@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ConductorService {
 
     private final ConductorRepository conductorRepository;
+
     public ConductorService(ConductorRepository conductorRepository) {
         this.conductorRepository = conductorRepository;
     }
@@ -27,6 +28,11 @@ public class ConductorService {
     @Transactional(readOnly = true)
     public Optional<Conductor> getConductor(Integer idConductor) {
         return conductorRepository.findById(idConductor);
+    }
+
+    @Transactional(readOnly = true)
+    public long totalConductoresActivos() {
+        return conductorRepository.totalConductoresEstado(true);
     }
 
     @Transactional

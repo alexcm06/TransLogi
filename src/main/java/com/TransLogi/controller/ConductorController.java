@@ -40,6 +40,7 @@ public class ConductorController {
         var conductores = conductorService.getConductores(false);
         model.addAttribute("conductores", conductores);
         model.addAttribute("totalConductores", conductores.size());
+        model.addAttribute("conductor", new Conductor());
         return "/conductor/listado";
     }
 

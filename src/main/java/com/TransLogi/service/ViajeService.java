@@ -51,6 +51,26 @@ public class ViajeService {
         return viajeRepository.findByFechaProgramada(fecha);
     }
 
+    @Transactional(readOnly = true)
+    public Long totalViajesProgramados() {
+        return viajeRepository.totalViajesPorEstado("Programado");
+    }
+
+    @Transactional(readOnly = true)
+    public long totalViajesProceso() {
+        return viajeRepository.totalViajesPorEstado("En Proceso");
+    }
+
+    @Transactional(readOnly = true)
+    public long totalViajesFinalizados() {
+        return viajeRepository.totalViajesPorEstado("Finalizado");
+    }
+
+    @Transactional(readOnly = true)
+    public List<Viaje> getUltimosViajes() {
+        return viajeRepository.findTop5ByOrderByFechaProgramadaDesc();
+    }
+
     @Transactional
     public void save(Viaje viaje) {
         viajeRepository.save(viaje);

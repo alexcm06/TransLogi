@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <head th:replace="~{general/fragmentos :: head}"></head>
+
+    <body>
+
+        <aside th:replace="~{general/fragmentos :: sidebar}"></aside>
+
+        <main class="main-content">
+
+            <div class="container-fluid">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+
+                    <div>
+                        <h2 class="page-title">Modificar Ubicación</h2>
+                        <p class="page-subtitle">
+                            Actualice la información de la ubicación.
+                        </p>
+                    </div>
+
+                    <a th:href="@{/ubicacion/listado}"
+                       class="btn btn-outline-secondary">
+
+                        <i class="bi bi-arrow-left"></i>
+                        Volver
+
+                    </a>
+
+                </div>
+
+                <div class="card shadow-sm">
+
+                    <div class="card-body">
+
+                        <form th:action="@{/ubicacion/guardar}"
+                              method="post"
+                              th:object="${ubicacion}">
+
+                            <input type="hidden"
+                                   th:field="*{idUbicacion}">
+
+                            <div class="row">
+
+                                <div class="col-12 mb-3">
+
+                                    <label class="form-label">
+                                        Nombre
+                                    </label>
+
+                                    <input type="text"
+                                           class="form-control"
+                                           th:field="*{nombre}"
+                                           required>
+
+                                </div>
+
+                                <div class="col-12 mb-4">
+
+                                    <label class="form-label">
+                                        Dirección
+                                    </label>
+
+                                    <textarea class="form-control"
+                                              rows="5"
+                                              th:field="*{direccion}"
+                                              required>
+                                    </textarea>
+
+                                </div>
+
+                            </div>
+
+                            <div class="text-end">
+
+                                <a th:href="@{/ubicacion/listado}"
+                                   class="btn btn-secondary">
+
+                                    Cancelar
+
+                                </a>
+
+                                <button type="submit"
+                                        class="btn btn-primary">
+
+                                    <i class="bi bi-check-lg"></i>
+                                    Guardar cambios
+
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+        <footer th:replace="~{general/fragmentos :: footer}"></footer>
+
+        <div th:replace="~{general/fragmentos :: scripts}"></div>
+
+    </body>
+</html>

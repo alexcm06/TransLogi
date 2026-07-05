@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <body>
+
+    </body>
+    <!-- TITULO -->
+    <section th:fragment="titulo">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <div>
+
+                <h2 class="fw-bold mb-1">
+                <i class="bi bi-truck text-primary"></i>
+                Gestión de Viajes
+                </h2>
+
+                <p class="page-subtitle mb-0">
+                    Administración de todos los viajes
+                </p>
+
+            </div>
+
+            <button class="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalViaje">
+
+                <i class="bi bi-plus-circle me-2"></i>
+                Nuevo Viaje
+
+            </button>
+
+        </div>
+
+    </section>
+
+    <!-- BUSQUEDA Y FILTROS -->
+    <section th:fragment="acciones">
+
+        <div class="card shadow-sm border-0 mb-4">
+
+            <div class="card-body">
+
+                <div class="row g-3">
+
+                    <div class="col-lg-8">
+
+                        <div class="input-group">
+
+                            <span class="input-group-text bg-white">
+
+                                <i class="bi bi-search"></i>
+
+                            </span>
+
+                            <input type="text"
+                                   class="form-control"
+                                   placeholder="Buscar por empresa, conductor o destino...">
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-4">
+
+                        <select class="form-select">
+
+                            <option selected>
+                                Todos los estados
+                            </option>
+
+                            <option>Programado</option>
+                            <option>En Proceso</option>
+                            <option>Finalizado</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+    <!-- TABLA -->
+    <section th:fragment="tabla">
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body p-0">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle mb-0">
+
+                        <thead class="table-light">
+
+                            <tr>
+
+                                <th>ID</th>
+                                <th>Fecha</th>
+                                <th>Hora</th>
+                                <th>Empresa</th>
+                                <th>Conductor</th>
+                                <th>Origen</th>
+                                <th>Destino</th>
+                                <th>Estado</th>
+                                <th class="text-center">Acciones</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr th:each="v : ${viajes}">
+
+                                <td th:text="${v.idViaje}"></td>
+
+                                <td th:text="${v.fechaProgramada}"></td>
+
+                                <td th:text="${v.horaProgramada}"></td>
+
+                                <td th:text="${v.empresa.nombre}"></td>
+
+                                <td th:text="${v.conductor.nombre}"></td>
+
+                                <td th:text="${v.origen.nombre}"></td>
+
+                                <td th:text="${v.destino.nombre}"></td>
+
+                                <td>
+
+                                    <span
+                                        class="badge"
+
+                                        th:classappend="
+                                        ${v.estadoViaje.nombreEstado == 'Programado'} ? ' bg-primary' :
+                                        (${v.estadoViaje.nombreEstado == 'En Proceso'} ? ' bg-warning text-dark' :
+                                        (${v.estadoViaje.nombreEstado == 'Finalizado'} ? ' bg-success' :
+                                        (${v.estadoViaje.nombreEstado == 'Cancelado'} ? ' bg-danger' :
+                                        ' bg-secondary')))"
+
+                                        th:text="${v.estadoViaje.nombreEstado}">
+                                    </span>
+
+                                </td>
+
+                                <td class="text-center">
+
+                                    <a class="btn btn-outline-primary btn-sm me-1"
+                                       th:href="@{/viaje/modificar/{id}(id=${v.idViaje})}">
+
+                                        <i class="bi bi-pencil"></i>
+
+                                    </a>
+
+
+                                    <button
+                                        type="button"
+                                        class="btn btn-danger btn-sm"
+
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalEliminarViaje"
+
+                                        th:attr="data-id=${v.idViaje},
+                                        data-nombre=${v.empresa.nombre}">
+
+                                        <i class="bi bi-trash"></i>
+
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+                            <tr th:if="${#lists.isEmpty(viajes)}">
+                                <td colspan="9" class="text-center py-5 text-muted">
+
+                                    <i class="bi bi-truck fs-1 d-block mb-3"></i>
+                                    No hay viajes registrados.
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <div th:fragment="modalViaje"
+         class="modal fade"
+         id="modalViaje"
+         tabindex="-1"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-lg">
+
+            <div class="modal-content">
+
+                <form th:action="@{/viaje/guardar}" method="post">
+
+                    <div class="modal-header">
+
+                        <h5 class="modal-title">
+                            Registrar Viaje
+                        </h5>
+
+                        <button class="btn-close"
+                                type="button"
+                                data-bs-dismiss="modal">
+                        </button>
+
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Fecha</label>
+                                <input type="date"
+                                       name="fechaProgramada"
+                                       class="form-control"
+                                       required>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Hora</label>
+                                <input type="time"
+                                       name="horaProgramada"
+                                       class="form-control"
+                                       required>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Empresa</label>
+
+                                <select class="form-select"
+                                        name="empresa"
+                                        required>
+
+                                    <option value="">
+                                        Seleccione...
+                                    </option>
+
+                                    <option th:each="e : ${empresas}"
+                                            th:value="${e.idEmpresa}"
+                                            th:text="${e.nombre}">
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Conductor</label>
+
+                                <select class="form-select"
+                                        name="conductor"
+                                        required>
+
+                                    <option value="">
+                                        Seleccione...
+                                    </option>
+
+                                    <option th:each="c : ${conductores}"
+                                            th:value="${c.idConductor}"
+                                            th:text="${c.nombre}">
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">Origen</label>
+
+                                <select class="form-select"
+                                        name="origen">
+
+                                    <option th:each="u : ${ubicaciones}"
+                                            th:value="${u.idUbicacion}"
+                                            th:text="${u.nombre}">
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">Destino</label>
+
+                                <select class="form-select"
+                                        name="destino">
+
+                                    <option th:each="u : ${ubicaciones}"
+                                            th:value="${u.idUbicacion}"
+                                            th:text="${u.nombre}">
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Cantidad de pasajeros
+                                </label>
+
+                                <input type="number"
+                                       class="form-control"
+                                       name="cantidadPasajeros"
+                                       min="1"
+                                       value="1">
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Estado
+                                </label>
+
+                                <select class="form-select"
+                                        name="estadoViaje">
+
+                                    <option th:each="e : ${estados}"
+                                            th:value="${e.idEstadoViaje}"
+                                            th:text="${e.nombreEstado}">
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-12">
+
+                                <label class="form-label">
+                                    Observaciones
+                                </label>
+
+                                <textarea class="form-control"
+                                          rows="3"
+                                          name="observaciones">
+                                </textarea>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <button class="btn btn-secondary"
+                                type="button"
+                                data-bs-dismiss="modal">
+                            Cancelar
+                        </button>
+
+                        <button class="btn btn-primary"
+                                type="submit">
+
+                            Guardar Viaje
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div th:fragment="modalEliminar"
+         class="modal fade"
+         id="modalEliminarViaje"
+         tabindex="-1">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+
+                <div class="modal-header bg-danger text-white">
+
+                    <h5 class="modal-title">
+
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+
+                        Confirmar eliminación
+
+                    </h5>
+
+                    <button class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"></button>
+
+                </div>
+
+                <form th:action="@{/viaje/eliminar}"
+                      method="post">
+
+                    <div class="modal-body">
+
+                        <input type="hidden"
+                               id="idViajeEliminar"
+                               name="idViaje">
+
+                        <p class="mb-0">
+
+                            ¿Deseas eliminar el viaje de la empresa
+
+                            <strong id="nombreViaje"></strong>?
+
+                        </p>
+
+                        <small class="text-danger">
+
+                            Esta acción no se puede deshacer.
+
+                        </small>
+
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+
+                            Cancelar
+
+                        </button>
+
+                        <button
+                            class="btn btn-danger"
+                            type="submit">
+
+                            <i class="bi bi-trash"></i>
+
+                            Eliminar
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+</body>
+</html>

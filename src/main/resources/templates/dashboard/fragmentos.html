@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <section th:fragment="titulo">
+
+        <div class="mb-4">
+
+            <h2 class="fw-bold mb-1">
+                <i class="bi bi-speedometer2 text-primary"></i>
+                Dashboard
+            </h2>
+
+            <p class="page-subtitle">
+                Bienvenido al sistema de gestión TransLogi
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- TARJETAS -->
+    <section th:fragment="tarjetas">
+
+        <div class="row g-4 mb-4">
+
+            <!-- VIAJES PROGRAMADOS -->
+            <div class="col-lg-3 col-md-6">
+
+                <div class="card stat-card">
+
+                    <div class="card-body">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div>
+
+                                <h6 class="text-secondary">
+                                    Viajes Programados
+                                </h6>
+
+                                <h2 class="fw-bold"
+                                    th:text="${viajesProgramados}">
+                                    0
+                                </h2>
+
+                            </div>
+
+                            <i class="bi bi-calendar-event fs-1 text-primary"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- VIAJES EN PROCESO -->
+            <div class="col-lg-3 col-md-6">
+
+                <div class="card stat-card">
+
+                    <div class="card-body">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div>
+
+                                <h6 class="text-secondary">
+                                    Viajes en Proceso
+                                </h6>
+
+                                <h2 class="fw-bold"
+                                    th:text="${viajesProceso}">
+                                    0
+                                </h2>
+
+                            </div>
+
+                            <i class="bi bi-truck fs-1 text-warning"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- VIAJES FINALIZADOS -->
+            <div class="col-lg-3 col-md-6">
+
+                <div class="card stat-card">
+
+                    <div class="card-body">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div>
+
+                                <h6 class="text-secondary">
+                                    Viajes Finalizados
+                                </h6>
+
+                                <h2 class="fw-bold"
+                                    th:text="${viajesFinalizados}">
+                                    0
+                                </h2>
+
+                            </div>
+
+                            <i class="bi bi-check-circle fs-1 text-success"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- CONDUCTORES ACTIVOS -->
+            <div class="col-lg-3 col-md-6">
+
+                <div class="card stat-card">
+
+                    <div class="card-body">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div>
+
+                                <h6 class="text-secondary">
+                                    Conductores Activos
+                                </h6>
+
+                                <h2 class="fw-bold"
+                                    th:text="${conductoresActivos}">
+                                    0
+                                </h2>
+
+                            </div>
+
+                            <i class="bi bi-person-badge fs-1 text-info"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- TBL ULTIMOS VIAJES -->
+    <section th:fragment="ultimosViajes">
+
+        <div class="card shadow">
+
+            <div class="card-header bg-white">
+
+                <h5 class="mb-0">
+                    Últimos Viajes
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead class="table-light">
+
+                            <tr>
+                                <th>ID</th>
+                                <th>Fecha</th>
+                                <th>Empresa</th>
+                                <th>Conductor</th>
+                                <th>Origen</th>
+                                <th>Destino</th>
+                                <th>Estado</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr th:each="v : ${ultimosViajes}">
+
+                                <td th:text="${v.idViaje}"></td>
+
+                                <td th:text="${v.fechaProgramada}"></td>
+
+                                <td th:text="${v.empresa.nombre}"></td>
+
+                                <td th:text="${v.conductor.nombre}"></td>
+
+                                <td th:text="${v.origen.nombre}"></td>
+
+                                <td th:text="${v.destino.nombre}"></td>
+
+                                <td>
+                                <td>
+                                    <span class="badge"
+                                          th:classappend="
+                                          ${v.estadoViaje.nombreEstado == 'Programado'} ? ' bg-primary' :
+                                          (${v.estadoViaje.nombreEstado == 'En proceso'} ? ' bg-warning text-dark' :
+                                          (${v.estadoViaje.nombreEstado == 'Finalizado'} ? ' bg-success' :
+                                          (${v.estadoViaje.nombreEstado == 'Cancelado'} ? ' bg-danger' :
+                                          ' bg-secondary')))"
+                                          th:text="${v.estadoViaje.nombreEstado}">
+                                    </span>
+                                </td>
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</html>
