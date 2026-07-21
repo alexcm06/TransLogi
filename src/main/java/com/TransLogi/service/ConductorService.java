@@ -20,7 +20,7 @@ public class ConductorService {
     @Transactional(readOnly = true)
     public List<Conductor> getConductores(boolean activos) {
         if (activos) {
-            return conductorRepository.findByEstadoTrue();
+            return conductorRepository.findByActivoTrue();
         }
         return conductorRepository.findAll();
     }
@@ -32,7 +32,7 @@ public class ConductorService {
 
     @Transactional(readOnly = true)
     public long totalConductoresActivos() {
-        return conductorRepository.totalConductoresEstado(true);
+        return conductorRepository.totalConductoresActivo(true);
     }
 
     @Transactional

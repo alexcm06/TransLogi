@@ -8,70 +8,54 @@ package com.Translogi;
  *
  * @author sebas
  */
+import com.TransLogi.domain.Ruta;
+import com.TransLogi.service.RutaService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
 
-    //  Recursos estáticos y rutas del sistema que no requieren autenticación
-    public static final String[] PUBLIC_URLS = {
-        "/", "/index", "/js/**", "/css/**", "/webjars/**", "/login", "/error", "/acceso_denegado"
-    };
-
-    // Acciones completas de escritura (save/delete) sobre entidades maestras de administración
-    public static final String[] ADMIN_URLS = {
-        "/usuario/nuevo", "/usuario/guardar", "/usuario/modificar/**", "/usuario/eliminar/**",
-        "/rol/nuevo", "/rol/guardar", "/rol/modificar/**",
-        "/empresa/nuevo", "/empresa/guardar", "/empresa/modificar/**", "/empresa/eliminar/**"
-    };
-
-    //  Vistas de consulta general (get) y reportes de la operación logística
-    public static final String[] ADMIN_OR_SUPERVISOR_URLS = {
-        "/usuario/listado", "/rol/listado", "/empresa/listado",
-        "/conductor/listado", "/ubicacion/listado", "/estadoViaje/listado",
-        "/viaje/listado", "/viaje/reportes"
-    };
-
-    //  Gestión directa de la operación y asignaciones (Conductores, Viajes y Ubicaciones)
-    public static final String[] USUARIO_URLS = {
-        "/conductor/nuevo", "/conductor/guardar", "/conductor/modificar/**", "/conductor/eliminar/**",
-        "/viaje/nuevo", "/viaje/guardar", "/viaje/modificar/**", "/viaje/eliminar/**",
-        "/ubicacion/nuevo", "/ubicacion/guardar", "/ubicacion/modificar/**", "/ubicacion/eliminar/**",
-        "/estadoViaje/nuevo", "/estadoViaje/guardar"
-    };
-
+    //Este método es quien genera el proceso de autorización...
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(request -> request
-                .requestMatchers(PUBLIC_URLS).permitAll()
-                .requestMatchers(ADMIN_URLS).hasRole("ADMIN")
-                .requestMatchers(ADMIN_OR_SUPERVISOR_URLS).hasAnyRole("ADMIN", "SUPERVISOR")
-                .requestMatchers(USUARIO_URLS).hasRole("USUARIO")
-                .anyRequest().authenticated()
-        ).formLogin(form -> form
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, @Lazy RutaService rutaService)
+            throws Exception {
+
+        var rutas = rutaService.getRutas();
+
+        http.authorizeHttpRequests(requests -> {
+            for (Ruta ruta : rutas) {
+                if (ruta.isRequiereRol()) {
+                    requests.requestMatchers(ruta.getRuta()).hasRole(ruta.getRol().getRol());
+                } else {
+                    requests.requestMatchers(ruta.getRuta()).permitAll();
+                }
+            }
+            requests.anyRequest().authenticated();
+        });
+        http.formLogin(form -> form // Configuración de formulario de login
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
                 .defaultSuccessUrl("/", true)
                 .failureUrl("/login?error=true")
                 .permitAll()
-        ).logout(logout -> logout
+        ).logout(logout -> logout // Configuración de logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout=true")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .permitAll()
-        ).exceptionHandling(exceptions -> exceptions
+        ).exceptionHandling(exceptions -> exceptions // Manejo de excepciones
                 .accessDeniedPage("/acceso_denegado")
-        ).sessionManagement(session -> session
+        ).sessionManagement(session -> session // Configuración de sesiones
                 .maximumSessions(1)
                 .maxSessionsPreventsLogin(false)
         );
@@ -84,26 +68,30 @@ public class SecurityConfig {
     }
 
     //Este método será reemplazado la siguiente semana
-    @Bean
-    public UserDetailsService users(PasswordEncoder passwordEncoder) {
-        UserDetails admin = User.builder()
-                .username("admin@translogi.com")
-                .password(passwordEncoder.encode("123456"))
-                .roles("ADMIN")
-                .build();
-
-        UserDetails supervisor = User.builder()
-                .username("supervisor@translogi.com")
-                .password(passwordEncoder.encode("123456"))
-                .roles("SUPERVISOR")
-                .build();
-
-        UserDetails conductor = User.builder()
-                .username("conductor@translogi.com")
-                .password(passwordEncoder.encode("123456"))
-                .roles("USUARIO")
-                .build();
-
-        return new InMemoryUserDetailsManager(admin, supervisor, conductor);
+//    @Bean
+//    public UserDetailsService users(PasswordEncoder passwordEncoder) {
+//        UserDetails juan = User.builder()
+//                .username("juan")
+//                .password(passwordEncoder.encode("123"))
+//                .roles("ADMIN")
+//                .build();
+//        UserDetails rebeca = User.builder()
+//                .username("rebeca")
+//                .password(passwordEncoder.encode("456"))
+//                .roles("VENDEDOR")
+//                .build();
+//        UserDetails pedro = User.builder()
+//                .username("pedro")
+//                .password(passwordEncoder.encode("789"))
+//                .roles("USUARIO") // Consistent con tu configuración
+//                .build();
+//        return new InMemoryUserDetailsManager(juan, rebeca, pedro);
+//    }
+    @Autowired
+    public void configurerGlobal(AuthenticationManagerBuilder build,
+            @Lazy PasswordEncoder passwordEncoder,
+            @Lazy UserDetailsService userDetailsService) throws Exception {
+        build.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
+
 }

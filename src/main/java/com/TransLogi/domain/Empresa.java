@@ -38,5 +38,5 @@ public class Empresa implements Serializable {
     private String correoContacto;
 
     @Column(nullable = false)
-    private boolean estado = true;
+    private boolean activo = true;
 }

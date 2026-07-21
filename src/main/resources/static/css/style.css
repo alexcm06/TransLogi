@@ -194,3 +194,78 @@ textarea.form-control{
     }
 
 }
+
+/*================ LOGIN =================*/
+
+.login-body{
+    background:#F8FAFC;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+}
+
+.login-container{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.login-card{
+
+    width:400px;
+
+    background:#FFF;
+
+    border-radius:12px;
+
+    padding:35px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+}
+
+.login-title{
+
+    color:#2563EB;
+
+    font-weight:700;
+
+    margin-bottom:0;
+
+}
+
+.login-subtitle{
+
+    color:#6B7280;
+
+    font-size:.95rem;
+
+}
+
+.login-card .form-label{
+
+    font-weight:600;
+
+    font-size:.9rem;
+
+}
+
+.login-card .form-control{
+
+    height:44px;
+
+    border-radius:8px;
+
+}
+
+.login-btn{
+
+    height:44px;
+
+    font-weight:600;
+
+    border-radius:8px;
+
+}

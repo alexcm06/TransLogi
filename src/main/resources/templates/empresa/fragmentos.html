@@ -82,8 +82,8 @@
                                 <td>
 
                                     <span class="badge"
-                                          th:classappend="${empresa.estado} ? ' bg-success' : ' bg-danger'"
-                                          th:text="${empresa.estado} ? 'Activa' : 'Inactiva'">
+                                          th:classappend="${empresa.activo} ? ' bg-success' : ' bg-danger'"
+                                          th:text="${empresa.activo} ? 'Activa' : 'Inactiva'">
                                     </span>
 
                                 </td>
@@ -195,7 +195,7 @@
 
                             <input class="form-check-input"
                                    type="checkbox"
-                                   th:field="*{estado}">
+                                   th:field="*{activo}">
 
                             <label class="form-check-label">
                                 Empresa activa

@@ -9,7 +9,6 @@ package com.TransLogi.domain;
  */
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import lombok.Data;
 
@@ -18,15 +17,15 @@ import lombok.Data;
 @Table(name = "rol")
 public class Rol implements Serializable {
 
+    // Se recomienda añadir un serialVersionUID
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_rol")
     private Integer idRol;
+// Añadir restricción de longitud y unicidad si el campo 'rol' es el nombre del rol
+    @Column(name = "nombre_rol", unique = true, length = 25)
+    private String rol;
 
-    @Column(name = "nombre_rol", nullable = false, unique = true, length = 50)
-    @NotBlank(message = "El nombre del rol no puede estar vacío.")
-    @Size(max = 50, message = "El nombre del rol no puede tener más de 50 caracteres.")
-    private String nombreRol;
 }
