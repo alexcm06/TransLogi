@@ -2,78 +2,78 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 
-    <!-- 1. Cargamos los estilos de Bootstrap que ya tienes en tus fragmentos -->
-    <head th:replace="~{general/fragmentos :: head}"/>
+    <head th:replace="~{general/fragmentos :: head}"></head>
 
-    <body class="bg-light">
-        <div class="container">
-            <div class="row justify-content-center" style="margin-top: 10%;">
-                <div class="col-md-4">
+    <body class="login-body">
 
-                    <div class="card shadow">
-                        <div class="card-header bg-success text-white text-center">
-                            <h3><i class="bi bi-truck"></i> [[#{login.titulo}]]</h3>
-                            <small>[[#{login.iniciar}]]</small>
-                        </div>
+        <div class="login-container">
 
-                        <div class="card-body">
-                            <!-- Formulario que procesa el ingreso -->
-                            <form method="POST" th:action="@{/login}">
+            <div class="login-card">
 
-                                <!-- Campo de Usuario -->
-                                <div class="mb-3">
-                                    <label for="username" class="form-label" th:text="#{login.usuario}">Usuario (Correo):</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="bi bi-person"></i></span>
-                                        <input class="form-control" id="username" type="text" name="username" required th:placeholder="#{login.usuarioPlaceholder}"/>
-                                    </div>
-                                </div>
+                <div class="text-center mb-4">
 
-                                <!-- Campo de Contraseña -->
-                                <div class="mb-3">
-                                    <label for="password" class="form-label" th:text="#{login.clave}">Contraseña:</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                                        <input class="form-control" id="password" type="password" name="password" required placeholder="********"/>
-                                    </div>
-                                </div>            
+                    <h2 class="login-title">
+                        TransLogi
+                    </h2>
 
-                                <!-- BOTÓN PRINCIPAL PARA ENTRAR -->
-                                <button class="btn btn-success w-100 mb-3" type="submit">
-                                    <i class="bi bi-box-arrow-in-right"></i> [[#{login.ingresar}]]
-                                </button>
-                            </form>
-
-                            <hr>
-
-                                <!-- BOTÓN PARA SALIR E IR A REGISTRO -->
-                                <div class="text-center mb-2">
-                                    <p class="mb-1 small text-muted" th:text="#{login.preguntaRegistro}">¿No tienes una cuenta operativa?</p>
-                                    <a th:href="@{/registro/nuevo}" class="btn btn-outline-primary btn-sm w-100">
-                                        <i class="bi bi-person-plus"></i> [[#{login.botonRegistro}]]
-                                    </a>
-                                </div>
-
-                                <!-- BOTÓN PARA SALIR DEL LOGIN Y VOLVER AL INDEX PRINCIPAL -->
-                                <div class="text-center">
-                                    <a th:href="@{/}" class="btn btn-outline-secondary btn-sm w-100">
-                                        <i class="bi bi-arrow-left-circle"></i> [[#{login.volver}]]
-                                    </a>
-                                </div>
-
-                        </div>
-                    </div>
-
-                    <!-- Mensaje si pones los datos mal -->
-                    <div th:if="${param.error != null}" th:text="#{login.error}" class="alert alert-danger mt-3 text-center" role="alert">
-                        Usuario o contraseña incorrectos. Intenta de nuevo.
-                    </div>
+                    <p class="login-subtitle">
+                        Gestión de Transporte
+                    </p>
 
                 </div>
+
+                <form method="POST" th:action="@{/login}">
+
+                    <input type="hidden"
+                           th:name="${_csrf.parameterName}"
+                           th:value="${_csrf.token}" />
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Correo Electrónico
+                        </label>
+
+                        <input
+                            class="form-control"
+                            id="username"
+                            name="username"
+                            type="text"
+                            required>
+
+                    </div>
+
+                    <div class="mb-4">
+
+                        <label class="form-label">
+                            Contraseña
+                        </label>
+
+                        <input
+                            class="form-control"
+                            id="password"
+                            name="password"
+                            type="password"
+                            required>
+
+                    </div>
+
+                    <button class="btn btn-primary w-100 login-btn" type="submit">
+                        Iniciar Sesión
+                    </button>
+
+                </form>
+
+                <div th:if="${param.error}" class="alert alert-danger mt-3 mb-0 text-center">
+                    Usuario o contraseña incorrectos.
+                </div>
+
             </div>
+
         </div>
 
-        <!-- Cargamos los scripts necesarios al final -->
         <div th:replace="~{general/fragmentos :: scripts}"></div>
+
     </body>
+
 </html>

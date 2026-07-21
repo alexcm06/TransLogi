@@ -47,7 +47,7 @@ public class Conductor implements Serializable {
     private LocalDate fechaVencimientoLicencia;
 
     @Column(nullable = false)
-    private boolean estado = true;
+    private boolean activo = true;
 
     @OneToOne
     @JoinColumn(name = "id_usuario", unique = true)

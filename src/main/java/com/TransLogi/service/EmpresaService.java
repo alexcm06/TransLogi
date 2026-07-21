@@ -20,7 +20,7 @@ public class EmpresaService {
     @Transactional(readOnly = true)
     public List<Empresa> getEmpresas(boolean activos) {
         if (activos) {
-            return empresaRepository.findByEstadoTrue();
+            return empresaRepository.findByActivoTrue();
         }
         return empresaRepository.findAll();
     }

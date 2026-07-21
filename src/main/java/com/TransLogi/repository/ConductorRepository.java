@@ -11,11 +11,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ConductorRepository extends JpaRepository<Conductor, Integer> {
 
-    List<Conductor> findByEstadoTrue();
+    List<Conductor> findByActivoTrue();
 
     Optional<Conductor> findByNumeroLicencia(String numeroLicencia);
     
     // Consulta JPQL que obtiene la cantidad de conductores activos
-    @Query(value = "SELECT COUNT(c) FROM Conductor c WHERE c.estado = :estado")
-    public long totalConductoresEstado(@Param("estado") boolean estado);
+    @Query(value = "SELECT COUNT(c) FROM Conductor c WHERE c.activo = :activo")
+    public long totalConductoresActivo(@Param("activo") boolean activo);
 }
