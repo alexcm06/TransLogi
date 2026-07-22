@@ -12,8 +12,8 @@
             <div>
 
                 <h2 class="fw-bold mb-1">
-                <i class="bi bi-truck text-primary"></i>
-                Gestión de Viajes
+                    <i class="bi bi-truck text-primary"></i>
+                    Gestión de Viajes
                 </h2>
 
                 <p class="page-subtitle mb-0">
@@ -327,24 +327,6 @@
                                        name="cantidadPasajeros"
                                        min="1"
                                        value="1">
-
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-
-                                <label class="form-label">
-                                    Estado
-                                </label>
-
-                                <select class="form-select"
-                                        name="estadoViaje">
-
-                                    <option th:each="e : ${estados}"
-                                            th:value="${e.idEstadoViaje}"
-                                            th:text="${e.nombreEstado}">
-                                    </option>
-
-                                </select>
 
                             </div>
 
