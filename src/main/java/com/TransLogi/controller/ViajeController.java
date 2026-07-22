@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.TransLogi.controller;
+
 /**
  *
  * @author sebas
@@ -62,8 +63,13 @@ public class ViajeController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(@Valid Viaje viaje,
+    public String guardar(Viaje viaje,
             RedirectAttributes redirectAttributes) {
+
+        if (viaje.getIdViaje() == null) {
+            viaje.setEstadoViaje(estadoViajeService.getEstadoProgramado());
+        }
+
         viajeService.save(viaje);
         redirectAttributes.addFlashAttribute(
                 "todoOk",

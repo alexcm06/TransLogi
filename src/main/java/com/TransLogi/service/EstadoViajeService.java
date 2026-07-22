@@ -26,6 +26,13 @@ public class EstadoViajeService {
         return estadoViajeRepository.findById(idEstado);
     }
 
+    @Transactional(readOnly = true)
+    public EstadoViaje getEstadoProgramado() {
+        return estadoViajeRepository.findByNombreEstado("Programado")
+                .orElseThrow(() -> new IllegalStateException(
+                "No existe el estado 'Programado' en la base de datos."));
+    }
+
     @Transactional
     public void save(EstadoViaje estadoViaje) {
         estadoViajeRepository.save(estadoViaje);
