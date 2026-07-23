@@ -215,6 +215,7 @@
 
                 <form th:action="@{/conductor/guardar}"
                       method="post"
+                      enctype="multipart/form-data"
                       th:object="${conductor}">
 
                     <div class="modal-header">
@@ -235,7 +236,34 @@
                         <input type="hidden" th:field="*{idConductor}">
 
                         <div class="row">
+                            
+                            <div class="col-12 mb-3">
+                            <label class="form-label">
+                                Fotografía de la licencia
+                                    </label>
 
+                                <input
+                                class="form-control"
+                                type="file"
+                                name="imagen"
+                                id="imagenLicencia"
+                                accept=".jpg,.jpeg,.png">
+
+                                    <small class="text-muted">
+                                    Formatos permitidos: JPG y PNG.
+                                </small>
+                                    <div class="text-center mt-3">
+
+                                    <img id="previewLicencia"
+                                    src=""
+                                    class="img-fluid rounded border"
+                                    style="max-height:250px; display:none;">
+
+                            </div>
+                            </div>
+                             </div>
+
+                                <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Nombre completo</label>
                                 <input type="text"
@@ -300,4 +328,33 @@
         </div>
     </div>
 
+    <script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const input = document.getElementById("imagenLicencia");
+    const preview = document.getElementById("previewLicencia");
+
+    if (!input || !preview) {
+        return;
+    }
+
+    input.addEventListener("change", function () {
+
+        const archivo = this.files[0];
+
+        if (!archivo) {
+            preview.style.display = "none";
+            preview.src = "";
+            return;
+        }
+
+        preview.src = URL.createObjectURL(archivo);
+        preview.style.display = "block";
+    });
+
+});
+
+</script>
+    
 </html>

@@ -172,6 +172,7 @@ CREATE TABLE `conductor` (
   `numero_licencia` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `fecha_vencimiento_licencia` date NOT NULL,
   `activo` tinyint(1) NOT NULL DEFAULT '1',
+  `foto_licencia` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `id_usuario` int DEFAULT NULL,
   `fecha_creacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `fecha_modificacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -183,7 +184,9 @@ CREATE TABLE `conductor` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
-INSERT INTO `conductor` VALUES (1,'Carlos Rodríguez','8888-1111','B1-1001-2020','2028-05-15',1,2,'2026-07-20 00:02:50','2026-07-20 00:02:50'),(2,'Luis Pérez','8888-2222','B1-1002-2019','2027-10-10',1,3,'2026-07-20 00:02:50','2026-07-20 00:02:50'),(3,'Marco Jiménez','8888-3333','B1-1003-2021','2029-02-20',1,5,'2026-07-20 00:02:50','2026-07-20 00:02:50');
+INSERT INTO `conductor` VALUES (1,'Carlos Rodríguez','8888-1111','B1-1001-2020','2028-05-15',1,NULL,2,'2026-07-20 00:02:50','2026-07-20 00:02:50'),
+                               (2,'Luis Pérez','8888-2222','B1-1002-2019','2027-10-10',1,NULL,3,'2026-07-20 00:02:50','2026-07-20 00:02:50'),
+                               (3,'Marco Jiménez','8888-3333','B1-1003-2021','2029-02-20',1,NULL,5,'2026-07-20 00:02:50','2026-07-20 00:02:50');
 
 --
 -- Tabla: `usuario_rol`  (depende de usuario, rol)
