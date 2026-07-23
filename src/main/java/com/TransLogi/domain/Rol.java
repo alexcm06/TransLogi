@@ -26,6 +26,6 @@ public class Rol implements Serializable {
     private Integer idRol;
 // Añadir restricción de longitud y unicidad si el campo 'rol' es el nombre del rol
     @Column(name = "nombre_rol", unique = true, length = 25)
-    private String rol;
+    private String nombreRol;
 
 }

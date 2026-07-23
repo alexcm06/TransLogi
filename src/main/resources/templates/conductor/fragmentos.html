@@ -9,8 +9,8 @@
             <div>
 
                 <h2 class="fw-bold mb-1">
-                <i class="bi bi-person-badge-fill text-primary"></i>
-                Conductores
+                    <i class="bi bi-person-badge-fill text-primary"></i>
+                    Conductores
                 </h2>
 
                 <p class="page-subtitle">
@@ -35,86 +35,87 @@
     <!-- TABLA -->
     <section th:fragment="tablaConductores">
 
-        <div class="card shadow-sm">
+        <div class="card shadow-sm border-0 rounded-4">
 
-            <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
 
-                <h4 class="mb-0">Conductores</h4>
+                <h5 class="mb-0 fw-semibold">Conductores</h5>
+
+                <span class="badge bg-primary fs-6"
+                      th:text="${totalConductores}">
+                    0
+                </span>
 
             </div>
 
-            <div class="card-body">
+            <div class="table-responsive">
 
-                <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
 
-                    <table class="table table-hover align-middle">
+                    <thead class="table-light">
 
-                        <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Teléfono</th>
+                            <th>Licencia</th>
+                            <th>Vence</th>
+                            <th>Estado</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
 
-                            <tr>
-                                <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Teléfono</th>
-                                <th>Licencia</th>
-                                <th>Vence</th>
-                                <th>Estado</th>
-                                <th class="text-center">Acciones</th>
-                            </tr>
+                    </thead>
 
-                        </thead>
+                    <tbody>
 
-                        <tbody>
+                        <tr th:each="c : ${conductores}">
 
-                            <tr th:each="c : ${conductores}">
+                            <td th:text="${c.idConductor}"></td>
 
-                                <td th:text="${c.idConductor}"></td>
+                            <td th:text="${c.nombre}"></td>
 
-                                <td th:text="${c.nombre}"></td>
+                            <td th:text="${c.telefono}"></td>
 
-                                <td th:text="${c.telefono}"></td>
+                            <td th:text="${c.numeroLicencia}"></td>
 
-                                <td th:text="${c.numeroLicencia}"></td>
+                            <td th:text="${c.fechaVencimientoLicencia}"></td>
 
-                                <td th:text="${c.fechaVencimientoLicencia}"></td>
+                            <td>
 
-                                <td>
+                                <span class="badge"
+                                      th:classappend="${c.activo} ? ' bg-success' : ' bg-danger'"
+                                      th:text="${c.activo} ? 'Activo' : 'Inactivo'">
+                                </span>
 
-                                    <span class="badge"
-                                          th:classappend="${c.activo} ? ' bg-success' : ' bg-danger'"
-                                          th:text="${c.activo} ? 'Activo' : 'Inactivo'">
-                                    </span>
+                            </td>
 
-                                </td>
+                            <td class="text-center">
 
-                                <td class="text-center">
+                                <a th:href="@{/conductor/modificar/{id}(id=${c.idConductor})}"
+                                   class="btn btn-warning btn-sm">
 
-                                    <a th:href="@{/conductor/modificar/{id}(id=${c.idConductor})}"
-                                       class="btn btn-warning btn-sm">
+                                    <i class="bi bi-pencil-square"></i>
 
-                                        <i class="bi bi-pencil-square"></i>
+                                </a>
 
-                                    </a>
+                                <button
+                                    class="btn btn-danger btn-sm btnEliminar"
+                                    th:data-id="${c.idConductor}"
+                                    th:data-nombre="${c.nombre}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalEliminarConductor">
 
-                                    <button
-                                        class="btn btn-danger btn-sm btnEliminar"
-                                        th:data-id="${c.idConductor}"
-                                        th:data-nombre="${c.nombre}"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#modalEliminarConductor">
+                                    <i class="bi bi-trash"></i>
 
-                                        <i class="bi bi-trash"></i>
+                                </button>
 
-                                    </button>
+                            </td>
 
-                                </td>
+                        </tr>
 
-                            </tr>
+                    </tbody>
 
-                        </tbody>
-
-                    </table>
-
-                </div>
+                </table>
 
             </div>
 
