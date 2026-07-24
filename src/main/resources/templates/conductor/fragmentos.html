@@ -56,6 +56,7 @@
 
                         <tr>
                             <th>ID</th>
+                            <th>Foto</th>
                             <th>Nombre</th>
                             <th>Teléfono</th>
                             <th>Licencia</th>
@@ -71,6 +72,22 @@
                         <tr th:each="c : ${conductores}">
 
                             <td th:text="${c.idConductor}"></td>
+
+                            <td class="text-center">
+
+                                <img th:if="${c.fotoLicencia != null}"
+                                     th:src="@{'/licencias/' + ${c.fotoLicencia}}"
+                                     class="img-thumbnail"
+                                     style="width:80px;height:80px;object-fit:cover;">
+
+                                <span th:unless="${c.fotoLicencia != null}"
+                                      class="text-muted">
+
+                                    Sin foto
+
+                                </span>
+
+                            </td>
 
                             <td th:text="${c.nombre}"></td>
 

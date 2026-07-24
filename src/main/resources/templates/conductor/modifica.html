@@ -34,11 +34,78 @@
 
                         <form th:action="@{/conductor/guardar}"
                               method="post"
+                              enctype="multipart/form-data"
                               th:object="${conductor}">
 
                             <input type="hidden"
                                    th:field="*{idConductor}">
+                            
+                            <input type="hidden"
+                                    th:field="*{fotoLicencia}">
+                            
+                            <div class="row">
 
+                                <div class="col-12 text-center mb-4">
+
+                                    <label class="form-label fw-bold">
+                                        Licencia actual
+                                    </label>
+
+                                    <div>
+
+                                        <img th:if="${conductor.fotoLicencia != null}"
+                                             th:src="@{'/licencias/' + ${conductor.fotoLicencia}}"
+                                             class="img-thumbnail"
+                                             style="max-width:350px;">
+
+                                        <p th:unless="${conductor.fotoLicencia != null}"
+                                           class="text-muted">
+
+                                            Este conductor no tiene una licencia registrada.
+
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-12 mb-4">
+
+                                    <label class="form-label">
+
+                                        Reemplazar fotografía de la licencia
+
+                                    </label>
+
+                                    <input type="file"
+                                           class="form-control"
+                                           id="imagenLicencia"
+                                           name="imagen"
+                                           accept=".jpg,.jpeg,.png">
+
+                                    <small class="text-muted">
+
+                                        Si no selecciona una imagen nueva,
+                                        se conservará la actual.
+
+                                    </small>
+
+                                </div>
+
+                            <div class="text-center">
+
+                                <img id="previewLicencia"
+                                     class="img-thumbnail"
+                                     style="max-width:350px; display:none;">
+
+                            </div>
+                                
+                                </div>
+                            
                             <div class="row">
 
                                 <div class="col-md-6 mb-3">
@@ -100,7 +167,7 @@
                                     </label>
 
                                     <select class="form-select"
-                                            th:field="*{estado}">
+                                            th:field="*{activo}">
 
                                         <option th:value="true">
                                             Activo
@@ -148,6 +215,36 @@
         <footer th:replace="~{general/fragmentos :: footer}"></footer>
 
         <div th:replace="~{general/fragmentos :: scripts}"></div>
+
+        <script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const input = document.getElementById("imagenLicencia");
+    const preview = document.getElementById("previewLicencia");
+
+    if (!input || !preview) {
+        return;
+    }
+
+    input.addEventListener("change", function () {
+
+        const archivo = this.files[0];
+
+        if (!archivo) {
+            preview.style.display = "none";
+            preview.src = "";
+            return;
+        }
+
+        preview.src = URL.createObjectURL(archivo);
+        preview.style.display = "block";
+
+    });
+
+});
+
+        </script>
 
     </body>
 
