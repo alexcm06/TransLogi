@@ -14,7 +14,6 @@ Centralizar la información relacionada con la operación diaria de una empresa 
 
 - Alexander Campos Marín
 - Sebastián Picado Vargas
-- Carlos Saborio Vega
 - Fernando Valverde Cubero
 
 ## Tecnologías previstas
