@@ -8,13 +8,13 @@ package com.TransLogi.controller;
  *
  * @author sebas
  */
-
 import com.TransLogi.domain.Viaje;
 import com.TransLogi.service.ViajeService;
 import com.TransLogi.service.EmpresaService;
 import com.TransLogi.service.ConductorService;
 import com.TransLogi.service.UbicacionService;
 import com.TransLogi.service.EstadoViajeService;
+import java.time.LocalDate;
 import jakarta.validation.Valid;
 import java.util.Locale;
 import java.util.Optional;
@@ -69,12 +69,16 @@ public class ViajeController {
         if (viaje.getIdViaje() == null) {
             viaje.setEstadoViaje(estadoViajeService.getEstadoProgramado());
         }
+        try {
+            viajeService.save(viaje);
+            redirectAttributes.addFlashAttribute(
+                    "todoOk",
+                    messageSource.getMessage("mensaje.actualizado", null, Locale.getDefault())
+            );
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
 
-        viajeService.save(viaje);
-        redirectAttributes.addFlashAttribute(
-                "todoOk",
-                messageSource.getMessage("mensaje.actualizado", null, Locale.getDefault())
-        );
         return "redirect:/viaje/listado";
     }
 
@@ -119,10 +123,12 @@ public class ViajeController {
         return "/viaje/modifica";
     }
 
-    private void cargarListasParaFormulario(Model model) {
+    private void cargarListasParaFormulario(Model model) { /* este método privado es el que ya se llama tanto desde listado() 
+        (para el modal de "Nuevo Viaje") como desde modificar() (para la pantalla de editar).*/
         model.addAttribute("empresas", empresaService.getEmpresas(true));
         model.addAttribute("conductores", conductorService.getConductores(true));
         model.addAttribute("ubicaciones", ubicacionService.getUbicaciones());
         model.addAttribute("estados", estadoViajeService.getEstados());
+        model.addAttribute("hoy", LocalDate.now());
     }
 }

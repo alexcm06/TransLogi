@@ -8,7 +8,21 @@
     <aside th:replace="~{general/fragmentos :: sidebar}"></aside>
 
     <main class="main-content">
-
+        
+        <!-- Este div SOLO aparece si el Controller guardó todoOk en el flash attribute -->
+        <div th:if="${todoOk}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <span th:text="${todoOk}"></span> <!-- se imprime el texto real del mensaje que viene de Java -->
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button> <!-- Botom  para que el usuario pueda cerrar la alerta manualmente -->
+        </div>
+        
+        <!-- Este div SOLO aparece si el Controller guardo error en el flash attribute -->
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        
         <section th:replace="~{viaje/fragmentos :: titulo}"></section>
 
         <section th:replace="~{viaje/fragmentos :: acciones}"></section>

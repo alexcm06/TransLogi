@@ -73,6 +73,25 @@ public class ViajeService {
 
     @Transactional
     public void save(Viaje viaje) {
+
+        boolean esNuevo = viaje.getIdViaje() == null;
+        boolean fechaCambio = true; // por defecto, asumimos que sí cambió (caso "nuevo")
+
+        if (!esNuevo) {
+            Viaje viajeExistente = viajeRepository.findById(viaje.getIdViaje())
+                    .orElseThrow(() -> new IllegalArgumentException(
+                    "El viaje con ID " + viaje.getIdViaje() + " no existe."));
+
+            fechaCambio = !viajeExistente.getFechaProgramada().equals(viaje.getFechaProgramada());
+        }
+
+        if (fechaCambio
+                && viaje.getFechaProgramada() != null
+                && viaje.getFechaProgramada().isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException(
+                    "No se puede asignar una fecha anterior a hoy.");
+        }
+
         viajeRepository.save(viaje);
     }
 
