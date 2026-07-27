@@ -1,13 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.TransLogi.domain;
-
-/**
- *
- * @author sebas
- */
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -48,6 +39,9 @@ public class Conductor implements Serializable {
 
     @Column(nullable = false)
     private boolean activo = true;
+    
+    @Column(name = "foto_licencia", length = 255)
+    private String fotoLicencia;
 
     @OneToOne
     @JoinColumn(name = "id_usuario", unique = true)

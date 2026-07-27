@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.TransLogi.controller;
 /**
  *
@@ -9,10 +5,13 @@ package com.TransLogi.controller;
  */
 
 import com.TransLogi.domain.Conductor;
+import com.TransLogi.service.ArchivoService;
 import com.TransLogi.service.ConductorService;
 import jakarta.validation.Valid;
 import java.util.Locale;
 import java.util.Optional;
+import java.io.IOException;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.context.MessageSource; // Traer textos desde el archivo messages.properties, en vez de escribirlos directo en el código Java
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,10 +27,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class ConductorController {
 
     private final ConductorService conductorService;
+    private final ArchivoService archivoService;
     private final MessageSource messageSource;
 
-    public ConductorController(ConductorService conductorService, MessageSource messageSource) {
+    public ConductorController(ConductorService conductorService, ArchivoService archivoService, MessageSource messageSource) {
         this.conductorService = conductorService;
+        this.archivoService = archivoService;
         this.messageSource = messageSource;
     }
 
@@ -45,15 +46,36 @@ public class ConductorController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(@Valid Conductor conductor,
-            RedirectAttributes redirectAttributes) {
+    public String guardar(
+        @Valid Conductor conductor,
+        @RequestParam("imagen") MultipartFile imagen,
+        RedirectAttributes redirectAttributes) {
+
+    try {
+
+        if (!imagen.isEmpty()) {
+            String nombreArchivo =
+                    archivoService.guardarImagen(imagen);
+            conductor.setFotoLicencia(nombreArchivo);
+        }
         conductorService.save(conductor);
         redirectAttributes.addFlashAttribute(
                 "todoOk",
-                messageSource.getMessage("mensaje.actualizado", null, Locale.getDefault())
+                messageSource.getMessage(
+                        "mensaje.actualizado",
+                        null,
+                        Locale.getDefault())
         );
-        return "redirect:/conductor/listado";
+
+    } catch (IOException e) {
+        redirectAttributes.addFlashAttribute(
+                "error",
+                "No fue posible guardar la imagen."
+        );
     }
+
+    return "redirect:/conductor/listado";
+}
 
     @PostMapping("/eliminar")
     public String eliminar(@RequestParam Integer idConductor,
