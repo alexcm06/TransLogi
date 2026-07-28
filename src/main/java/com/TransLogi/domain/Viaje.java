@@ -38,11 +38,13 @@ public class Viaje implements Serializable {
     @NotNull(message = "La hora programada es obligatoria.")
     private LocalTime horaProgramada;
 
+    @PositiveOrZero
     @Column(name = "cantidad_pasajeros", nullable = false)
     @NotNull(message = "La cantidad de pasajeros es obligatoria.")
     @Min(value = 1, message = "Debe haber al menos 1 pasajero.")
     private Integer cantidadPasajeros = 1;
 
+    @PositiveOrZero
     @Column(name = "kilometros_recorridos", precision = 10, scale = 2)
     private BigDecimal kilometrosRecorridos;
 
