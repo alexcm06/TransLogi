@@ -55,7 +55,6 @@
                     <thead class="table-light">
 
                         <tr>
-                            <th>ID</th>
                             <th>Nombre</th>
                             <th>Teléfono</th>
                             <th>Licencia</th>
@@ -69,8 +68,6 @@
                     <tbody>
 
                         <tr th:each="c : ${conductores}">
-
-                            <td th:text="${c.idConductor}"></td>
 
                             <td th:text="${c.nombre}"></td>
 

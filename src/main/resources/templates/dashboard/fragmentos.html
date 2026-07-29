@@ -181,7 +181,6 @@
                         <thead class="table-light">
 
                             <tr>
-                                <th>ID</th>
                                 <th>Fecha</th>
                                 <th>Empresa</th>
                                 <th>Conductor</th>
@@ -195,8 +194,6 @@
                         <tbody>
 
                             <tr th:each="v : ${ultimosViajes}">
-
-                                <td th:text="${v.idViaje}"></td>
 
                                 <td th:text="${v.fechaProgramada}"></td>
 

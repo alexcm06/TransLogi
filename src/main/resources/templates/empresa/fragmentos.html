@@ -42,7 +42,7 @@
                     Empresas registradas
                 </h5>
 
-                <span class="badge bg-primary"
+                <span class="badge bg-primary fs-6"
                       th:text="${totalEmpresas}">
                     0
                 </span>
@@ -160,7 +160,8 @@
 
                             <input class="form-control"
                                    th:field="*{nombre}"
-                                   required>
+                                   required
+                                   maxlength="150">
 
                         </div>
 

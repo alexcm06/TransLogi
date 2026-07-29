@@ -55,8 +55,9 @@
                             </span>
 
                             <input type="text"
+                                   id="buscarViaje"
                                    class="form-control"
-                                   placeholder="Buscar por empresa, conductor o destino...">
+                                   placeholder="Buscar por empresa, conductor, destino...">
 
                         </div>
 
@@ -64,15 +65,15 @@
 
                     <div class="col-lg-4">
 
-                        <select class="form-select">
+                        <select class="form-select"
+                                id="filtroEstado">
 
-                            <option selected>
-                                Todos los estados
-                            </option>
+                            <option value="">Todos los estados</option>
 
-                            <option>Programado</option>
-                            <option>En Proceso</option>
-                            <option>Finalizado</option>
+                            <option value="Programado">Programado</option>
+                            <option value="En Proceso">En Proceso</option>
+                            <option value="Finalizado">Finalizado</option>
+                            <option value="Cancelado">Cancelado</option>
 
                         </select>
 
@@ -106,13 +107,13 @@
 
                 <div class="table-responsive">
 
-                    <table class="table table-hover align-middle mb-0">
+                    <table id="tablaViajes"
+                           class="table table-hover align-middle mb-0">
 
                         <thead class="table-light">
 
                             <tr>
 
-                                <th>ID</th>
                                 <th>Fecha</th>
                                 <th>Hora</th>
                                 <th>Empresa</th>
@@ -130,8 +131,6 @@
 
                             <tr th:each="v : ${viajes}">
 
-                                <td th:text="${v.idViaje}"></td>
-
                                 <td th:text="${v.fechaProgramada}"></td>
 
                                 <td th:text="${v.horaProgramada}"></td>
@@ -147,7 +146,7 @@
                                 <td>
 
                                     <span
-                                        class="badge"
+                                        class="badge estado"
 
                                         th:classappend="
                                         ${v.estadoViaje.nombreEstado == 'Programado'} ? ' bg-primary' :
