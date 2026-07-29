@@ -204,6 +204,9 @@
                                             type="text"
                                             class="form-control"
                                             th:field="*{nombre}"
+                                            minlength="2"
+                                            maxlength="20"
+                                            pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$"
                                             required>
 
                                     </div>
@@ -221,6 +224,9 @@
                                             type="text"
                                             class="form-control"
                                             th:field="*{apellidos}"
+                                            minlength="2"
+                                            maxlength="30"
+                                            pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$"
                                             required>
 
                                     </div>
@@ -269,9 +275,12 @@
                                         </label>
 
                                         <input
-                                            type="text"
+                                            type="tel"
                                             class="form-control"
-                                            th:field="*{telefono}">
+                                            th:field="*{telefono}"
+                                            pattern="[0-9]{8}"
+                                            maxlength="8"
+                                            required>
 
                                     </div>
 
@@ -301,7 +310,8 @@
                                         <input type="file"
                                                class="form-control"
                                                name="imagenFile"
-                                               accept="image/*">
+                                               accept="image/*"
+                                               required>
 
                                     </div>
 
@@ -488,8 +498,12 @@
                                     </label>
 
                                     <input
+                                        type="text"
                                         class="form-control"
                                         th:field="*{nombre}"
+                                        minlength="2"
+                                        maxlength="20"
+                                        pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$"
                                         required>
 
                                 </div>
@@ -503,8 +517,12 @@
                                     </label>
 
                                     <input
+                                        type="text"
                                         class="form-control"
                                         th:field="*{apellidos}"
+                                        minlength="2"
+                                        maxlength="30"
+                                        pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$"
                                         required>
 
                                 </div>
@@ -549,8 +567,12 @@
                                     </label>
 
                                     <input
+                                        type="tel"
                                         class="form-control"
-                                        th:field="*{telefono}">
+                                        th:field="*{telefono}"
+                                        pattern="[0-9]{8}"
+                                        maxlength="8"
+                                        required>
 
                                 </div>
 

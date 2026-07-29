@@ -67,6 +67,14 @@ public class UsuarioService {
             String correo) {
         return usuarioRepository.existsByUsernameOrCorreo(username, correo);
     }
+    
+    public List<Usuario> getUsuariosSinConductor() {
+        return usuarioRepository.getUsuariosSinConductor();
+    }
+    
+    public List<Usuario> getUsuariosDisponibles(Integer idUsuarioActual) {
+        return usuarioRepository.getUsuariosDisponibles(idUsuarioActual);
+    }
 
     @Transactional
     public void save(Usuario usuario, MultipartFile imagenFile) {

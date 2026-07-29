@@ -56,7 +56,6 @@
 
                         <tr>
                             <th>ID</th>
-                            <th>Foto</th>
                             <th>Nombre</th>
                             <th>Teléfono</th>
                             <th>Licencia</th>
@@ -72,22 +71,6 @@
                         <tr th:each="c : ${conductores}">
 
                             <td th:text="${c.idConductor}"></td>
-
-                            <td class="text-center">
-
-                                <img th:if="${c.fotoLicencia != null}"
-                                     th:src="@{'/licencias/' + ${c.fotoLicencia}}"
-                                     class="img-thumbnail"
-                                     style="width:80px;height:80px;object-fit:cover;">
-
-                                <span th:unless="${c.fotoLicencia != null}"
-                                      class="text-muted">
-
-                                    Sin foto
-
-                                </span>
-
-                            </td>
 
                             <td th:text="${c.nombre}"></td>
 
@@ -254,48 +237,25 @@
                         <input type="hidden" th:field="*{idConductor}">
 
                         <div class="row">
-                            
-                            <div class="col-12 mb-3">
-                            <label class="form-label">
-                                Fotografía de la licencia
-                                    </label>
-
-                                <input
-                                class="form-control"
-                                type="file"
-                                name="imagen"
-                                id="imagenLicencia"
-                                accept=".jpg,.jpeg,.png">
-
-                                    <small class="text-muted">
-                                    Formatos permitidos: JPG y PNG.
-                                </small>
-                                    <div class="text-center mt-3">
-
-                                    <img id="previewLicencia"
-                                    src=""
-                                    class="img-fluid rounded border"
-                                    style="max-height:250px; display:none;">
-
-                            </div>
-                            </div>
-                             </div>
-
-                                <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Nombre completo</label>
                                 <input type="text"
                                        class="form-control"
                                        th:field="*{nombre}"
-                                       required>
+                                       required
+                                       minlength="2"
+                                       maxlength="100"
+                                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$">
                             </div>
 
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Teléfono</label>
-                                <input type="text"
+                                <input type="tel"
                                        class="form-control"
                                        th:field="*{telefono}"
-                                       required>
+                                       required
+                                       pattern="[0-9]{8}"
+                                       maxlength="8">
                             </div>
 
                         </div>
@@ -318,7 +278,53 @@
                                 <input type="date"
                                        class="form-control"
                                        th:field="*{fechaVencimientoLicencia}"
-                                       required>
+                                       required
+                                       th:min="${hoy}">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    Usuario asociado
+                                </label>
+
+                                <select class="form-select"
+                                        th:field="*{usuario}"
+                                        required>
+                                    <option value="">Seleccione un usuario</option>
+
+                                    <option th:each="u : ${usuariosDisponibles}"
+                                            th:value="${u.idUsuario}"
+                                            th:text="${u.nombre + ' ' + u.apellidos + ' (' + u.username + ')'}">
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+
+                                <label class="form-label">
+                                    Foto del frente de la licencia
+                                </label>
+
+                                <input type="file"
+                                       class="form-control"
+                                       name="fotoFrontal"
+                                       required
+                                       accept="image/*">
+
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+
+                                <label class="form-label">
+                                    Foto del reverso de la licencia
+                                </label>
+
+                                <input type="file"
+                                       class="form-control"
+                                       name="fotoReverso"
+                                       required
+                                       accept="image/*">
+
                             </div>
 
                         </div>
@@ -345,34 +351,4 @@
             </div>
         </div>
     </div>
-
-    <script>
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    const input = document.getElementById("imagenLicencia");
-    const preview = document.getElementById("previewLicencia");
-
-    if (!input || !preview) {
-        return;
-    }
-
-    input.addEventListener("change", function () {
-
-        const archivo = this.files[0];
-
-        if (!archivo) {
-            preview.style.display = "none";
-            preview.src = "";
-            return;
-        }
-
-        preview.src = URL.createObjectURL(archivo);
-        preview.style.display = "block";
-    });
-
-});
-
-</script>
-    
 </html>

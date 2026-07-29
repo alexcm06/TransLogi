@@ -7,13 +7,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.templatemode.TemplateMode;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 
 @Configuration
@@ -49,13 +47,6 @@ public class ProjectConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registro) {
     registro.addInterceptor(localeChangeInterceptor());
-    }
-    
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-
-    registry.addResourceHandler("/licencias/**")
-            .addResourceLocations("file:uploads/licencias/");
     }
     
     // Bean para poder acceder a los messages.properties en código...

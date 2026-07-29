@@ -302,7 +302,8 @@
                                 <label class="form-label">Origen</label>
 
                                 <select class="form-select"
-                                        name="origen">
+                                        name="origen"
+                                        required>
 
                                     <option th:each="u : ${ubicaciones}"
                                             th:value="${u.idUbicacion}"
@@ -318,7 +319,8 @@
                                 <label class="form-label">Destino</label>
 
                                 <select class="form-select"
-                                        name="destino">
+                                        name="destino"
+                                        required>
 
                                     <option th:each="u : ${ubicaciones}"
                                             th:value="${u.idUbicacion}"
@@ -339,7 +341,8 @@
                                        class="form-control"
                                        name="cantidadPasajeros"
                                        min="1"
-                                       value="1">
+                                       value="1"
+                                       required>
 
                             </div>
 

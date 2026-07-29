@@ -30,7 +30,11 @@ public class Empresa implements Serializable {
     @Size(max = 150, message = "El nombre no puede tener más de 150 caracteres.")
     private String nombre;
 
-    @Column(length = 20)
+    @Column(length = 8)
+    @Pattern(
+            regexp = "^[0-9]{8}$",
+            message = "Debe tener exactamente 8 dígitos"
+    )
     private String telefono;
 
     @Column(name = "correo_contacto", length = 150)

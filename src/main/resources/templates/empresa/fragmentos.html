@@ -171,7 +171,11 @@
                             </label>
 
                             <input class="form-control"
-                                   th:field="*{telefono}">
+                                   type="tel"
+                                   th:field="*{telefono}"
+                                   pattern="[0-9]{8}"
+                                   maxlength="8"
+                                   required>
 
                         </div>
 
@@ -183,7 +187,8 @@
 
                             <input type="email"
                                    class="form-control"
-                                   th:field="*{correoContacto}">
+                                   th:field="*{correoContacto}"
+                                   required>
 
                         </div>
 
