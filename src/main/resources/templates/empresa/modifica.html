@@ -52,7 +52,8 @@
                                     <input type="text"
                                            class="form-control"
                                            th:field="*{nombre}"
-                                           required>
+                                           required
+                                           maxlength="150">
 
                                 </div>
 
@@ -62,9 +63,11 @@
                                         Teléfono
                                     </label>
 
-                                    <input type="text"
-                                           class="form-control"
+                                    <input class="form-control"
+                                           type="tel"
                                            th:field="*{telefono}"
+                                           pattern="[0-9]{8}"
+                                           maxlength="8"
                                            required>
 
                                 </div>
@@ -81,25 +84,16 @@
                                            required>
 
                                 </div>
+                                
+                                <div class="form-check form-switch">
 
-                                <div class="col-md-6 mb-4">
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           th:field="*{activo}">
 
-                                    <label class="form-label">
-                                        Estado
+                                    <label class="form-check-label">
+                                        Empresa activa
                                     </label>
-
-                                    <select class="form-select"
-                                            th:field="*{estado}">
-
-                                        <option th:value="true">
-                                            Activa
-                                        </option>
-
-                                        <option th:value="false">
-                                            Inactiva
-                                        </option>
-
-                                    </select>
 
                                 </div>
 

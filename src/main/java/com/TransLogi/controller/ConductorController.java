@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.io.IOException;
 import java.time.LocalDate;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.context.MessageSource; // Traer textos desde el archivo messages.properties, en vez de escribirlos directo en el código Java
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,10 +49,9 @@ public class ConductorController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(
-            @Valid Conductor conductor,
-            @RequestParam MultipartFile fotoFrontal,
-            @RequestParam MultipartFile fotoReverso) {
+    public String guardar(Conductor conductor,
+            @RequestParam("fotoFrontal") MultipartFile fotoFrontal,
+            @RequestParam("fotoReverso") MultipartFile fotoReverso) {
 
         conductorService.save(conductor, fotoFrontal, fotoReverso);
 
@@ -108,6 +107,7 @@ public class ConductorController {
                 usuarioService.getUsuariosDisponibles(idUsuario));
 
         model.addAttribute("conductor", conductor);
+        model.addAttribute("hoy", LocalDate.now());
 
         return "/conductor/modifica";
     }

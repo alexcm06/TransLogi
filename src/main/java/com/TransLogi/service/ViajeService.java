@@ -71,6 +71,22 @@ public class ViajeService {
         return viajeRepository.findTop5ByOrderByFechaProgramadaDesc();
     }
 
+    @Transactional(readOnly = true)
+    public List<Viaje> obtenerReporte(
+            LocalDate fechaInicio,
+            LocalDate fechaFin,
+            Integer empresa,
+            Integer conductor,
+            Integer estado) {
+
+        return viajeRepository.obtenerReporte(
+                fechaInicio,
+                fechaFin,
+                empresa,
+                conductor,
+                estado);
+    }
+
     @Transactional
     public void save(Viaje viaje) {
 

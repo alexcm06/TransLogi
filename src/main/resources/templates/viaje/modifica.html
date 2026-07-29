@@ -49,6 +49,7 @@
                                            class="form-control"
                                            name="fechaProgramada"
                                            th:value="${viaje.fechaProgramada}"
+                                           th:min="${hoy}"
                                            required>
                                 </div>
 
@@ -69,7 +70,8 @@
                                     <label class="form-label">Empresa</label>
 
                                     <select class="form-select"
-                                            name="empresa">
+                                            name="empresa"
+                                            required>
 
                                         <option th:each="e : ${empresas}"
                                                 th:value="${e.idEmpresa}"
@@ -86,7 +88,8 @@
                                     <label class="form-label">Conductor</label>
 
                                     <select class="form-select"
-                                            name="conductor">
+                                            name="conductor"
+                                            required>
 
                                         <option th:each="c:${conductores}"
                                                 th:value="${c.idConductor}"
@@ -103,7 +106,8 @@
                                     <label class="form-label">Origen</label>
 
                                     <select class="form-select"
-                                            name="origen">
+                                            name="origen"
+                                            required>
 
                                         <option th:each="o:${ubicaciones}"
                                                 th:value="${o.idUbicacion}"
@@ -120,7 +124,8 @@
                                     <label class="form-label">Destino</label>
 
                                     <select class="form-select"
-                                            name="destino">
+                                            name="destino"
+                                            required>
 
                                         <option th:each="d:${ubicaciones}"
                                                 th:value="${d.idUbicacion}"
@@ -137,7 +142,8 @@
                                     <label class="form-label">Estado</label>
 
                                     <select class="form-select"
-                                            name="estadoViaje">
+                                            name="estadoViaje"
+                                            required>
 
                                         <option th:each="e:${estados}"
                                                 th:value="${e.idEstadoViaje}"
@@ -159,7 +165,8 @@
                                            class="form-control"
                                            name="cantidadPasajeros"
                                            min="1"
-                                           th:value="${viaje.cantidadPasajeros}">
+                                           th:value="${viaje.cantidadPasajeros}"
+                                           required>
 
                                 </div>
 
