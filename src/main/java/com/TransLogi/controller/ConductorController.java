@@ -7,10 +7,12 @@ package com.TransLogi.controller;
 import com.TransLogi.domain.Conductor;
 import com.TransLogi.service.ArchivoService;
 import com.TransLogi.service.ConductorService;
+import com.TransLogi.service.ViajeService;
 import jakarta.validation.Valid;
 import java.util.Locale;
 import java.util.Optional;
 import java.io.IOException;
+import org.springframework.security.core.Authentication; 
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.context.MessageSource; // Traer textos desde el archivo messages.properties, en vez de escribirlos directo en el código Java
 import org.springframework.stereotype.Controller;
@@ -29,11 +31,14 @@ public class ConductorController {
     private final ConductorService conductorService;
     private final ArchivoService archivoService;
     private final MessageSource messageSource;
-
-    public ConductorController(ConductorService conductorService, ArchivoService archivoService, MessageSource messageSource) {
+    private final ViajeService viajeService; 
+    
+    
+    public ConductorController(ConductorService conductorService, ArchivoService archivoService, MessageSource messageSource, ViajeService viajeService) {
         this.conductorService = conductorService;
         this.archivoService = archivoService;
         this.messageSource = messageSource;
+        this.viajeService = viajeService;
     }
 
     @GetMapping("/listado")
@@ -120,4 +125,29 @@ public class ConductorController {
         model.addAttribute("conductor", conductorOpt.get());
         return "/conductor/modifica";
     }
+    
+    @GetMapping("/mis-viajes")
+    public String verMisViajes(Authentication authentication, Model model, RedirectAttributes redirectAttributes) {
+        //Obtenemos el username de la persona que inició sesión
+        String username = authentication.getName();
+        
+        //Buscamos el conductor vinculado a ese usuario en la BD
+        Conductor conductor = conductorService.getConductorPorUsername(username);
+        
+        if (conductor == null) {
+            redirectAttributes.addFlashAttribute("error", "No se encontró un perfil de conductor asociado a tu usuario.");
+            return "redirect:/"; // O la ruta principal que prefieras si no tiene perfil
+        }
+        
+        //Buscamos los viajes que le pertenecen exclusivamente a este conductor
+        var viajes = viajeService.getViajesPorConductor(conductor);
+        
+        //andamos los datos a la vista de Thymeleaf
+        model.addAttribute("viajes", viajes);
+        model.addAttribute("totalViajes", viajes.size());
+        model.addAttribute("conductor", conductor);
+        
+        return "conductor/mis_viajes"; // Buscará el archivo en templates/conductor/mis_viajes.html
+    }
+    
 }
