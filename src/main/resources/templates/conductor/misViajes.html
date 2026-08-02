@@ -53,7 +53,7 @@
                                 <tr th:each="v : ${viajes}">
                                     <td class="fw-bold" th:text="${v.idViaje}"></td>
                                     <td th:text="${v.fechaProgramada}"></td>
-                                    <td th:text="${v.empresa != null ? v.empresa.nombreEmpresa : 'Sin Empresa'}"></td>
+                                    <td th:text="${v.empresa != null ? v.empresa.nombre : 'Sin Empresa'}"></td>
                                     <td>
                                         <span class="badge"
                                               th:classappend="${v.estadoViaje != null && v.estadoViaje.nombreEstado == 'Programado'} ? ' bg-warning text-dark' : 

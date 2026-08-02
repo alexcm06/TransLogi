@@ -1,13 +1,14 @@
+//
 ///*
 // * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
 // * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
 // */
 //package com.TransLogi.controller;
 //
-///**
-// *
-// * @author sebas
-// */
+/////**
+//// *
+//// * @author sebas
+//// */
 //
 //import com.TransLogi.domain.Rol;
 //import com.TransLogi.service.RolService;

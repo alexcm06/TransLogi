@@ -181,7 +181,6 @@
                         <thead class="table-light">
 
                             <tr>
-                                <th>ID</th>
                                 <th>Fecha</th>
                                 <th>Empresa</th>
                                 <th>Conductor</th>
@@ -196,8 +195,6 @@
 
                             <tr th:each="v : ${ultimosViajes}">
 
-                                <td th:text="${v.idViaje}"></td>
-
                                 <td th:text="${v.fechaProgramada}"></td>
 
                                 <td th:text="${v.empresa.nombre}"></td>
@@ -209,7 +206,6 @@
                                 <td th:text="${v.destino.nombre}"></td>
 
                                 <td>
-                                <td>
                                     <span class="badge"
                                           th:classappend="
                                           ${v.estadoViaje.nombreEstado == 'Programado'} ? ' bg-primary' :
@@ -220,8 +216,6 @@
                                           th:text="${v.estadoViaje.nombreEstado}">
                                     </span>
                                 </td>
-                                </td>
-
                             </tr>
 
                         </tbody>

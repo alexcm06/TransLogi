@@ -67,94 +67,80 @@ public class UsuarioService {
             String correo) {
         return usuarioRepository.existsByUsernameOrCorreo(username, correo);
     }
-
+    
+    @Transactional(readOnly = true)
+    public List<Rol> getRolesDisponibles() {
+        return rolRepository.findAll();
+    }
+    
+    public List<Usuario> getUsuariosSinConductor() {
+        return usuarioRepository.getUsuariosSinConductor();
+    }
+    
+    public List<Usuario> getUsuariosDisponibles(Integer idUsuarioActual) {
+        return usuarioRepository.getUsuariosDisponibles(idUsuarioActual);
+    }
+    
     @Transactional
-    public void save(Usuario usuario, MultipartFile imagenFile) {
+    public void save(Usuario usuario, MultipartFile imagenFile,Integer idRol) {
 
         boolean nuevoUsuario = usuario.getIdUsuario() == null;
 
         // Validar correo repetido
-        Optional<Usuario> usuarioDuplicado
-                = usuarioRepository.findByUsernameOrCorreo(null, usuario.getCorreo());
+        Optional<Usuario> usuarioDuplicado =
+            usuarioRepository.findByUsernameOrCorreo(null, usuario.getCorreo());
 
         if (usuarioDuplicado.isPresent()) {
-
             Usuario encontrado = usuarioDuplicado.get();
-
             if (nuevoUsuario || !encontrado.getIdUsuario().equals(usuario.getIdUsuario())) {
                 throw new DataIntegrityViolationException("El correo ya está registrado.");
             }
-
         }
-
         if (nuevoUsuario) {
-
             if (usuario.getPassword() == null || usuario.getPassword().isBlank()) {
                 throw new IllegalArgumentException("Debe ingresar una contraseña.");
             }
-
             usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
-
         } else {
-
             Usuario existente = usuarioRepository.findById(usuario.getIdUsuario())
                     .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado."));
-
             // Mantener roles
             usuario.setRoles(existente.getRoles());
-
             // Mantener imagen
             usuario.setRutaImagen(existente.getRutaImagen());
-
             // Mantener contraseña
             if (usuario.getPassword() == null || usuario.getPassword().isBlank()) {
-
                 usuario.setPassword(existente.getPassword());
-
             } else {
-
                 usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
-
             }
-
         }
-
         usuario = usuarioRepository.save(usuario);
 
         // Si seleccionó imagen nueva
         if (imagenFile != null && !imagenFile.isEmpty()) {
 
             try {
-
                 String ruta = firebaseStorageService.uploadImage(
                         imagenFile,
                         "usuario",
                         usuario.getIdUsuario());
-
                 usuario.setRutaImagen(ruta);
-
                 usuarioRepository.save(usuario);
-
             } catch (IOException e) {
-
                 throw new RuntimeException("Error al subir la imagen.");
-
             }
 
         }
-
         // Rol por defecto para usuarios nuevos
         if (nuevoUsuario) {
-
-            Rol rol = rolRepository.findById(3)
-                    .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+            Integer idRolFinal = (idRol != null) ? idRol : 3; // Si el formulario no envía un rol (idRol es null) se asigna Conductor (id 3) por defecto
+            Rol rol = rolRepository.findById(idRolFinal)
+                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
 
             usuario.getRoles().add(rol);
-
             usuarioRepository.save(usuario);
-
         }
-
     }
 
     @Transactional

@@ -44,6 +44,7 @@ public class UsuarioController {
         model.addAttribute("usuarios", usuarios);
         model.addAttribute("usuario", new Usuario());
         model.addAttribute("totalUsuarios", usuarios.size());
+        model.addAttribute("roles", usuarioService.getRolesDisponibles());
         return "usuario/listado";
     }
 
@@ -51,26 +52,19 @@ public class UsuarioController {
     public String guardar(@Valid Usuario usuario,
             BindingResult result,
             @RequestParam(required = false) MultipartFile imagenFile,
+            @RequestParam(required = false) Integer idRol,  // ← nuevo
             RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("error", "Datos inválidos, revise el formulario.");
             return "redirect:/usuario/listado";
         }
-
         try {
-
-            usuarioService.save(usuario, imagenFile);
-
-            redirectAttributes.addFlashAttribute("todoOk",
-                    "Usuario guardado correctamente.");
-
+            usuarioService.save(usuario, imagenFile,idRol);
+            redirectAttributes.addFlashAttribute("todoOk","Usuario guardado correctamente.");
         } catch (Exception e) {
-
-            redirectAttributes.addFlashAttribute("error",
-                    e.getMessage());
-
+            redirectAttributes.addFlashAttribute("error",e.getMessage());
         }
-
         return "redirect:/usuario/listado";
     }
 

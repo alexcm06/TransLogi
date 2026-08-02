@@ -3,18 +3,18 @@ package com.TransLogi.controller;
  *
  * @author sebas
  */
-
 import com.TransLogi.domain.Conductor;
-import com.TransLogi.service.ArchivoService;
 import com.TransLogi.service.ConductorService;
 import com.TransLogi.service.ViajeService;
+import com.TransLogi.service.UsuarioService;
 import jakarta.validation.Valid;
 import java.util.Locale;
 import java.util.Optional;
 import java.io.IOException;
+import java.time.LocalDate;
 import org.springframework.security.core.Authentication; 
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.context.MessageSource; // Traer textos desde el archivo messages.properties, en vez de escribirlos directo en el código Java
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,58 +29,36 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class ConductorController {
 
     private final ConductorService conductorService;
-    private final ArchivoService archivoService;
+    private final UsuarioService usuarioService;
     private final MessageSource messageSource;
     private final ViajeService viajeService; 
     
-    
-    public ConductorController(ConductorService conductorService, ArchivoService archivoService, MessageSource messageSource, ViajeService viajeService) {
+    public ConductorController(ConductorService conductorService, UsuarioService usuarioService, MessageSource messageSource, ViajeService viajeService) {
         this.conductorService = conductorService;
-        this.archivoService = archivoService;
+        this.usuarioService = usuarioService;
         this.messageSource = messageSource;
         this.viajeService = viajeService;
     }
-
     @GetMapping("/listado")
     public String listado(Model model) {
         var conductores = conductorService.getConductores(false);
         model.addAttribute("conductores", conductores);
         model.addAttribute("totalConductores", conductores.size());
         model.addAttribute("conductor", new Conductor());
+        model.addAttribute("usuariosDisponibles", usuarioService.getUsuariosSinConductor());
+        model.addAttribute("hoy", LocalDate.now());
         return "/conductor/listado";
-    }
+    } 
 
     @PostMapping("/guardar")
-    public String guardar(
-        @Valid Conductor conductor,
-        @RequestParam("imagen") MultipartFile imagen,
-        RedirectAttributes redirectAttributes) {
+    public String guardar(Conductor conductor,
+            @RequestParam("fotoFrontal") MultipartFile fotoFrontal,
+            @RequestParam("fotoReverso") MultipartFile fotoReverso) {
 
-    try {
+        conductorService.save(conductor, fotoFrontal, fotoReverso);
 
-        if (!imagen.isEmpty()) {
-            String nombreArchivo =
-                    archivoService.guardarImagen(imagen);
-            conductor.setFotoLicencia(nombreArchivo);
-        }
-        conductorService.save(conductor);
-        redirectAttributes.addFlashAttribute(
-                "todoOk",
-                messageSource.getMessage(
-                        "mensaje.actualizado",
-                        null,
-                        Locale.getDefault())
-        );
-
-    } catch (IOException e) {
-        redirectAttributes.addFlashAttribute(
-                "error",
-                "No fue posible guardar la imagen."
-        );
+        return "redirect:/conductor/listado";
     }
-
-    return "redirect:/conductor/listado";
-}
 
     @PostMapping("/eliminar")
     public String eliminar(@RequestParam Integer idConductor,
@@ -117,12 +95,22 @@ public class ConductorController {
         if (conductorOpt.isEmpty()) {
             redirectAttributes.addFlashAttribute(
                     "error",
-                    messageSource.getMessage("error", null, Locale.getDefault())
-            );
+                    messageSource.getMessage("error", null, Locale.getDefault()));
             return "redirect:/conductor/listado";
         }
 
-        model.addAttribute("conductor", conductorOpt.get());
+        Conductor conductor = conductorOpt.get();
+
+        Integer idUsuario = conductor.getUsuario() != null
+                ? conductor.getUsuario().getIdUsuario()
+                : null;
+
+        model.addAttribute("usuariosDisponibles",
+                usuarioService.getUsuariosDisponibles(idUsuario));
+
+        model.addAttribute("conductor", conductor);
+        model.addAttribute("hoy", LocalDate.now());
+
         return "/conductor/modifica";
     }
     
@@ -147,7 +135,7 @@ public class ConductorController {
         model.addAttribute("totalViajes", viajes.size());
         model.addAttribute("conductor", conductor);
         
-        return "conductor/mis_viajes"; // Buscará el archivo en templates/conductor/mis_viajes.html
+        return "conductor/misViajes"; // Buscará el archivo en templates/conductor/mis_viajes.html
     }
     
 }

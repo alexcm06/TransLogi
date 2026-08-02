@@ -20,42 +20,53 @@
     <aside th:fragment="sidebar" class="sidebar">
 
         <div class="logo">
-
             <h3>
                 <i class="bi bi-truck"></i>
                 TransLogi
             </h3>
-
             <p>Sistema de Gestión</p>
-
         </div>
 
         <nav class="sidebar-menu">
 
-            <!-- Opción infalible para el Administrador -->
-            <div th:if="${#authentication.name == 'admin'}">
+            <!-- Menú general accesible para administradores y supervisores -->
+            <div sec:authorize="hasAnyRole('Administrador','Supervisor')">
+
                 <a th:href="@{/}">
                     <i class="bi bi-speedometer2"></i> Dashboard
                 </a>
+                
                 <a th:href="@{/viaje/listado}">
                     <i class="bi bi-truck"></i> Viajes
                 </a>
+
                 <a th:href="@{/conductor/listado}">
                     <i class="bi bi-person-badge"></i> Conductores
                 </a>
+
                 <a th:href="@{/empresa/listado}">
                     <i class="bi bi-buildings"></i> Empresas
                 </a>
+
                 <a th:href="@{/ubicacion/listado}">
                     <i class="bi bi-geo-alt"></i> Ubicaciones
                 </a>
+
+                <a th:href="@{/reportes/listado}">
+                    <i class="bi bi-file-earmark-bar-graph"></i> Reportes
+                </a>
+
+            </div>
+
+            <!-- Usuarios: solo Administrador -->
+            <div sec:authorize="hasRole('Administrador')">
                 <a th:href="@{/usuario/listado}">
                     <i class="bi bi-people"></i> Usuarios
                 </a>
             </div>
 
-            <!-- Opción para cualquier conductor (ej. marcos) -->
-            <div th:if="${#authentication.name != 'admin'}">
+            <!-- Menú exclusivo para Conductores -->
+            <div sec:authorize="hasRole('Conductor')">
                 <a th:href="@{/conductor/mis-viajes}">
                     <i class="bi bi-journal-text"></i> Mis Viajes
                 </a>
@@ -66,29 +77,37 @@
         <div class="sidebar-footer">
 
             <hr class="text-secondary">
+
+            <!-- Sección cuando NO está autenticado (Login) -->
+            <div sec:authorize="!isAuthenticated()" class="px-3 mb-2">
+                <a th:href="@{/login}" class="btn btn-primary btn-sm w-100">
+                    <i class="bi bi-box-arrow-in-right"></i> Login
+                </a>
+            </div>
+
+            <!-- Sección cuando SÍ está autenticado (Usuario + Logout) -->
             <ul class="navbar-nav" sec:authorize="isAuthenticated()">
-                <li class="nav-item my-auto">
-                    <a class="nav-link">
+                <li class="nav-item my-auto px-2">
+                    <a class="nav-link text-white d-flex align-items-center p-0 mb-2">
                         <img th:src="@{${session.imagenUsuario}}"
-                             alt="your image" height="40" class="round-circle"/>
-                        <span sec:authentication="name" class="ms-1"></span>
+                             alt="Avatar" height="35" width="35" class="rounded-circle me-2 object-fit-cover"/>
+                        <span sec:authentication="name" class="fw-semibold text-truncate"></span>
                     </a>
                 </li>
 
                 <li class="nav-item my-auto">
-                    <form method="POST" th:action="@{/logout}" style="margin-bottom: 15px; padding: 0 10px;">
-                        <button type="submit" class="btn btn-danger btn-sm w-100" style="border-radius: 5px;">
-                            <i class="bi bi-box-arrow-left"></i> Cerrar Sesión
+                    <form method="POST" th:action="@{/logout}" class="px-2 mb-2">
+                        <button type="submit" class="btn btn-danger btn-sm w-100">
+                            <i class="bi bi-box-arrow-left"></i> Logout
                         </button>
                     </form>
                 </li>
             </ul>
 
-
             <hr class="text-secondary">
 
-            <small>
-                Grupo 3 - Equipo TransLogi
+            <small class="text-white-50 d-block text-center pb-2">
+                Grupo 3 - TransLogi
             </small>
 
         </div>

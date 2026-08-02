@@ -7,6 +7,7 @@ package com.TransLogi.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,10 +34,18 @@ public class Usuario implements Serializable {
     
     @Column(length = 20)
     @NotBlank
+    @Pattern(
+            regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$",
+            message = "El nombre solo puede contener letras"
+    )
     private String nombre;
     
     @Column(length = 30)
     @NotBlank
+    @Pattern(
+            regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$",
+            message = "Los apellidos solo pueden contener letras"
+    )
     private String apellidos;
     
     @Column(unique = true, length = 75)
@@ -44,6 +53,10 @@ public class Usuario implements Serializable {
     private String correo;
     
     @Column(length = 25)
+    @Pattern(
+            regexp = "^[0-9]{8}$",
+            message = "Debe tener exactamente 8 dígitos"
+    )
     private String telefono;
     
     @Column(length = 1024)
