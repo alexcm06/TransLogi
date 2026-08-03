@@ -301,6 +301,19 @@
 
                                     </div>
 
+                                    <!-- Rol -->
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Rol</label>
+                                        <select class="form-select" name="idRol" required>
+                                            <option value="">Seleccione un rol</option>
+                                            <option th:each="r : ${roles}"
+                                                    th:value="${r.idRol}"
+                                                    th:text="${r.nombreRol}">
+                                            </option>
+                                        </select>
+                                    </div>
+                           
+                                    <!-- Foto Perfil -->
                                     <div class="col-md-12 mb-3">
 
                                         <label class="form-label">

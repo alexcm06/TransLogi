@@ -1,17 +1,18 @@
 package com.TransLogi.controller;
-
 /**
  *
  * @author sebas
  */
 import com.TransLogi.domain.Conductor;
 import com.TransLogi.service.ConductorService;
+import com.TransLogi.service.ViajeService;
 import com.TransLogi.service.UsuarioService;
 import jakarta.validation.Valid;
 import java.util.Locale;
 import java.util.Optional;
 import java.io.IOException;
 import java.time.LocalDate;
+import org.springframework.security.core.Authentication; 
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -30,13 +31,14 @@ public class ConductorController {
     private final ConductorService conductorService;
     private final UsuarioService usuarioService;
     private final MessageSource messageSource;
-
-    public ConductorController(ConductorService conductorService, UsuarioService usuarioService, MessageSource messageSource) {
+    private final ViajeService viajeService; 
+    
+    public ConductorController(ConductorService conductorService, UsuarioService usuarioService, MessageSource messageSource, ViajeService viajeService) {
         this.conductorService = conductorService;
         this.usuarioService = usuarioService;
         this.messageSource = messageSource;
+        this.viajeService = viajeService;
     }
-
     @GetMapping("/listado")
     public String listado(Model model) {
         var conductores = conductorService.getConductores(false);
@@ -46,7 +48,7 @@ public class ConductorController {
         model.addAttribute("usuariosDisponibles", usuarioService.getUsuariosSinConductor());
         model.addAttribute("hoy", LocalDate.now());
         return "/conductor/listado";
-    }
+    } 
 
     @PostMapping("/guardar")
     public String guardar(Conductor conductor,
@@ -111,4 +113,29 @@ public class ConductorController {
 
         return "/conductor/modifica";
     }
+    
+    @GetMapping("/mis-viajes")
+    public String verMisViajes(Authentication authentication, Model model, RedirectAttributes redirectAttributes) {
+        //Obtenemos el username de la persona que inició sesión
+        String username = authentication.getName();
+        
+        //Buscamos el conductor vinculado a ese usuario en la BD
+        Conductor conductor = conductorService.getConductorPorUsername(username);
+        
+        if (conductor == null) {
+            redirectAttributes.addFlashAttribute("error", "No se encontró un perfil de conductor asociado a tu usuario.");
+            return "redirect:/"; // O la ruta principal que prefieras si no tiene perfil
+        }
+        
+        //Buscamos los viajes que le pertenecen exclusivamente a este conductor
+        var viajes = viajeService.getViajesPorConductor(conductor);
+        
+        //andamos los datos a la vista de Thymeleaf
+        model.addAttribute("viajes", viajes);
+        model.addAttribute("totalViajes", viajes.size());
+        model.addAttribute("conductor", conductor);
+        
+        return "conductor/misViajes"; // Buscará el archivo en templates/conductor/mis_viajes.html
+    }
+    
 }

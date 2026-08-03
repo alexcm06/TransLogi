@@ -34,7 +34,12 @@ public class ConductorService {
     public Optional<Conductor> getConductor(Integer idConductor) {
         return conductorRepository.findById(idConductor);
     }
-
+    
+    @Transactional(readOnly = true)
+    public Conductor getConductorPorUsername(String username) {
+        return conductorRepository.findByUsuarioUsername(username).orElse(null);
+    }
+    
     @Transactional(readOnly = true)
     public long totalConductoresActivos() {
         return conductorRepository.totalConductoresActivo(true);
