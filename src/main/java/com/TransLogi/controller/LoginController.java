@@ -34,4 +34,9 @@ public class LoginController {
             return "redirect:/login?error";
         }
     }
+
+    @GetMapping("/acceso_denegado")
+    public String accesoDenegado() {
+        return "acceso_denegado";
+    }
 }
