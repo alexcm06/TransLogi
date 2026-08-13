@@ -1,11 +1,11 @@
 package com.TransLogi.controller;
 
+import java.util.Locale;
 import com.TransLogi.domain.Ubicacion;
 import com.TransLogi.service.UbicacionService;
 import jakarta.validation.Valid;
 import java.util.Optional;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,7 +41,7 @@ public class UbicacionController {
         ubicacionService.save(ubicacion);
         redirectAttributes.addFlashAttribute(
                 "todoOk",
-                messageSource.getMessage("mensaje.actualizado", null, LocaleContextHolder.getLocale())
+                messageSource.getMessage("mensaje.actualizado", null, Locale.getDefault())
         );
         return "redirect:/ubicacion/listado";
     }
@@ -67,7 +67,7 @@ public class UbicacionController {
 
         redirectAttributes.addFlashAttribute(
                 titulo,
-                messageSource.getMessage(detalle, null, LocaleContextHolder.getLocale())
+                messageSource.getMessage(detalle, null, Locale.getDefault())
         );
         return "redirect:/ubicacion/listado";
     }
@@ -81,7 +81,7 @@ public class UbicacionController {
         if (ubicacionOpt.isEmpty()) {
             redirectAttributes.addFlashAttribute(
                     "error",
-                    messageSource.getMessage("error", null, LocaleContextHolder.getLocale())
+                    messageSource.getMessage("error", null, Locale.getDefault())
             );
             return "redirect:/ubicacion/listado";
         }

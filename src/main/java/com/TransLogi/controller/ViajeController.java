@@ -4,6 +4,7 @@
  */
 package com.TransLogi.controller;
 
+import java.util.Locale;
 /**
  *
  * @author sebas
@@ -18,7 +19,6 @@ import java.time.LocalDate;
 import jakarta.validation.Valid;
 import java.util.Optional;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -73,7 +73,7 @@ public class ViajeController {
             viajeService.save(viaje);
             redirectAttributes.addFlashAttribute(
                     "todoOk",
-                    messageSource.getMessage("mensaje.actualizado", null, LocaleContextHolder.getLocale())
+                    messageSource.getMessage("mensaje.actualizado", null, Locale.getDefault())
             );
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
@@ -101,7 +101,7 @@ public class ViajeController {
         }
         redirectAttributes.addFlashAttribute(
                 titulo,
-                messageSource.getMessage(detalle, null, LocaleContextHolder.getLocale())
+                messageSource.getMessage(detalle, null, Locale.getDefault())
         );
         return "redirect:/viaje/listado";
     }
@@ -114,7 +114,7 @@ public class ViajeController {
         if (viajeOpt.isEmpty()) {
             redirectAttributes.addFlashAttribute(
                     "error",
-                    messageSource.getMessage("error", null, LocaleContextHolder.getLocale())
+                    messageSource.getMessage("error", null, Locale.getDefault())
             );
             return "redirect:/viaje/listado";
         }
@@ -123,7 +123,7 @@ public class ViajeController {
         return "/viaje/modifica";
     }
 
-    private void cargarListasParaFormulario(Model model) { /* este método privado es el que ya se llama tanto desde listado() 
+    private void cargarListasParaFormulario(Model model) { /* este mÃ©todo privado es el que ya se llama tanto desde listado()
         (para el modal de "Nuevo Viaje") como desde modificar() (para la pantalla de editar).*/
         model.addAttribute("empresas", empresaService.getEmpresas(true));
         model.addAttribute("conductores", conductorService.getConductores(true));

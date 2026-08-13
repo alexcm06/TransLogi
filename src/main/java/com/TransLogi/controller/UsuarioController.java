@@ -1,11 +1,11 @@
 package com.TransLogi.controller;
 
+import java.util.Locale;
 import com.TransLogi.domain.Usuario;
 import com.TransLogi.service.UsuarioService;
 import jakarta.validation.Valid;
 import java.util.Optional;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -48,14 +48,14 @@ public class UsuarioController {
 
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("error",
-                    messageSource.getMessage("usuario.error04", null, LocaleContextHolder.getLocale()));
+                    messageSource.getMessage("usuario.error04", null, Locale.getDefault()));
             return "redirect:/usuario/listado";
         }
 
         try {
             usuarioService.save(usuario, imagenFile, idRol);
             redirectAttributes.addFlashAttribute("todoOk",
-                    messageSource.getMessage("usuario.guardado", null, LocaleContextHolder.getLocale()));
+                    messageSource.getMessage("usuario.guardado", null, Locale.getDefault()));
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
@@ -78,7 +78,7 @@ public class UsuarioController {
 
         if (usuario.isEmpty()) {
             redirectAttributes.addFlashAttribute("error",
-                    messageSource.getMessage("usuario.error01", null, LocaleContextHolder.getLocale()));
+                    messageSource.getMessage("usuario.error01", null, Locale.getDefault()));
             return "redirect:/usuario/listado";
         }
 

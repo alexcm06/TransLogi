@@ -1,11 +1,11 @@
 package com.TransLogi.controller;
 
+import java.util.Locale;
 import com.TransLogi.domain.EstadoViaje;
 import com.TransLogi.service.EstadoViajeService;
 import jakarta.validation.Valid;
 import java.util.Optional;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +40,7 @@ public class EstadoViajeController {
         estadoViajeService.save(estadoViaje);
         redirectAttributes.addFlashAttribute(
                 "todoOk",
-                messageSource.getMessage("mensaje.actualizado", null, LocaleContextHolder.getLocale())
+                messageSource.getMessage("mensaje.actualizado", null, Locale.getDefault())
         );
         return "redirect:/estadoViaje/listado";
     }
@@ -54,7 +54,7 @@ public class EstadoViajeController {
         if (estadoOpt.isEmpty()) {
             redirectAttributes.addFlashAttribute(
                     "error",
-                    messageSource.getMessage("error", null, LocaleContextHolder.getLocale())
+                    messageSource.getMessage("error", null, Locale.getDefault())
             );
             return "redirect:/estadoViaje/listado";
         }

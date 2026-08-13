@@ -1,5 +1,6 @@
 package com.TransLogi.controller;
 
+import java.util.Locale;
 import com.TransLogi.domain.Conductor;
 import com.TransLogi.domain.Gasto;
 import com.TransLogi.domain.Viaje;
@@ -14,7 +15,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -94,7 +94,7 @@ public class ConductorController {
 
         redirectAttributes.addFlashAttribute(
                 titulo,
-                messageSource.getMessage(detalle, null, LocaleContextHolder.getLocale())
+                messageSource.getMessage(detalle, null, Locale.getDefault())
         );
         return "redirect:/conductor/listado";
     }
@@ -108,7 +108,7 @@ public class ConductorController {
         if (conductorOpt.isEmpty()) {
             redirectAttributes.addFlashAttribute(
                     "error",
-                    messageSource.getMessage("error", null, LocaleContextHolder.getLocale()));
+                    messageSource.getMessage("error", null, Locale.getDefault()));
             return "redirect:/conductor/listado";
         }
 
@@ -137,7 +137,7 @@ public class ConductorController {
 
         if (conductor == null) {
             redirectAttributes.addFlashAttribute("error",
-                    messageSource.getMessage("conductor.noPerfil", null, LocaleContextHolder.getLocale()));
+                    messageSource.getMessage("conductor.noPerfil", null, Locale.getDefault()));
             return "redirect:/";
         }
 
@@ -172,7 +172,7 @@ public class ConductorController {
         if (viajeOpt.isEmpty() || conductor == null
                 || !viajeOpt.get().getConductor().getIdConductor().equals(conductor.getIdConductor())) {
             redirectAttributes.addFlashAttribute("error",
-                    messageSource.getMessage("viaje.noEncontrado", null, LocaleContextHolder.getLocale()));
+                    messageSource.getMessage("viaje.noEncontrado", null, Locale.getDefault()));
             return "redirect:/conductor/mis-viajes";
         }
 
@@ -209,7 +209,7 @@ public class ConductorController {
         if (viajeOpt.isEmpty() || conductor == null
                 || !viajeOpt.get().getConductor().getIdConductor().equals(conductor.getIdConductor())) {
             redirectAttributes.addFlashAttribute("error",
-                    messageSource.getMessage("viaje.noEncontrado", null, LocaleContextHolder.getLocale()));
+                    messageSource.getMessage("viaje.noEncontrado", null, Locale.getDefault()));
             return "redirect:/conductor/mis-viajes";
         }
 
@@ -221,13 +221,13 @@ public class ConductorController {
 
         if (ahora.isBefore(fechaHoraProgramada.minusMinutes(30))) {
             redirectAttributes.addFlashAttribute("error",
-                    messageSource.getMessage("viaje.inicioNoDisponible", null, LocaleContextHolder.getLocale()));
+                    messageSource.getMessage("viaje.inicioNoDisponible", null, Locale.getDefault()));
             return "redirect:/conductor/viaje/detalle/" + idViaje;
         }
 
         if (!viaje.getEstadoViaje().getNombreEstado().equalsIgnoreCase("Programado")) {
             redirectAttributes.addFlashAttribute("error",
-                    messageSource.getMessage("viaje.soloProgramados", null, LocaleContextHolder.getLocale()));
+                    messageSource.getMessage("viaje.soloProgramados", null, Locale.getDefault()));
             return "redirect:/conductor/viaje/detalle/" + idViaje;
         }
 
@@ -236,7 +236,7 @@ public class ConductorController {
         viajeService.save(viaje);
 
         redirectAttributes.addFlashAttribute("todoOk",
-                messageSource.getMessage("viaje.iniciado", null, LocaleContextHolder.getLocale()));
+                messageSource.getMessage("viaje.iniciado", null, Locale.getDefault()));
 
         return "redirect:/conductor/viaje/detalle/" + idViaje;
     }
@@ -257,7 +257,7 @@ public class ConductorController {
         if (viajeOpt.isEmpty() || conductor == null
                 || !viajeOpt.get().getConductor().getIdConductor().equals(conductor.getIdConductor())) {
             redirectAttributes.addFlashAttribute("error",
-                    messageSource.getMessage("viaje.noEncontrado", null, LocaleContextHolder.getLocale()));
+                    messageSource.getMessage("viaje.noEncontrado", null, Locale.getDefault()));
             return "redirect:/conductor/mis-viajes";
         }
 
@@ -265,19 +265,19 @@ public class ConductorController {
 
         if (!viaje.getEstadoViaje().getNombreEstado().equalsIgnoreCase("En proceso")) {
             redirectAttributes.addFlashAttribute("error",
-                    messageSource.getMessage("viaje.soloProceso", null, LocaleContextHolder.getLocale()));
+                    messageSource.getMessage("viaje.soloProceso", null, Locale.getDefault()));
             return "redirect:/conductor/viaje/detalle/" + idViaje;
         }
 
         if (fechaHoraFin.isBefore(fechaHoraInicio)) {
             redirectAttributes.addFlashAttribute("error",
-                    messageSource.getMessage("viaje.fechaFinAnterior", null, LocaleContextHolder.getLocale()));
+                    messageSource.getMessage("viaje.fechaFinAnterior", null, Locale.getDefault()));
             return "redirect:/conductor/viaje/detalle/" + idViaje;
         }
 
         if (kilometrosRecorridos.compareTo(BigDecimal.ZERO) < 0) {
             redirectAttributes.addFlashAttribute("error",
-                    messageSource.getMessage("viaje.kilometrosNegativos", null, LocaleContextHolder.getLocale()));
+                    messageSource.getMessage("viaje.kilometrosNegativos", null, Locale.getDefault()));
             return "redirect:/conductor/viaje/detalle/" + idViaje;
         }
 
@@ -288,7 +288,7 @@ public class ConductorController {
         viajeService.save(viaje);
 
         redirectAttributes.addFlashAttribute("todoOk",
-                messageSource.getMessage("viaje.finalizadoOk", null, LocaleContextHolder.getLocale()));
+                messageSource.getMessage("viaje.finalizadoOk", null, Locale.getDefault()));
 
         return "redirect:/conductor/viaje/detalle/" + idViaje;
     }
@@ -310,13 +310,13 @@ public class ConductorController {
         if (viajeOpt.isEmpty() || conductor == null
                 || !viajeOpt.get().getConductor().getIdConductor().equals(conductor.getIdConductor())) {
             redirectAttributes.addFlashAttribute("error",
-                    messageSource.getMessage("viaje.noEncontrado", null, LocaleContextHolder.getLocale()));
+                    messageSource.getMessage("viaje.noEncontrado", null, Locale.getDefault()));
             return "redirect:/conductor/mis-viajes";
         }
 
         if (monto.compareTo(BigDecimal.ZERO) < 0) {
             redirectAttributes.addFlashAttribute("error",
-                    messageSource.getMessage("gasto.montoNegativo", null, LocaleContextHolder.getLocale()));
+                    messageSource.getMessage("gasto.montoNegativo", null, Locale.getDefault()));
             return "redirect:/conductor/mis-viajes";
         }
 
@@ -324,14 +324,14 @@ public class ConductorController {
         if (viaje.getEstadoViaje() == null
                 || viaje.getEstadoViaje().getNombreEstado().equalsIgnoreCase("Programado")) {
             redirectAttributes.addFlashAttribute("error",
-                    messageSource.getMessage("gasto.viajeNoDisponible", null, LocaleContextHolder.getLocale()));
+                    messageSource.getMessage("gasto.viajeNoDisponible", null, Locale.getDefault()));
             return "redirect:/conductor/mis-viajes";
         }
 
         var tipoGastoOpt = gastoService.getTipoGasto(idTipoGasto);
         if (tipoGastoOpt.isEmpty()) {
             redirectAttributes.addFlashAttribute("error",
-                    messageSource.getMessage("gasto.tipoInvalido", null, LocaleContextHolder.getLocale()));
+                    messageSource.getMessage("gasto.tipoInvalido", null, Locale.getDefault()));
             return "redirect:/conductor/mis-viajes";
         }
 
@@ -344,7 +344,7 @@ public class ConductorController {
         gastoService.save(gasto);
 
         redirectAttributes.addFlashAttribute("todoOk",
-                messageSource.getMessage("gasto.guardado", null, LocaleContextHolder.getLocale()));
+                messageSource.getMessage("gasto.guardado", null, Locale.getDefault()));
 
         return "redirect:/conductor/mis-viajes";
     }
@@ -362,14 +362,14 @@ public class ConductorController {
         if (gastoOpt.isEmpty() || conductor == null
                 || !gastoOpt.get().getViaje().getConductor().getIdConductor().equals(conductor.getIdConductor())) {
             redirectAttributes.addFlashAttribute("error",
-                    messageSource.getMessage("gasto.noEncontrado", null, LocaleContextHolder.getLocale()));
+                    messageSource.getMessage("gasto.noEncontrado", null, Locale.getDefault()));
             return "redirect:/conductor/mis-viajes";
         }
 
         gastoService.delete(idGasto);
 
         redirectAttributes.addFlashAttribute("todoOk",
-                messageSource.getMessage("gasto.eliminado", null, LocaleContextHolder.getLocale()));
+                messageSource.getMessage("gasto.eliminado", null, Locale.getDefault()));
 
         return "redirect:/conductor/mis-viajes";
     }
