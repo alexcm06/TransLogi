@@ -16,9 +16,9 @@ import com.TransLogi.service.UbicacionService;
 import com.TransLogi.service.EstadoViajeService;
 import java.time.LocalDate;
 import jakarta.validation.Valid;
-import java.util.Locale;
 import java.util.Optional;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -73,7 +73,7 @@ public class ViajeController {
             viajeService.save(viaje);
             redirectAttributes.addFlashAttribute(
                     "todoOk",
-                    messageSource.getMessage("mensaje.actualizado", null, Locale.getDefault())
+                    messageSource.getMessage("mensaje.actualizado", null, LocaleContextHolder.getLocale())
             );
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
@@ -101,7 +101,7 @@ public class ViajeController {
         }
         redirectAttributes.addFlashAttribute(
                 titulo,
-                messageSource.getMessage(detalle, null, Locale.getDefault())
+                messageSource.getMessage(detalle, null, LocaleContextHolder.getLocale())
         );
         return "redirect:/viaje/listado";
     }
@@ -114,7 +114,7 @@ public class ViajeController {
         if (viajeOpt.isEmpty()) {
             redirectAttributes.addFlashAttribute(
                     "error",
-                    messageSource.getMessage("error", null, Locale.getDefault())
+                    messageSource.getMessage("error", null, LocaleContextHolder.getLocale())
             );
             return "redirect:/viaje/listado";
         }

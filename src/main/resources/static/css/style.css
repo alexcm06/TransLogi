@@ -71,8 +71,31 @@ body{
 }
 
 .sidebar-footer{
-    padding:20px;
+    padding:12px 20px 14px;
     border-top:1px solid rgba(255,255,255,.08);
+}
+
+.sidebar-footer hr{
+    margin:10px 0;
+}
+
+.language-switcher{
+    padding:0 8px;
+}
+
+.language-switcher .btn{
+    border-color: rgba(255,255,255,.25);
+    color:#E2E8F0;
+    border-radius:10px;
+    font-weight:500;
+    padding:7px 12px;
+}
+
+.language-switcher .btn:hover,
+.language-switcher .btn:focus{
+    background: var(--sidebar-hover);
+    border-color: rgba(255,255,255,.45);
+    color:white;
 }
 
 /* ================= CONTENIDO ================= */

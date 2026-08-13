@@ -1,9 +1,5 @@
 package com.TransLogi.domain;
 
-/**
- *
- * @author sebas
- */
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -19,52 +15,51 @@ import lombok.Data;
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_usuario")
     private Integer idUsuario;
-    
+
     @NotBlank
     @Column(unique = true, length = 30)
     private String username;
-    
+
     @Column(length = 512)
     private String password;
-    
+
     @Column(length = 20)
     @NotBlank
     @Pattern(
-            regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$",
+            regexp = "^[\\p{L} ]+$",
             message = "El nombre solo puede contener letras"
     )
     private String nombre;
-    
+
     @Column(length = 30)
     @NotBlank
     @Pattern(
-            regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$",
+            regexp = "^[\\p{L} ]+$",
             message = "Los apellidos solo pueden contener letras"
     )
     private String apellidos;
-    
+
     @Column(unique = true, length = 75)
     @Email
     private String correo;
-    
+
     @Column(length = 25)
     @Pattern(
-            regexp = "^[0-9]{8}$",
-            message = "Debe tener exactamente 8 dígitos"
+            regexp = "^[0-9]{4}-?[0-9]{4}$",
+            message = "Debe tener 8 digitos, con guion opcional"
     )
     private String telefono;
-    
+
     @Column(length = 1024)
     private String rutaImagen;
-    
+
     private boolean activo;
 
-    // Relación Many-to-Many con la entidad Rol
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "usuario_rol",

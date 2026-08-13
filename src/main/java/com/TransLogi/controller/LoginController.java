@@ -26,8 +26,11 @@ public class LoginController {
         boolean isConductor = authentication.getAuthorities().stream()
                 .anyMatch(r -> r.getAuthority().equals("ROLE_Conductor"));
 
-        if (isAdmin) {
-            return "redirect:/viaje/listado";
+        boolean isSupervisor = authentication.getAuthorities().stream()
+                .anyMatch(r -> r.getAuthority().equals("ROLE_Supervisor"));
+
+        if (isAdmin || isSupervisor) {
+            return "redirect:/";
         } else if (isConductor) {
             return "redirect:/conductor/mis-viajes";
         } else {

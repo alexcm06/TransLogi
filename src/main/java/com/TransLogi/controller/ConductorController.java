@@ -1,23 +1,22 @@
 package com.TransLogi.controller;
 
-/**
- *
- * @author sebas
- */
 import com.TransLogi.domain.Conductor;
-import com.TransLogi.service.ConductorService;
-import com.TransLogi.service.ViajeService;
-import com.TransLogi.service.UsuarioService;
-import com.TransLogi.service.EstadoViajeService;
+import com.TransLogi.domain.Gasto;
 import com.TransLogi.domain.Viaje;
-import jakarta.validation.Valid;
-import java.util.Locale;
-import java.util.Optional;
-import java.io.IOException;
+import com.TransLogi.service.ConductorService;
+import com.TransLogi.service.EstadoViajeService;
+import com.TransLogi.service.GastoService;
+import com.TransLogi.service.UsuarioService;
+import com.TransLogi.service.ViajeService;
+import java.math.BigDecimal;
 import java.time.LocalDate;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.multipart.MultipartFile;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -35,15 +35,21 @@ public class ConductorController {
     private final UsuarioService usuarioService;
     private final MessageSource messageSource;
     private final ViajeService viajeService;
-    private final EstadoViajeService estadoViajeService; // ← nuevo
+    private final EstadoViajeService estadoViajeService;
+    private final GastoService gastoService;
 
-    public ConductorController(ConductorService conductorService, UsuarioService usuarioService, MessageSource messageSource, ViajeService viajeService, EstadoViajeService estadoViajeService) {
+    public ConductorController(ConductorService conductorService,
+            UsuarioService usuarioService,
+            MessageSource messageSource,
+            ViajeService viajeService,
+            EstadoViajeService estadoViajeService,
+            GastoService gastoService) {
         this.conductorService = conductorService;
         this.usuarioService = usuarioService;
         this.messageSource = messageSource;
         this.viajeService = viajeService;
-        this.estadoViajeService = estadoViajeService; // ← nuevo
-
+        this.estadoViajeService = estadoViajeService;
+        this.gastoService = gastoService;
     }
 
     @GetMapping("/listado")
@@ -88,7 +94,7 @@ public class ConductorController {
 
         redirectAttributes.addFlashAttribute(
                 titulo,
-                messageSource.getMessage(detalle, null, Locale.getDefault())
+                messageSource.getMessage(detalle, null, LocaleContextHolder.getLocale())
         );
         return "redirect:/conductor/listado";
     }
@@ -102,7 +108,7 @@ public class ConductorController {
         if (conductorOpt.isEmpty()) {
             redirectAttributes.addFlashAttribute(
                     "error",
-                    messageSource.getMessage("error", null, Locale.getDefault()));
+                    messageSource.getMessage("error", null, LocaleContextHolder.getLocale()));
             return "redirect:/conductor/listado";
         }
 
@@ -122,27 +128,34 @@ public class ConductorController {
     }
 
     @GetMapping("/mis-viajes")
-    public String verMisViajes(Authentication authentication, Model model, RedirectAttributes redirectAttributes) {
-        //Obtenemos el username de la persona que inició sesión
-        String username = authentication.getName();
+    public String verMisViajes(Authentication authentication,
+            Model model,
+            RedirectAttributes redirectAttributes) {
 
-        //Buscamos el conductor vinculado a ese usuario en la BD
+        String username = authentication.getName();
         Conductor conductor = conductorService.getConductorPorUsername(username);
 
         if (conductor == null) {
-            redirectAttributes.addFlashAttribute("error", "No se encontró un perfil de conductor asociado a tu usuario.");
-            return "redirect:/"; // O la ruta principal que prefieras si no tiene perfil
+            redirectAttributes.addFlashAttribute("error",
+                    messageSource.getMessage("conductor.noPerfil", null, LocaleContextHolder.getLocale()));
+            return "redirect:/";
         }
 
-        //Buscamos los viajes que le pertenecen exclusivamente a este conductor
         var viajes = viajeService.getViajesPorConductor(conductor);
+        var viajesConGastos = viajes.stream()
+                .filter(viaje -> viaje.getEstadoViaje() != null
+                && !viaje.getEstadoViaje().getNombreEstado().equalsIgnoreCase("Programado"))
+                .toList();
 
-        //andamos los datos a la vista de Thymeleaf
         model.addAttribute("viajes", viajes);
+        model.addAttribute("viajesConGastos", viajesConGastos);
+        model.addAttribute("gastos", gastoService.getGastosPorConductor(conductor));
+        model.addAttribute("tiposGasto", gastoService.getTiposGasto());
+        model.addAttribute("fechaGastoSugerida", LocalDate.now());
         model.addAttribute("totalViajes", viajes.size());
         model.addAttribute("conductor", conductor);
 
-        return "conductor/misViajes"; // Buscará el archivo en templates/conductor/mis_viajes.html
+        return "conductor/misViajes";
     }
 
     @GetMapping("/viaje/detalle/{idViaje}")
@@ -156,22 +169,35 @@ public class ConductorController {
 
         Optional<Viaje> viajeOpt = viajeService.getViaje(idViaje);
 
-        // Verifica que el viaje exista Y que le pertenezca a este conductor
         if (viajeOpt.isEmpty() || conductor == null
                 || !viajeOpt.get().getConductor().getIdConductor().equals(conductor.getIdConductor())) {
-            redirectAttributes.addFlashAttribute("error", "Viaje no encontrado o no autorizado.");
+            redirectAttributes.addFlashAttribute("error",
+                    messageSource.getMessage("viaje.noEncontrado", null, LocaleContextHolder.getLocale()));
             return "redirect:/conductor/mis-viajes";
         }
 
-        model.addAttribute("viaje", viajeOpt.get());
-        model.addAttribute("estados", estadoViajeService.getEstados());
+        Viaje viaje = viajeOpt.get();
+        LocalDateTime fechaHoraProgramada = LocalDateTime.of(
+                viaje.getFechaProgramada(),
+                viaje.getHoraProgramada());
+        LocalDateTime ahora = LocalDateTime.now();
+        LocalDateTime fechaHoraInicioSugerida =
+                viaje.getFechaHoraInicio() != null ? viaje.getFechaHoraInicio() : ahora;
+        DateTimeFormatter formatoFechaHora = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+
+        model.addAttribute("viaje", viaje);
+        model.addAttribute("puedeIniciar",
+                !ahora.isBefore(fechaHoraProgramada.minusMinutes(30)));
+        model.addAttribute("fechaHoraInicioInput",
+                fechaHoraInicioSugerida.format(formatoFechaHora));
+        model.addAttribute("fechaHoraFinInput",
+                ahora.format(formatoFechaHora));
 
         return "conductor/detalleViaje";
     }
 
-    @PostMapping("/viaje/cambiar-estado")
-    public String cambiarEstado(@RequestParam Integer idViaje,
-            @RequestParam Integer idEstado,
+    @PostMapping("/viaje/iniciar")
+    public String iniciarViaje(@RequestParam Integer idViaje,
             Authentication authentication,
             RedirectAttributes redirectAttributes) {
 
@@ -180,26 +206,171 @@ public class ConductorController {
 
         Optional<Viaje> viajeOpt = viajeService.getViaje(idViaje);
 
-        // Misma verificación de seguridad: solo el dueño del viaje puede cambiar su estado
         if (viajeOpt.isEmpty() || conductor == null
                 || !viajeOpt.get().getConductor().getIdConductor().equals(conductor.getIdConductor())) {
-            redirectAttributes.addFlashAttribute("error", "Viaje no encontrado o no autorizado.");
+            redirectAttributes.addFlashAttribute("error",
+                    messageSource.getMessage("viaje.noEncontrado", null, LocaleContextHolder.getLocale()));
+            return "redirect:/conductor/mis-viajes";
+        }
+
+        Viaje viaje = viajeOpt.get();
+        LocalDateTime fechaHoraProgramada = LocalDateTime.of(
+                viaje.getFechaProgramada(),
+                viaje.getHoraProgramada());
+        LocalDateTime ahora = LocalDateTime.now();
+
+        if (ahora.isBefore(fechaHoraProgramada.minusMinutes(30))) {
+            redirectAttributes.addFlashAttribute("error",
+                    messageSource.getMessage("viaje.inicioNoDisponible", null, LocaleContextHolder.getLocale()));
+            return "redirect:/conductor/viaje/detalle/" + idViaje;
+        }
+
+        if (!viaje.getEstadoViaje().getNombreEstado().equalsIgnoreCase("Programado")) {
+            redirectAttributes.addFlashAttribute("error",
+                    messageSource.getMessage("viaje.soloProgramados", null, LocaleContextHolder.getLocale()));
+            return "redirect:/conductor/viaje/detalle/" + idViaje;
+        }
+
+        viaje.setEstadoViaje(estadoViajeService.getEstadoEnProceso());
+        viaje.setFechaHoraInicio(ahora);
+        viajeService.save(viaje);
+
+        redirectAttributes.addFlashAttribute("todoOk",
+                messageSource.getMessage("viaje.iniciado", null, LocaleContextHolder.getLocale()));
+
+        return "redirect:/conductor/viaje/detalle/" + idViaje;
+    }
+
+    @PostMapping("/viaje/finalizar")
+    public String finalizarViaje(@RequestParam Integer idViaje,
+            @RequestParam BigDecimal kilometrosRecorridos,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fechaHoraInicio,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fechaHoraFin,
+            Authentication authentication,
+            RedirectAttributes redirectAttributes) {
+
+        String username = authentication.getName();
+        Conductor conductor = conductorService.getConductorPorUsername(username);
+
+        Optional<Viaje> viajeOpt = viajeService.getViaje(idViaje);
+
+        if (viajeOpt.isEmpty() || conductor == null
+                || !viajeOpt.get().getConductor().getIdConductor().equals(conductor.getIdConductor())) {
+            redirectAttributes.addFlashAttribute("error",
+                    messageSource.getMessage("viaje.noEncontrado", null, LocaleContextHolder.getLocale()));
             return "redirect:/conductor/mis-viajes";
         }
 
         Viaje viaje = viajeOpt.get();
 
-        estadoViajeService.getEstado(idEstado).ifPresentOrElse(
-                estado -> {
-                    viaje.setEstadoViaje(estado);
-                    viajeService.save(viaje);
-                },
-                () -> redirectAttributes.addFlashAttribute("error", "Estado no válido.")
-        );
+        if (!viaje.getEstadoViaje().getNombreEstado().equalsIgnoreCase("En proceso")) {
+            redirectAttributes.addFlashAttribute("error",
+                    messageSource.getMessage("viaje.soloProceso", null, LocaleContextHolder.getLocale()));
+            return "redirect:/conductor/viaje/detalle/" + idViaje;
+        }
 
-        redirectAttributes.addFlashAttribute("todoOk", "Estado del viaje actualizado.");
+        if (fechaHoraFin.isBefore(fechaHoraInicio)) {
+            redirectAttributes.addFlashAttribute("error",
+                    messageSource.getMessage("viaje.fechaFinAnterior", null, LocaleContextHolder.getLocale()));
+            return "redirect:/conductor/viaje/detalle/" + idViaje;
+        }
+
+        if (kilometrosRecorridos.compareTo(BigDecimal.ZERO) < 0) {
+            redirectAttributes.addFlashAttribute("error",
+                    messageSource.getMessage("viaje.kilometrosNegativos", null, LocaleContextHolder.getLocale()));
+            return "redirect:/conductor/viaje/detalle/" + idViaje;
+        }
+
+        viaje.setKilometrosRecorridos(kilometrosRecorridos);
+        viaje.setFechaHoraInicio(fechaHoraInicio);
+        viaje.setFechaHoraFin(fechaHoraFin);
+        viaje.setEstadoViaje(estadoViajeService.getEstadoFinalizado());
+        viajeService.save(viaje);
+
+        redirectAttributes.addFlashAttribute("todoOk",
+                messageSource.getMessage("viaje.finalizadoOk", null, LocaleContextHolder.getLocale()));
 
         return "redirect:/conductor/viaje/detalle/" + idViaje;
     }
 
+    @PostMapping("/gasto/guardar")
+    public String guardarGasto(@RequestParam Integer idViaje,
+            @RequestParam Integer idTipoGasto,
+            @RequestParam BigDecimal monto,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
+            @RequestParam(required = false) String descripcion,
+            Authentication authentication,
+            RedirectAttributes redirectAttributes) {
+
+        String username = authentication.getName();
+        Conductor conductor = conductorService.getConductorPorUsername(username);
+
+        Optional<Viaje> viajeOpt = viajeService.getViaje(idViaje);
+
+        if (viajeOpt.isEmpty() || conductor == null
+                || !viajeOpt.get().getConductor().getIdConductor().equals(conductor.getIdConductor())) {
+            redirectAttributes.addFlashAttribute("error",
+                    messageSource.getMessage("viaje.noEncontrado", null, LocaleContextHolder.getLocale()));
+            return "redirect:/conductor/mis-viajes";
+        }
+
+        if (monto.compareTo(BigDecimal.ZERO) < 0) {
+            redirectAttributes.addFlashAttribute("error",
+                    messageSource.getMessage("gasto.montoNegativo", null, LocaleContextHolder.getLocale()));
+            return "redirect:/conductor/mis-viajes";
+        }
+
+        Viaje viaje = viajeOpt.get();
+        if (viaje.getEstadoViaje() == null
+                || viaje.getEstadoViaje().getNombreEstado().equalsIgnoreCase("Programado")) {
+            redirectAttributes.addFlashAttribute("error",
+                    messageSource.getMessage("gasto.viajeNoDisponible", null, LocaleContextHolder.getLocale()));
+            return "redirect:/conductor/mis-viajes";
+        }
+
+        var tipoGastoOpt = gastoService.getTipoGasto(idTipoGasto);
+        if (tipoGastoOpt.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error",
+                    messageSource.getMessage("gasto.tipoInvalido", null, LocaleContextHolder.getLocale()));
+            return "redirect:/conductor/mis-viajes";
+        }
+
+        Gasto gasto = new Gasto();
+        gasto.setDescripcion(descripcion);
+        gasto.setMonto(monto);
+        gasto.setFecha(fecha);
+        gasto.setViaje(viaje);
+        gasto.setTipoGasto(tipoGastoOpt.get());
+        gastoService.save(gasto);
+
+        redirectAttributes.addFlashAttribute("todoOk",
+                messageSource.getMessage("gasto.guardado", null, LocaleContextHolder.getLocale()));
+
+        return "redirect:/conductor/mis-viajes";
+    }
+
+    @PostMapping("/gasto/eliminar")
+    public String eliminarGasto(@RequestParam Integer idGasto,
+            Authentication authentication,
+            RedirectAttributes redirectAttributes) {
+
+        String username = authentication.getName();
+        Conductor conductor = conductorService.getConductorPorUsername(username);
+
+        var gastoOpt = gastoService.getGasto(idGasto);
+
+        if (gastoOpt.isEmpty() || conductor == null
+                || !gastoOpt.get().getViaje().getConductor().getIdConductor().equals(conductor.getIdConductor())) {
+            redirectAttributes.addFlashAttribute("error",
+                    messageSource.getMessage("gasto.noEncontrado", null, LocaleContextHolder.getLocale()));
+            return "redirect:/conductor/mis-viajes";
+        }
+
+        gastoService.delete(idGasto);
+
+        redirectAttributes.addFlashAttribute("todoOk",
+                messageSource.getMessage("gasto.eliminado", null, LocaleContextHolder.getLocale()));
+
+        return "redirect:/conductor/mis-viajes";
+    }
 }

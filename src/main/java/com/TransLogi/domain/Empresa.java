@@ -1,13 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.TransLogi.domain;
 
-/**
- *
- * @author sebas
- */
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
@@ -26,19 +18,19 @@ public class Empresa implements Serializable {
     private Integer idEmpresa;
 
     @Column(nullable = false, length = 150)
-    @NotBlank(message = "El nombre de la empresa no puede estar vacío.")
-    @Size(max = 150, message = "El nombre no puede tener más de 150 caracteres.")
+    @NotBlank(message = "El nombre de la empresa no puede estar vacio.")
+    @Size(max = 150, message = "El nombre no puede tener mas de 150 caracteres.")
     private String nombre;
 
-    @Column(length = 8)
+    @Column(length = 20)
     @Pattern(
-            regexp = "^[0-9]{8}$",
-            message = "Debe tener exactamente 8 dígitos"
+            regexp = "^[0-9]{4}-?[0-9]{4}$",
+            message = "Debe tener 8 digitos, con guion opcional"
     )
     private String telefono;
 
     @Column(name = "correo_contacto", length = 150)
-    @Email(message = "El correo de contacto no tiene un formato válido.")
+    @Email(message = "El correo de contacto no tiene un formato valido.")
     private String correoContacto;
 
     @Column(nullable = false)

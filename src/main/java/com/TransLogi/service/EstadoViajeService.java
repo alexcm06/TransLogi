@@ -33,6 +33,20 @@ public class EstadoViajeService {
                 "No existe el estado 'Programado' en la base de datos."));
     }
 
+    @Transactional(readOnly = true)
+    public EstadoViaje getEstadoEnProceso() {
+        return estadoViajeRepository.findByNombreEstado("En proceso")
+                .orElseThrow(() -> new IllegalStateException(
+                "No existe el estado 'En proceso' en la base de datos."));
+    }
+
+    @Transactional(readOnly = true)
+    public EstadoViaje getEstadoFinalizado() {
+        return estadoViajeRepository.findByNombreEstado("Finalizado")
+                .orElseThrow(() -> new IllegalStateException(
+                "No existe el estado 'Finalizado' en la base de datos."));
+    }
+
     @Transactional
     public void save(EstadoViaje estadoViaje) {
         estadoViajeRepository.save(estadoViaje);

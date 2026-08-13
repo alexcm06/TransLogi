@@ -1,9 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
     <!-- ===================== TITULO ===================== -->
 
-    <section th:fragment="titulo">
+    <section th:fragment="titulo"
+             sec:authorize="hasAnyRole('Administrador','Supervisor')">
 
         <div class="container-fluid mb-4">
 
@@ -12,11 +13,11 @@
                 <div>
 
                     <h2 class="fw-bold">
-                        Reportes de Viajes
+                        [[#{reporte.titulo}]] de [[#{menu.viajes}]]
                     </h2>
 
                     <p class="text-muted mb-0">
-                        Consulte y exporte reportes personalizados.
+                        [[#{reporte.subtitulo}]]
                     </p>
 
                 </div>
@@ -29,7 +30,8 @@
 
     <!-- ===================== FILTROS ===================== -->
 
-    <section th:fragment="filtros">
+    <section th:fragment="filtros"
+             sec:authorize="hasAnyRole('Administrador','Supervisor')">
 
         <div class="container-fluid">
 
@@ -38,7 +40,7 @@
                 <div class="card-header bg-white">
 
                     <h5 class="mb-0 fw-semibold">
-                        Filtros
+                        [[#{reporte.filtros}]]
                     </h5>
 
                 </div>
@@ -53,7 +55,7 @@
                             <div class="col-md-3">
 
                                 <label class="form-label">
-                                    Fecha inicio
+                                    [[#{campo.fechaInicio}]]
                                 </label>
 
                                 <input type="date"
@@ -66,7 +68,7 @@
                             <div class="col-md-3">
 
                                 <label class="form-label">
-                                    Fecha fin
+                                    [[#{campo.fechaFin}]]
                                 </label>
 
                                 <input type="date"
@@ -79,14 +81,14 @@
                             <div class="col-md-3">
 
                                 <label class="form-label">
-                                    Empresa
+                                    [[#{campo.empresa}]]
                                 </label>
 
                                 <select class="form-select"
                                         name="empresa">
 
                                     <option value="">
-                                        Todas
+                                        [[#{accion.todas}]]
                                     </option>
 
                                     <option th:each="e : ${empresas}"
@@ -102,14 +104,14 @@
                             <div class="col-md-3">
 
                                 <label class="form-label">
-                                    Conductor
+                                    [[#{campo.conductor}]]
                                 </label>
 
                                 <select class="form-select"
                                         name="conductor">
 
                                     <option value="">
-                                        Todos
+                                        [[#{accion.todos}]]
                                     </option>
 
                                     <option th:each="c : ${conductores}"
@@ -125,14 +127,14 @@
                             <div class="col-md-3">
 
                                 <label class="form-label">
-                                    Estado
+                                    [[#{campo.estado}]]
                                 </label>
 
                                 <select class="form-select"
                                         name="estado">
 
                                     <option value="">
-                                        Todos
+                                        [[#{accion.todos}]]
                                     </option>
 
                                     <option th:each="e : ${estados}"
@@ -154,13 +156,13 @@
                             <button class="btn btn-primary">
 
                                 <i class="bi bi-search"></i>
-                                Buscar
+                                [[#{accion.buscar}]]
 
                             </button>
                             
                             <a th:href="@{/reportes/listado}"
                                class="btn btn-outline-secondary">
-                                Limpiar
+                                [[#{accion.limpiar}]]
                             </a>
 
                             <a class="btn btn-success"
@@ -172,7 +174,7 @@
                                estado=${estado})}">
 
                                 <i class="bi bi-file-earmark-excel"></i>
-                                Exportar Excel
+                                [[#{accion.exportarExcel}]]
 
                             </a>
 
@@ -180,7 +182,7 @@
                                href="#">
 
                                 <i class="bi bi-file-earmark-pdf"></i>
-                                PDF
+                                [[#{accion.pdf}]]
 
                             </a>
 
@@ -198,7 +200,8 @@
 
     <!-- ===================== TABLA ===================== -->
 
-    <section th:fragment="tablaReportes">
+    <section th:fragment="tablaReportes"
+             sec:authorize="hasAnyRole('Administrador','Supervisor')">
 
         <div class="container-fluid">
 
@@ -208,7 +211,7 @@
 
                     <h5 class="mb-0 fw-semibold">
 
-                        Resultados
+                        [[#{reporte.resultados}]]
 
                     </h5>
 
@@ -228,13 +231,13 @@
                             <thead class="table-light">
 
                                 <tr>
-                                    <th>Fecha</th>
-                                    <th>Hora</th>
-                                    <th>Empresa</th>
-                                    <th>Conductor</th>
-                                    <th>Origen</th>
-                                    <th>Destino</th>
-                                    <th>Estado</th>
+                                    <th>[[#{campo.fecha}]]</th>
+                                    <th>[[#{campo.hora}]]</th>
+                                    <th>[[#{campo.empresa}]]</th>
+                                    <th>[[#{campo.conductor}]]</th>
+                                    <th>[[#{campo.origen}]]</th>
+                                    <th>[[#{campo.destino}]]</th>
+                                    <th>[[#{campo.estado}]]</th>
 
                                 </tr>
 
@@ -262,7 +265,7 @@
 
                                               th:classappend="
                                               ${v.estadoViaje.nombreEstado == 'Programado'} ? ' bg-primary' :
-                                              (${v.estadoViaje.nombreEstado == 'En Proceso'} ? ' bg-warning text-dark' :
+                                              (${v.estadoViaje.nombreEstado == 'En proceso'} ? ' bg-warning text-dark' :
                                               (${v.estadoViaje.nombreEstado == 'Finalizado'} ? ' bg-success' :
                                               (${v.estadoViaje.nombreEstado == 'Cancelado'} ? ' bg-danger' :
                                               ' bg-secondary')))"

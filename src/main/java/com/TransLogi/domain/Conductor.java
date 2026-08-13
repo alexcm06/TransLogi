@@ -19,19 +19,19 @@ public class Conductor implements Serializable {
     private Integer idConductor;
 
     @Column(nullable = false, length = 100)
-    @NotBlank(message = "El nombre no puede estar vacío.")
-    @Size(min = 2, max = 100, message = "El nombre no puede tener menos de 2 caracteres ni más de 100 caracteres.")
-    @Pattern(regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$",message = "El nombre solo puede contener letras")
+    @NotBlank(message = "El nombre no puede estar vacio.")
+    @Size(min = 2, max = 100, message = "El nombre no puede tener menos de 2 caracteres ni mas de 100 caracteres.")
+    @Pattern(regexp = "^[\\p{L} ]+$", message = "El nombre solo puede contener letras")
     private String nombre;
 
-    @Column(nullable = false, length = 8)
-    @NotBlank(message = "El teléfono no puede estar vacío.")
-    @Pattern(regexp = "^[0-9]{8}$",message = "Debe tener exactamente 8 dígitos")
+    @Column(nullable = false, length = 20)
+    @NotBlank(message = "El telefono no puede estar vacio.")
+    @Pattern(regexp = "^[0-9]{4}-?[0-9]{4}$", message = "Debe tener 8 digitos, con guion opcional")
     private String telefono;
 
     @Column(name = "numero_licencia", nullable = false, unique = true, length = 50)
-    @NotBlank(message = "El número de licencia no puede estar vacío.")
-    @Size(min = 6, max = 30, message = "El número de licencia no puede tener menos de 6 caracteres ni más de 30 caracteres.")
+    @NotBlank(message = "El numero de licencia no puede estar vacio.")
+    @Size(min = 6, max = 30, message = "El numero de licencia no puede tener menos de 6 caracteres ni mas de 30 caracteres.")
     private String numeroLicencia;
 
     @FutureOrPresent
@@ -41,17 +41,14 @@ public class Conductor implements Serializable {
 
     @Column(nullable = false)
     private boolean activo = true;
-    
-    @Column(name = "foto_licencia_frente")
-//    @NotNull(message = "La foto del frente de la licencia es obligatoria.")
+
+    @Column(name = "foto_licencia_frente", length = 1024)
     private String fotoLicenciaFrente;
 
-    @Column(name = "foto_licencia_reverso")
-//    @NotNull(message = "La foto del reverso de la licencia es obligatoria.")
+    @Column(name = "foto_licencia_reverso", length = 1024)
     private String fotoLicenciaReverso;
 
     @OneToOne
     @JoinColumn(name = "id_usuario", unique = true)
-//    @NotNull(message = "El usuario asociado es obligatorio.")
     private Usuario usuario;
 }

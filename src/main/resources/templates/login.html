@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 
@@ -17,7 +17,7 @@
                     </h2>
 
                     <p class="login-subtitle">
-                        Gestión de Transporte
+                        [[#{login.subtitulo}]]
                     </p>
 
                 </div>
@@ -31,7 +31,7 @@
                     <div class="mb-3">
 
                         <label class="form-label">
-                            Correo Electrónico
+                            [[#{login.correo}]]
                         </label>
 
                         <input
@@ -46,7 +46,7 @@
                     <div class="mb-4">
 
                         <label class="form-label">
-                            Contraseña
+                            [[#{login.clave}]]
                         </label>
 
                         <input
@@ -59,13 +59,13 @@
                     </div>
 
                     <button class="btn btn-primary w-100 login-btn" type="submit">
-                        Iniciar Sesión
+                        [[#{login.iniciar}]]
                     </button>
 
                 </form>
 
                 <div th:if="${param.error}" class="alert alert-danger mt-3 mb-0 text-center">
-                    Usuario o contraseña incorrectos.
+                    [[#{login.error}]]
                 </div>
 
             </div>

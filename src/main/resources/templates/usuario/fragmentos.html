@@ -1,20 +1,22 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
     <body>
 
         <!-- TITULO -->
-        <section th:fragment="titulo" class="d-flex justify-content-between align-items-center mb-4">
+        <section th:fragment="titulo"
+                 sec:authorize="hasRole('Administrador')"
+                 class="d-flex justify-content-between align-items-center mb-4">
 
             <div>
 
                 <h2 class="fw-bold mb-1">
                     <i class="bi bi-people-fill text-primary"></i>
-                    Usuarios
+                    [[#{menu.usuarios}]]
                 </h2>
 
                 <p class="text-muted mb-0">
-                    Gestión de usuarios del sistema
+                    [[#{usuario.subtitulo}]]
                 </p>
 
             </div>
@@ -24,21 +26,22 @@
                     data-bs-target="#modalAgregarUsuario">
 
                 <i class="bi bi-person-plus"></i>
-                Nuevo usuario
+                [[#{usuario.nuevo}]]
 
             </button>
 
         </section>
 
         <!-- TABLA USUARIOS -->
-        <section th:fragment="tablaUsuarios">
+        <section th:fragment="tablaUsuarios"
+                 sec:authorize="hasRole('Administrador')">
 
             <div class="card shadow-sm border-0 rounded-4">
 
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
 
                     <h5 class="mb-0 fw-semibold">
-                        Usuarios registrados
+                        [[#{usuario.lista}]]
                     </h5>
 
                     <span class="badge bg-primary fs-6"
@@ -57,20 +60,20 @@
 
                                 <tr>
 
-                                    <th>Usuario</th>
+                                    <th>[[#{campo.usuario}]]</th>
 
-                                    <th>Nombre</th>
+                                    <th>[[#{campo.nombre}]]</th>
 
-                                    <th>Correo</th>
+                                    <th>[[#{campo.correo}]]</th>
 
-                                    <th>Teléfono</th>
+                                    <th>[[#{campo.telefono}]]</th>
 
-                                    <th>Rol</th>
+                                    <th>[[#{campo.rol}]]</th>
 
-                                    <th>Estado</th>
+                                    <th>[[#{campo.estado}]]</th>
 
                                     <th class="text-center">
-                                        Acciones
+                                        [[#{accion.acciones}]]
                                     </th>
 
                                 </tr>
@@ -107,12 +110,12 @@
 
                                         <span class="badge bg-success"
                                               th:if="${u.activo}">
-                                            Activo
+                                            [[#{campo.activo}]]
                                         </span>
 
                                         <span class="badge bg-danger"
                                               th:unless="${u.activo}">
-                                            Inactivo
+                                            [[#{campo.inactivo}]]
                                         </span>
 
                                     </td>
@@ -157,7 +160,8 @@
         </section>
 
         <!-- MODAL AGREGAR -->
-        <div th:fragment="modalAgregarUsuario">
+        <div th:fragment="modalAgregarUsuario"
+             sec:authorize="hasRole('Administrador')">
 
             <div class="modal fade"
                  id="modalAgregarUsuario"
@@ -179,7 +183,7 @@
 
                                     <i class="bi bi-person-plus-fill"></i>
 
-                                    Nuevo Usuario
+                                    [[#{usuario.nuevo}]]
 
                                 </h5>
 
@@ -193,11 +197,11 @@
 
                                 <div class="row">
 
-                                    <!-- Nombre -->
+                                    <!-- [[#{campo.nombre}]] -->
                                     <div class="col-md-6 mb-3">
 
                                         <label class="form-label">
-                                            Nombre
+                                            [[#{campo.nombre}]]
                                         </label>
 
                                         <input
@@ -206,17 +210,17 @@
                                             th:field="*{nombre}"
                                             minlength="2"
                                             maxlength="20"
-                                            pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$"
+                                            pattern="^[A-Za-zÃÃ‰ÃÃ“ÃšÃ¡Ã©Ã­Ã³ÃºÃ‘Ã± ]+$"
                                             required>
 
                                     </div>
 
-                                    <!-- Apellidos -->
+                                    <!-- [[#{campo.apellidos}]] -->
                                     <div class="col-md-6 mb-3">
 
                                         <label class="form-label">
 
-                                            Apellidos
+                                            [[#{campo.apellidos}]]
 
                                         </label>
 
@@ -226,7 +230,7 @@
                                             th:field="*{apellidos}"
                                             minlength="2"
                                             maxlength="30"
-                                            pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$"
+                                            pattern="^[A-Za-zÃÃ‰ÃÃ“ÃšÃ¡Ã©Ã­Ã³ÃºÃ‘Ã± ]+$"
                                             required>
 
                                     </div>
@@ -236,7 +240,7 @@
 
                                         <label class="form-label">
 
-                                            Usuario
+                                            [[#{campo.usuario}]]
 
                                         </label>
 
@@ -248,12 +252,12 @@
 
                                     </div>
 
-                                    <!-- Correo -->
+                                    <!-- [[#{campo.correo}]] -->
                                     <div class="col-md-6 mb-3">
 
                                         <label class="form-label">
 
-                                            Correo
+                                            [[#{campo.correo}]]
 
                                         </label>
 
@@ -265,12 +269,12 @@
 
                                     </div>
 
-                                    <!-- Teléfono -->
+                                    <!-- [[#{campo.telefono}]] -->
                                     <div class="col-md-6 mb-3">
 
                                         <label class="form-label">
 
-                                            Teléfono
+                                            [[#{campo.telefono}]]
 
                                         </label>
 
@@ -278,18 +282,18 @@
                                             type="tel"
                                             class="form-control"
                                             th:field="*{telefono}"
-                                            pattern="[0-9]{8}"
+                                            pattern="[0-9]{4}-?[0-9]{4}"
                                             maxlength="8"
                                             required>
 
                                     </div>
 
-                                    <!-- Contraseña -->
+                                    <!-- [[#{login.clave}]] -->
                                     <div class="col-md-6 mb-3">
 
                                         <label class="form-label">
 
-                                            Contraseña
+                                            [[#{login.clave}]]
 
                                         </label>
 
@@ -301,9 +305,9 @@
 
                                     </div>
 
-                                    <!-- Rol -->
+                                    <!-- [[#{campo.rol}]] -->
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label">Rol</label>
+                                        <label class="form-label">[[#{campo.rol}]]</label>
                                         <select class="form-select" name="idRol" required>
                                             <option value="">Seleccione un rol</option>
                                             <option th:each="r : ${roles}"
@@ -328,7 +332,7 @@
 
                                     </div>
 
-                                    <!-- Activo -->
+                                    <!-- [[#{campo.activo}]] -->
                                     <div class="col-md-6 d-flex align-items-center">
 
                                         <div class="form-check form-switch mt-4">
@@ -340,7 +344,7 @@
 
                                             <label class="form-check-label">
 
-                                                Usuario activo
+                                                [[#{campo.usuarioActivo}]]
 
                                             </label>
 
@@ -359,7 +363,7 @@
                                     class="btn btn-secondary"
                                     data-bs-dismiss="modal">
 
-                                    Cancelar
+                                    [[#{accion.cancelar}]]
 
                                 </button>
 
@@ -369,7 +373,7 @@
 
                                     <i class="bi bi-check-circle"></i>
 
-                                    Guardar
+                                    [[#{accion.guardar}]]
 
                                 </button>
 
@@ -386,7 +390,8 @@
         </div>
 
         <!-- MODAL ELIMINAR -->
-        <div th:fragment="modalEliminarUsuario">
+        <div th:fragment="modalEliminarUsuario"
+             sec:authorize="hasRole('Administrador')">
 
             <div class="modal fade"
                  id="modalEliminarUsuario"
@@ -410,7 +415,7 @@
 
                                     <i class="bi bi-trash-fill"></i>
 
-                                    Eliminar Usuario
+                                    [[#{accion.eliminar}]] [[#{campo.usuario}]]
 
                                 </h5>
 
@@ -425,7 +430,7 @@
 
                                 <p class="fs-5">
 
-                                    ¿Desea eliminar al usuario
+                                    [[#{usuario.confirmarEliminar}]]
 
                                     <strong id="nombreUsuarioEliminar"></strong>?
 
@@ -433,7 +438,7 @@
 
                                 <p class="text-danger">
 
-                                    Esta acción no se puede deshacer.
+                                    [[#{accion.noDeshacer}]]
 
                                 </p>
 
@@ -445,7 +450,7 @@
                                         class="btn btn-secondary"
                                         data-bs-dismiss="modal">
 
-                                    Cancelar
+                                    [[#{accion.cancelar}]]
 
                                 </button>
 
@@ -454,7 +459,7 @@
 
                                     <i class="bi bi-trash"></i>
 
-                                    Eliminar
+                                    [[#{accion.eliminar}]]
 
                                 </button>
 
@@ -472,7 +477,8 @@
 
         <!-- FORM MODIFICAR -->
 
-        <section th:fragment="formModificarUsuario">
+        <section th:fragment="formModificarUsuario"
+                 sec:authorize="hasRole('Administrador')">
 
             <div class="container-fluid">
 
@@ -484,7 +490,7 @@
 
                             <i class="bi bi-pencil-square text-warning"></i>
 
-                            Modificar Usuario
+                            [[#{usuario.modificar}]]
 
                         </h3>
 
@@ -506,7 +512,7 @@
 
                                     <label class="form-label">
 
-                                        Nombre
+                                        [[#{campo.nombre}]]
 
                                     </label>
 
@@ -516,7 +522,7 @@
                                         th:field="*{nombre}"
                                         minlength="2"
                                         maxlength="20"
-                                        pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$"
+                                        pattern="^[A-Za-zÃÃ‰ÃÃ“ÃšÃ¡Ã©Ã­Ã³ÃºÃ‘Ã± ]+$"
                                         required>
 
                                 </div>
@@ -525,7 +531,7 @@
 
                                     <label class="form-label">
 
-                                        Apellidos
+                                        [[#{campo.apellidos}]]
 
                                     </label>
 
@@ -535,7 +541,7 @@
                                         th:field="*{apellidos}"
                                         minlength="2"
                                         maxlength="30"
-                                        pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$"
+                                        pattern="^[A-Za-zÃÃ‰ÃÃ“ÃšÃ¡Ã©Ã­Ã³ÃºÃ‘Ã± ]+$"
                                         required>
 
                                 </div>
@@ -544,7 +550,7 @@
 
                                     <label class="form-label">
 
-                                        Usuario
+                                        [[#{campo.usuario}]]
 
                                     </label>
 
@@ -559,7 +565,7 @@
 
                                     <label class="form-label">
 
-                                        Correo
+                                        [[#{campo.correo}]]
 
                                     </label>
 
@@ -575,7 +581,7 @@
 
                                     <label class="form-label">
 
-                                        Teléfono
+                                        [[#{campo.telefono}]]
 
                                     </label>
 
@@ -583,7 +589,7 @@
                                         type="tel"
                                         class="form-control"
                                         th:field="*{telefono}"
-                                        pattern="[0-9]{8}"
+                                        pattern="[0-9]{4}-?[0-9]{4}"
                                         maxlength="8"
                                         required>
 
@@ -593,7 +599,7 @@
 
                                     <label class="form-label">
 
-                                        Contraseña
+                                        [[#{login.clave}]]
 
                                     </label>
 
@@ -628,7 +634,7 @@
 
                                         <label class="form-check-label">
 
-                                            Usuario activo
+                                            [[#{campo.usuarioActivo}]]
 
                                         </label>
 
@@ -643,7 +649,7 @@
                                 <a th:href="@{/usuario/listado}"
                                    class="btn btn-secondary">
 
-                                    Cancelar
+                                    [[#{accion.cancelar}]]
 
                                 </a>
 
@@ -653,7 +659,7 @@
 
                                     <i class="bi bi-floppy"></i>
 
-                                    Guardar Cambios
+                                    [[#{accion.guardarCambios}]]
 
                                 </button>
 

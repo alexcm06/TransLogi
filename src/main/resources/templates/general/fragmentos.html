@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
     <!-- HEAD -->
@@ -24,51 +24,51 @@
                 <i class="bi bi-truck"></i>
                 TransLogi
             </h3>
-            <p>Sistema de Gestión</p>
+            <p>[[#{aplicacion.subtitulo}]]</p>
         </div>
 
         <nav class="sidebar-menu">
 
-            <!-- Menú general accesible para administradores y supervisores -->
+            <!-- MenÃº general accesible para administradores y supervisores -->
             <div sec:authorize="hasAnyRole('Administrador','Supervisor')">
 
                 <a th:href="@{/}">
-                    <i class="bi bi-speedometer2"></i> Dashboard
+                    <i class="bi bi-speedometer2"></i> [[#{menu.dashboard}]]
                 </a>
                 
                 <a th:href="@{/viaje/listado}">
-                    <i class="bi bi-truck"></i> Viajes
+                    <i class="bi bi-truck"></i> [[#{menu.viajes}]]
                 </a>
 
                 <a th:href="@{/conductor/listado}">
-                    <i class="bi bi-person-badge"></i> Conductores
+                    <i class="bi bi-person-badge"></i> [[#{menu.conductores}]]
                 </a>
 
                 <a th:href="@{/empresa/listado}">
-                    <i class="bi bi-buildings"></i> Empresas
+                    <i class="bi bi-buildings"></i> [[#{menu.empresas}]]
                 </a>
 
                 <a th:href="@{/ubicacion/listado}">
-                    <i class="bi bi-geo-alt"></i> Ubicaciones
+                    <i class="bi bi-geo-alt"></i> [[#{ubicacion.titulo}]]
                 </a>
 
                 <a th:href="@{/reportes/listado}">
-                    <i class="bi bi-file-earmark-bar-graph"></i> Reportes
+                    <i class="bi bi-file-earmark-bar-graph"></i> [[#{reporte.titulo}]]
                 </a>
 
             </div>
 
-            <!-- Usuarios: solo Administrador -->
+            <!-- [[#{menu.usuarios}]]: solo Administrador -->
             <div sec:authorize="hasRole('Administrador')">
                 <a th:href="@{/usuario/listado}">
-                    <i class="bi bi-people"></i> Usuarios
+                    <i class="bi bi-people"></i> [[#{menu.usuarios}]]
                 </a>
             </div>
 
-            <!-- Menú exclusivo para Conductores -->
+            <!-- MenÃº exclusivo para [[#{menu.conductores}]] -->
             <div sec:authorize="hasRole('Conductor')">
                 <a th:href="@{/conductor/mis-viajes}">
-                    <i class="bi bi-journal-text"></i> Mis Viajes
+                    <i class="bi bi-journal-text"></i> [[#{menu.misViajes}]]
                 </a>
             </div>
 
@@ -76,16 +76,43 @@
 
         <div class="sidebar-footer">
 
+            <div class="language-switcher mb-3">
+                <div class="dropdown">
+                    <button class="btn btn-outline-light btn-sm dropdown-toggle w-100"
+                            type="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                        <i class="bi bi-translate me-1"></i>
+                        [[#{plantilla.idioma}]]
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-dark w-100">
+                        <li>
+                            <a class="dropdown-item"
+                               href="?lang=es">
+                                Español
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item"
+                               href="?lang=en">
+                                English
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
             <hr class="text-secondary">
 
-            <!-- Sección cuando NO está autenticado (Login) -->
+            <!-- SecciÃ³n cuando NO estÃ¡ autenticado ([[#{login.iniciar}]]) -->
             <div sec:authorize="!isAuthenticated()" class="px-3 mb-2">
                 <a th:href="@{/login}" class="btn btn-primary btn-sm w-100">
-                    <i class="bi bi-box-arrow-in-right"></i> Login
+                    <i class="bi bi-box-arrow-in-right"></i> [[#{login.iniciar}]]
                 </a>
             </div>
 
-            <!-- Sección cuando SÍ está autenticado (Usuario + Logout) -->
+            <!-- SecciÃ³n cuando SÃ estÃ¡ autenticado ([[#{campo.usuario}]] + [[#{menu.cerrarSesion}]]) -->
             <ul class="navbar-nav" sec:authorize="isAuthenticated()">
                 <li class="nav-item my-auto px-2">
                     <a class="nav-link text-white d-flex align-items-center p-0 mb-2">
@@ -98,7 +125,7 @@
                 <li class="nav-item my-auto">
                     <form method="POST" th:action="@{/logout}" class="px-2 mb-2">
                         <button type="submit" class="btn btn-danger btn-sm w-100">
-                            <i class="bi bi-box-arrow-left"></i> Logout
+                            <i class="bi bi-box-arrow-left"></i> [[#{menu.cerrarSesion}]]
                         </button>
                     </form>
                 </li>
