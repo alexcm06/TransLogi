@@ -1,17 +1,18 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
     <section th:fragment="titulo"
+             sec:authorize="hasAnyRole('Administrador','Supervisor')"
              class="d-flex justify-content-between align-items-center mb-4">
 
         <div>
             <h2 class="fw-bold mb-1">
                 <i class="bi bi-geo-alt-fill text-primary"></i>
-                Ubicaciones
+                [[#{ubicacion.titulo}]]
             </h2>
 
             <p class="text-muted mb-0">
-                Gestión de ubicaciones del sistema.
+                [[#{ubicacion.subtitulo}]]
             </p>
         </div>
 
@@ -20,7 +21,7 @@
                 data-bs-target="#modalAgregar">
 
             <i class="bi bi-plus-circle"></i>
-            Nueva ubicación
+            [[#{ubicacion.nueva}]]
 
         </button>
 
@@ -33,7 +34,7 @@
             <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
 
                 <h5 class="mb-0 fw-semibold">
-                    Lista de Ubicaciones
+                    [[#{ubicacion.lista}]]
                 </h5>
 
                 <span class="badge bg-primary fs-6"
@@ -51,11 +52,11 @@
 
                         <tr>
                             
-                            <th>Nombre</th>
-                            <th>Dirección</th>
+                            <th>[[#{campo.nombre}]]</th>
+                            <th>[[#{campo.direccion}]]</th>
 
                             <th class="text-center">
-                                Acciones
+                                [[#{accion.acciones}]]
                             </th>
 
                         </tr>
@@ -73,6 +74,7 @@
                             <td class="text-center">
 
                                 <a class="btn btn-warning btn-sm"
+                                   sec:authorize="hasAnyRole('Administrador','Supervisor')"
                                    th:href="@{/ubicacion/modificar/{id}(id=${ubicacion.idUbicacion})}">
 
                                     <i class="bi bi-pencil-square"></i>
@@ -81,6 +83,7 @@
 
                                 <button
                                     class="btn btn-danger btn-sm"
+                                    sec:authorize="hasAnyRole('Administrador','Supervisor')"
 
                                     data-bs-toggle="modal"
                                     data-bs-target="#modalEliminarUbicacion"
@@ -109,6 +112,7 @@
 
     <div th:fragment="modalAgregar"
          class="modal fade"
+         sec:authorize="hasAnyRole('Administrador','Supervisor')"
          id="modalAgregar"
          tabindex="-1">
 
@@ -120,7 +124,7 @@
 
                     <h5 class="modal-title">
                         <i class="bi bi-geo-alt-fill"></i>
-                        Nueva Ubicación
+                        Nueva UbicaciÃ³n
                     </h5>
 
                     <button class="btn-close btn-close"
@@ -137,7 +141,7 @@
                         <div class="mb-3">
 
                             <label class="form-label">
-                                Nombre
+                                [[#{campo.nombre}]]
                             </label>
 
                             <input
@@ -152,7 +156,7 @@
                         <div class="mb-3">
 
                             <label class="form-label">
-                                Dirección
+                                [[#{campo.direccion}]]
                             </label>
 
                             <textarea
@@ -173,7 +177,7 @@
                             class="btn btn-secondary"
                             data-bs-dismiss="modal">
 
-                            Cancelar
+                            [[#{accion.cancelar}]]
 
                         </button>
 
@@ -182,7 +186,7 @@
                             class="btn btn-primary">
 
                             <i class="bi bi-check-lg"></i>
-                            Guardar ubicación
+                            [[#{ubicacion.guardar}]]
 
                         </button>
 
@@ -199,6 +203,7 @@
     <!-- ================= MODAL ELIMINAR ================= -->
     <div th:fragment="modalEliminar"
          class="modal fade"
+         sec:authorize="hasAnyRole('Administrador','Supervisor')"
          id="modalEliminarUbicacion"
          tabindex="-1">
 
@@ -210,7 +215,7 @@
 
                     <h5 class="modal-title">
                         <i class="bi bi-exclamation-triangle-fill"></i>
-                        Confirmar eliminación
+                        [[#{accion.confirmarEliminacion}]]
                     </h5>
 
                     <button type="button"
@@ -229,7 +234,7 @@
                                name="idUbicacion">
 
                         <p class="mb-0">
-                            ¿Está seguro de eliminar la ubicación
+                            [[#{ubicacion.confirmarEliminar}]]
                             <strong id="nombreUbicacion"></strong>?
                         </p>
 
@@ -240,14 +245,14 @@
                         <button type="button"
                                 class="btn btn-secondary"
                                 data-bs-dismiss="modal">
-                            Cancelar
+                            [[#{accion.cancelar}]]
                         </button>
 
                         <button type="submit"
                                 class="btn btn-danger">
 
                             <i class="bi bi-trash"></i>
-                            Eliminar
+                            [[#{accion.eliminar}]]
 
                         </button>
 

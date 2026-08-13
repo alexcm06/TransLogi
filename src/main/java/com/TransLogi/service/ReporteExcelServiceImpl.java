@@ -104,7 +104,7 @@ public class ReporteExcelServiceImpl implements ReporteExcelService {
                     .count();
 
             long proceso = viajes.stream()
-                    .filter(v -> v.getEstadoViaje().getNombreEstado().equalsIgnoreCase("En Proceso"))
+                    .filter(v -> v.getEstadoViaje().getNombreEstado().equalsIgnoreCase("En proceso"))
                     .count();
 
             long finalizados = viajes.stream()

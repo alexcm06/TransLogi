@@ -1,18 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.TransLogi.controller;
-/**
- *
- * @author sebas
- */
+
 import com.TransLogi.domain.Empresa;
 import com.TransLogi.service.EmpresaService;
 import jakarta.validation.Valid;
-import java.util.Locale;
 import java.util.Optional;
-import org.springframework.context.MessageSource; // Traer textos desde el archivo messages.properties, en vez de escribirlos directo en el código Java
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,7 +42,7 @@ public class EmpresaController {
         empresaService.save(empresa);
         redirectAttributes.addFlashAttribute(
                 "todoOk",
-                messageSource.getMessage("mensaje.actualizado", null, Locale.getDefault())
+                messageSource.getMessage("mensaje.actualizado", null, LocaleContextHolder.getLocale())
         );
         return "redirect:/empresa/listado";
     }
@@ -75,7 +68,7 @@ public class EmpresaController {
 
         redirectAttributes.addFlashAttribute(
                 titulo,
-                messageSource.getMessage(detalle, null, Locale.getDefault())
+                messageSource.getMessage(detalle, null, LocaleContextHolder.getLocale())
         );
         return "redirect:/empresa/listado";
     }
@@ -89,7 +82,7 @@ public class EmpresaController {
         if (empresaOpt.isEmpty()) {
             redirectAttributes.addFlashAttribute(
                     "error",
-                    messageSource.getMessage("error", null, Locale.getDefault())
+                    messageSource.getMessage("error", null, LocaleContextHolder.getLocale())
             );
             return "redirect:/empresa/listado";
         }

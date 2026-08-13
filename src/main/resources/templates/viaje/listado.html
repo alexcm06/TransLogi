@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{general/fragmentos :: head}"></head>
@@ -9,7 +9,7 @@
 
     <main class="main-content">
         
-        <!-- Este div SOLO aparece si el Controller guardó todoOk en el flash attribute -->
+        <!-- Este div SOLO aparece si el Controller guardÃ³ todoOk en el flash attribute -->
         <div th:if="${todoOk}" class="alert alert-success alert-dismissible fade show" role="alert">
             <i class="bi bi-check-circle-fill me-2"></i>
             <span th:text="${todoOk}"></span> <!-- se imprime el texto real del mensaje que viene de Java -->

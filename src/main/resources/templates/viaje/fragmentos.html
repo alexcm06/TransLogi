@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
     <body>
@@ -13,21 +13,22 @@
 
                 <h2 class="fw-bold mb-1">
                     <i class="bi bi-truck text-primary"></i>
-                    Gestión de Viajes
+                    [[#{viaje.titulo}]]
                 </h2>
 
                 <p class="page-subtitle mb-0">
-                    Administración de todos los viajes
+                    [[#{viaje.subtitulo}]]
                 </p>
 
             </div>
 
             <button class="btn btn-primary"
+                    sec:authorize="hasAnyRole('Administrador','Supervisor')"
                     data-bs-toggle="modal"
                     data-bs-target="#modalViaje">
 
                 <i class="bi bi-plus-circle me-2"></i>
-                Nuevo Viaje
+                [[#{viaje.nuevo}]]
 
             </button>
 
@@ -57,7 +58,7 @@
                             <input type="text"
                                    id="buscarViaje"
                                    class="form-control"
-                                   placeholder="Buscar por empresa, conductor, destino...">
+                                   th:placeholder="#{viaje.buscarPlaceholder}">
 
                         </div>
 
@@ -68,12 +69,12 @@
                         <select class="form-select"
                                 id="filtroEstado">
 
-                            <option value="">Todos los estados</option>
+                            <option value="">[[#{accion.todos}]]</option>
 
-                            <option value="Programado">Programado</option>
-                            <option value="En Proceso">En Proceso</option>
-                            <option value="Finalizado">Finalizado</option>
-                            <option value="Cancelado">Cancelado</option>
+                            <option value="Programado">[[#{estado.programado}]]</option>
+                            <option value="En proceso">[[#{estado.enProceso}]]</option>
+                            <option value="Finalizado">[[#{estado.finalizado}]]</option>
+                            <option value="Cancelado">[[#{estado.cancelado}]]</option>
 
                         </select>
 
@@ -94,7 +95,7 @@
             <div class="card-header bg-white d-flex justify-content-between align-items-center">
 
                 <h5 class="mb-0 fw-semibold">
-                    Viajes registrados
+                    [[#{viaje.lista}]]
                 </h5>
 
                 <span class="badge bg-primary fs-6"
@@ -114,14 +115,14 @@
 
                             <tr>
 
-                                <th>Fecha</th>
-                                <th>Hora</th>
-                                <th>Empresa</th>
-                                <th>Conductor</th>
-                                <th>Origen</th>
-                                <th>Destino</th>
-                                <th>Estado</th>
-                                <th class="text-center">Acciones</th>
+                                <th>[[#{campo.fecha}]]</th>
+                                <th>[[#{campo.hora}]]</th>
+                                <th>[[#{campo.empresa}]]</th>
+                                <th>[[#{campo.conductor}]]</th>
+                                <th>[[#{campo.origen}]]</th>
+                                <th>[[#{campo.destino}]]</th>
+                                <th>[[#{campo.estado}]]</th>
+                                <th class="text-center">[[#{accion.acciones}]]</th>
 
                             </tr>
 
@@ -150,7 +151,7 @@
 
                                         th:classappend="
                                         ${v.estadoViaje.nombreEstado == 'Programado'} ? ' bg-primary' :
-                                        (${v.estadoViaje.nombreEstado == 'En Proceso'} ? ' bg-warning text-dark' :
+                                        (${v.estadoViaje.nombreEstado == 'En proceso'} ? ' bg-warning text-dark' :
                                         (${v.estadoViaje.nombreEstado == 'Finalizado'} ? ' bg-success' :
                                         (${v.estadoViaje.nombreEstado == 'Cancelado'} ? ' bg-danger' :
                                         ' bg-secondary')))"
@@ -163,6 +164,7 @@
                                 <td class="text-center">
 
                                     <a class="btn btn-outline-primary btn-sm me-1"
+                                       sec:authorize="hasAnyRole('Administrador','Supervisor')"
                                        th:href="@{/viaje/modificar/{id}(id=${v.idViaje})}">
 
                                         <i class="bi bi-pencil"></i>
@@ -173,6 +175,7 @@
                                     <button
                                         type="button"
                                         class="btn btn-danger btn-sm"
+                                        sec:authorize="hasAnyRole('Administrador','Supervisor')"
 
                                         data-bs-toggle="modal"
                                         data-bs-target="#modalEliminarViaje"
@@ -192,7 +195,7 @@
                                 <td colspan="9" class="text-center py-5 text-muted">
 
                                     <i class="bi bi-truck fs-1 d-block mb-3"></i>
-                                    No hay viajes registrados.
+                                    [[#{viaje.sinRegistros}]]
 
                                 </td>
 
@@ -212,6 +215,7 @@
 
     <div th:fragment="modalViaje"
          class="modal fade"
+         sec:authorize="hasAnyRole('Administrador','Supervisor')"
          id="modalViaje"
          tabindex="-1"
          aria-hidden="true">
@@ -225,7 +229,7 @@
                     <div class="modal-header">
 
                         <h5 class="modal-title">
-                            Registrar Viaje
+                            [[#{viaje.registrar}]]
                         </h5>
 
                         <button class="btn-close"
@@ -240,7 +244,7 @@
                         <div class="row">
 
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Fecha</label>
+                                <label class="form-label">[[#{campo.fecha}]]</label>
                                 <input type="date"
                                        name="fechaProgramada"
                                        class="form-control"
@@ -249,7 +253,7 @@
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Hora</label>
+                                <label class="form-label">[[#{campo.hora}]]</label>
                                 <input type="time"
                                        name="horaProgramada"
                                        class="form-control"
@@ -257,14 +261,14 @@
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Empresa</label>
+                                <label class="form-label">[[#{campo.empresa}]]</label>
 
                                 <select class="form-select"
                                         name="empresa"
                                         required>
 
                                     <option value="">
-                                        Seleccione...
+                                        [[#{accion.seleccione}]]
                                     </option>
 
                                     <option th:each="e : ${empresas}"
@@ -277,14 +281,14 @@
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Conductor</label>
+                                <label class="form-label">[[#{campo.conductor}]]</label>
 
                                 <select class="form-select"
                                         name="conductor"
                                         required>
 
                                     <option value="">
-                                        Seleccione...
+                                        [[#{accion.seleccione}]]
                                     </option>
 
                                     <option th:each="c : ${conductores}"
@@ -298,7 +302,7 @@
 
                             <div class="col-md-6 mb-3">
 
-                                <label class="form-label">Origen</label>
+                                <label class="form-label">[[#{campo.origen}]]</label>
 
                                 <select class="form-select"
                                         name="origen"
@@ -315,7 +319,7 @@
 
                             <div class="col-md-6 mb-3">
 
-                                <label class="form-label">Destino</label>
+                                <label class="form-label">[[#{campo.destino}]]</label>
 
                                 <select class="form-select"
                                         name="destino"
@@ -333,7 +337,7 @@
                             <div class="col-md-6 mb-3">
 
                                 <label class="form-label">
-                                    Cantidad de pasajeros
+                                    [[#{campo.cantidadPasajeros}]]
                                 </label>
 
                                 <input type="number"
@@ -348,7 +352,7 @@
                             <div class="col-12">
 
                                 <label class="form-label">
-                                    Observaciones
+                                    [[#{campo.observaciones}]]
                                 </label>
 
                                 <textarea class="form-control"
@@ -367,13 +371,13 @@
                         <button class="btn btn-secondary"
                                 type="button"
                                 data-bs-dismiss="modal">
-                            Cancelar
+                            [[#{accion.cancelar}]]
                         </button>
 
                         <button class="btn btn-primary"
                                 type="submit">
 
-                            Guardar Viaje
+                            [[#{accion.guardar}]]
 
                         </button>
 
@@ -389,6 +393,7 @@
 
     <div th:fragment="modalEliminar"
          class="modal fade"
+         sec:authorize="hasAnyRole('Administrador','Supervisor')"
          id="modalEliminarViaje"
          tabindex="-1">
 
@@ -402,7 +407,7 @@
 
                         <i class="bi bi-exclamation-triangle-fill"></i>
 
-                        Confirmar eliminación
+                        [[#{accion.confirmarEliminacion}]]
 
                     </h5>
 
@@ -422,7 +427,7 @@
 
                         <p class="mb-0">
 
-                            ¿Deseas eliminar el viaje de la empresa
+                            [[#{viaje.confirmarEliminar}]]
 
                             <strong id="nombreViaje"></strong>?
 
@@ -430,7 +435,7 @@
 
                         <small class="text-danger">
 
-                            Esta acción no se puede deshacer.
+                            [[#{accion.noDeshacer}]]
 
                         </small>
 
@@ -443,7 +448,7 @@
                             class="btn btn-secondary"
                             data-bs-dismiss="modal">
 
-                            Cancelar
+                            [[#{accion.cancelar}]]
 
                         </button>
 
@@ -453,7 +458,7 @@
 
                             <i class="bi bi-trash"></i>
 
-                            Eliminar
+                            [[#{accion.eliminar}]]
 
                         </button>
 

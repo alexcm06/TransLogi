@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
     <head th:replace="~{general/fragmentos :: head}"></head>
@@ -14,9 +14,9 @@
                 <div class="d-flex justify-content-between align-items-center mb-4">
 
                     <div>
-                        <h2 class="page-title">Modificar Empresa</h2>
+                        <h2 class="page-title">[[#{empresa.modificar}]]</h2>
                         <p class="page-subtitle">
-                            Actualice la información de la empresa.
+                            [[#{empresa.modificarSubtitulo}]]
                         </p>
                     </div>
 
@@ -24,7 +24,7 @@
                        class="btn btn-outline-secondary">
 
                         <i class="bi bi-arrow-left"></i>
-                        Volver
+                        [[#{accion.volver}]]
 
                     </a>
 
@@ -46,7 +46,7 @@
                                 <div class="col-md-6 mb-3">
 
                                     <label class="form-label">
-                                        Nombre
+                                        [[#{campo.nombre}]]
                                     </label>
 
                                     <input type="text"
@@ -60,13 +60,13 @@
                                 <div class="col-md-6 mb-3">
 
                                     <label class="form-label">
-                                        Teléfono
+                                        [[#{campo.telefono}]]
                                     </label>
 
                                     <input class="form-control"
                                            type="tel"
                                            th:field="*{telefono}"
-                                           pattern="[0-9]{8}"
+                                           pattern="[0-9]{4}-?[0-9]{4}"
                                            maxlength="8"
                                            required>
 
@@ -75,7 +75,7 @@
                                 <div class="col-md-6 mb-3">
 
                                     <label class="form-label">
-                                        Correo Electrónico
+                                        [[#{login.correo}]]
                                     </label>
 
                                     <input type="email"
@@ -92,7 +92,7 @@
                                            th:field="*{activo}">
 
                                     <label class="form-check-label">
-                                        Empresa activa
+                                        [[#{campo.empresaActiva}]]
                                     </label>
 
                                 </div>
@@ -104,7 +104,7 @@
                                 <a th:href="@{/empresa/listado}"
                                    class="btn btn-secondary">
 
-                                    Cancelar
+                                    [[#{accion.cancelar}]]
 
                                 </a>
 
@@ -112,7 +112,7 @@
                                         class="btn btn-primary">
 
                                     <i class="bi bi-check-lg"></i>
-                                    Guardar cambios
+                                    [[#{accion.guardarCambios}]]
 
                                 </button>
 

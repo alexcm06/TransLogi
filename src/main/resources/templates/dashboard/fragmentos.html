@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
     <section th:fragment="titulo">
@@ -7,11 +7,11 @@
 
             <h2 class="fw-bold mb-1">
                 <i class="bi bi-speedometer2 text-primary"></i>
-                Dashboard
+                [[#{menu.dashboard}]]
             </h2>
 
             <p class="page-subtitle">
-                Bienvenido al sistema de gestión TransLogi
+                [[#{dashboard.bienvenida}]]
             </p>
 
         </div>
@@ -37,7 +37,7 @@
                             <div>
 
                                 <h6 class="text-secondary">
-                                    Viajes Programados
+                                    [[#{dashboard.viajesProgramados}]]
                                 </h6>
 
                                 <h2 class="fw-bold"
@@ -69,7 +69,7 @@
                             <div>
 
                                 <h6 class="text-secondary">
-                                    Viajes en Proceso
+                                    [[#{dashboard.viajesProceso}]]
                                 </h6>
 
                                 <h2 class="fw-bold"
@@ -101,7 +101,7 @@
                             <div>
 
                                 <h6 class="text-secondary">
-                                    Viajes Finalizados
+                                    [[#{dashboard.viajesFinalizados}]]
                                 </h6>
 
                                 <h2 class="fw-bold"
@@ -133,7 +133,7 @@
                             <div>
 
                                 <h6 class="text-secondary">
-                                    Conductores Activos
+                                    [[#{dashboard.conductoresActivos}]]
                                 </h6>
 
                                 <h2 class="fw-bold"
@@ -167,7 +167,7 @@
             <div class="card-header bg-white d-flex justify-content-between align-items-center">
 
                 <h5 class="mb-0 fw-semibold">
-                    Últimos Viajes
+                    [[#{dashboard.ultimosViajes}]]
                 </h5>
 
             </div>
@@ -181,12 +181,12 @@
                         <thead class="table-light">
 
                             <tr>
-                                <th>Fecha</th>
-                                <th>Empresa</th>
-                                <th>Conductor</th>
-                                <th>Origen</th>
-                                <th>Destino</th>
-                                <th>Estado</th>
+                                <th>[[#{campo.fecha}]]</th>
+                                <th>[[#{campo.empresa}]]</th>
+                                <th>[[#{campo.conductor}]]</th>
+                                <th>[[#{campo.origen}]]</th>
+                                <th>[[#{campo.destino}]]</th>
+                                <th>[[#{campo.estado}]]</th>
                             </tr>
 
                         </thead>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
     <head th:replace="~{general/fragmentos :: head}"></head>
@@ -14,16 +14,16 @@
                 <div class="d-flex justify-content-between align-items-center mb-4">
 
                     <div>
-                        <h2 class="page-title">Modificar Conductor</h2>
+                        <h2 class="page-title">[[#{conductor.modificar}]]</h2>
                         <p class="page-subtitle">
-                            Actualice la información del conductor.
+                            [[#{conductor.modificarSubtitulo}]]
                         </p>
                     </div>
 
                     <a th:href="@{/conductor/listado}"
                        class="btn btn-outline-secondary">
                         <i class="bi bi-arrow-left"></i>
-                        Volver
+                        [[#{accion.volver}]]
                     </a>
 
                 </div>
@@ -48,7 +48,7 @@
                                 <div class="col-md-6 text-center">
 
                                     <label class="form-label fw-bold">
-                                        Licencia (Frente)
+                                        [[#{campo.licenciaFrente}]]
                                     </label>
 
                                     <div>
@@ -61,7 +61,7 @@
                                         <p th:unless="${conductor.fotoLicenciaFrente != null}"
                                            class="text-muted">
 
-                                            No hay imagen del frente.
+                                            [[#{conductor.licenciaFrenteVacia}]]
 
                                         </p>
 
@@ -72,7 +72,7 @@
                                 <div class="col-md-6 text-center">
 
                                     <label class="form-label fw-bold">
-                                        Licencia (Reverso)
+                                        [[#{campo.licenciaReverso}]]
                                     </label>
 
                                     <div>
@@ -85,7 +85,7 @@
                                         <p th:unless="${conductor.fotoLicenciaReverso != null}"
                                            class="text-muted">
 
-                                            No hay imagen del reverso.
+                                            [[#{conductor.licenciaReversoVacia}]]
 
                                         </p>
 
@@ -95,13 +95,13 @@
 
                             </div>
 
-                            <!-- NUEVAS IMÁGENES -->
+                            <!-- NUEVAS IMÃGENES -->
                             <div class="row mb-4">
 
                                 <div class="col-md-6">
 
                                     <label class="form-label">
-                                        Reemplazar licencia (Frente)
+                                        [[#{conductor.reemplazarLicenciaFrente}]]
                                     </label>
 
                                     <input type="file"
@@ -110,7 +110,7 @@
                                            accept=".jpg,.jpeg,.png">
 
                                     <small class="text-muted">
-                                        Si no selecciona una imagen se conservará la actual.
+                                        [[#{conductor.conservarImagen}]]
                                     </small>
 
                                 </div>
@@ -118,7 +118,7 @@
                                 <div class="col-md-6">
 
                                     <label class="form-label">
-                                        Reemplazar licencia (Reverso)
+                                        [[#{conductor.reemplazarLicenciaReverso}]]
                                     </label>
 
                                     <input type="file"
@@ -127,7 +127,7 @@
                                            accept=".jpg,.jpeg,.png">
 
                                     <small class="text-muted">
-                                        Si no selecciona una imagen se conservará la actual.
+                                        [[#{conductor.conservarImagen}]]
                                     </small>
 
                                 </div>
@@ -140,7 +140,7 @@
                                 <div class="col-md-6 mb-3">
 
                                     <label class="form-label">
-                                        Nombre
+                                        [[#{campo.nombre}]]
                                     </label>
 
                                     <input type="text"
@@ -149,21 +149,21 @@
                                            required
                                            minlength="2"
                                            maxlength="100"
-                                           pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$">
+                                           pattern="^[A-Za-zÃÃ‰ÃÃ“ÃšÃ¡Ã©Ã­Ã³ÃºÃ‘Ã± ]+$">
 
                                 </div>
 
                                 <div class="col-md-6 mb-3">
 
                                     <label class="form-label">
-                                        Teléfono
+                                        [[#{campo.telefono}]]
                                     </label>
 
                                     <input type="tel"
                                            class="form-control"
                                            th:field="*{telefono}"
                                            required
-                                           pattern="[0-9]{8}"
+                                           pattern="[0-9]{4}-?[0-9]{4}"
                                            maxlength="8">
 
                                 </div>
@@ -171,7 +171,7 @@
                                 <div class="col-md-6 mb-3">
 
                                     <label class="form-label">
-                                        Número de Licencia
+                                        [[#{campo.numeroLicencia}]]
                                     </label>
 
                                     <input type="text"
@@ -184,7 +184,7 @@
                                 <div class="col-md-6 mb-3">
 
                                     <label class="form-label">
-                                        Vencimiento Licencia
+                                        [[#{campo.fechaVencimiento}]]
                                     </label>
 
                                     <input type="date"
@@ -198,18 +198,18 @@
                                 <div class="col-md-6 mb-4">
 
                                     <label class="form-label">
-                                        Estado
+                                        [[#{campo.estado}]]
                                     </label>
 
                                     <select class="form-select"
                                             th:field="*{activo}">
 
                                         <option th:value="true">
-                                            Activo
+                                            [[#{campo.activo}]]
                                         </option>
 
                                         <option th:value="false">
-                                            Inactivo
+                                            [[#{campo.inactivo}]]
                                         </option>
 
                                     </select>
@@ -223,7 +223,7 @@
                                 <a th:href="@{/conductor/listado}"
                                    class="btn btn-secondary">
 
-                                    Cancelar
+                                    [[#{accion.cancelar}]]
 
                                 </a>
 
@@ -231,7 +231,7 @@
                                         class="btn btn-primary">
 
                                     <i class="bi bi-check-lg"></i>
-                                    Guardar cambios
+                                    [[#{accion.guardarCambios}]]
 
                                 </button>
 

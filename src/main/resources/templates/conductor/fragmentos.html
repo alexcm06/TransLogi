@@ -1,7 +1,7 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-    <!-- TÍTULO -->
+    <!-- TÃTULO -->
     <section th:fragment="titulo">
 
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -10,21 +10,22 @@
 
                 <h2 class="fw-bold mb-1">
                     <i class="bi bi-person-badge-fill text-primary"></i>
-                    Conductores
+                    [[#{menu.conductores}]]
                 </h2>
 
                 <p class="page-subtitle">
-                    Gestión de conductores del sistema
+                    [[#{conductor.subtitulo}]]
                 </p>
 
             </div>
 
             <button class="btn btn-primary"
+                    sec:authorize="hasAnyRole('Administrador','Supervisor')"
                     data-bs-toggle="modal"
                     data-bs-target="#modalAgregarConductor">
 
                 <i class="bi bi-plus-circle me-2"></i>
-                Nuevo Conductor
+                [[#{conductor.nuevo}]]
 
             </button>
 
@@ -39,7 +40,7 @@
 
             <div class="card-header bg-white d-flex justify-content-between align-items-center">
 
-                <h5 class="mb-0 fw-semibold">Conductores</h5>
+                <h5 class="mb-0 fw-semibold">[[#{menu.conductores}]]</h5>
 
                 <span class="badge bg-primary fs-6"
                       th:text="${totalConductores}">
@@ -55,12 +56,12 @@
                     <thead class="table-light">
 
                         <tr>
-                            <th>Nombre</th>
-                            <th>Teléfono</th>
-                            <th>Licencia</th>
-                            <th>Vence</th>
-                            <th>Estado</th>
-                            <th class="text-center">Acciones</th>
+                            <th>[[#{campo.nombre}]]</th>
+                            <th>[[#{campo.telefono}]]</th>
+                            <th>[[#{campo.licencia}]]</th>
+                            <th>[[#{campo.vence}]]</th>
+                            <th>[[#{campo.estado}]]</th>
+                            <th class="text-center">[[#{accion.acciones}]]</th>
                         </tr>
 
                     </thead>
@@ -81,7 +82,7 @@
 
                                 <span class="badge"
                                       th:classappend="${c.activo} ? ' bg-success' : ' bg-danger'"
-                                      th:text="${c.activo} ? 'Activo' : 'Inactivo'">
+                                      th:text="${c.activo} ? #{campo.activo} : #{campo.inactivo}">
                                 </span>
 
                             </td>
@@ -89,6 +90,7 @@
                             <td class="text-center">
 
                                 <a th:href="@{/conductor/modificar/{id}(id=${c.idConductor})}"
+                                   sec:authorize="hasAnyRole('Administrador','Supervisor')"
                                    class="btn btn-warning btn-sm">
 
                                     <i class="bi bi-pencil-square"></i>
@@ -97,6 +99,7 @@
 
                                 <button
                                     class="btn btn-danger btn-sm btnEliminar"
+                                    sec:authorize="hasRole('Administrador')"
                                     th:data-id="${c.idConductor}"
                                     th:data-nombre="${c.nombre}"
                                     data-bs-toggle="modal"
@@ -123,6 +126,7 @@
     <!-- MODAL ELIMINAR -->
     <div th:fragment="modalEliminar"
          class="modal fade"
+         sec:authorize="hasRole('Administrador')"
          id="modalEliminarConductor"
          tabindex="-1">
 
@@ -136,7 +140,7 @@
 
                         <i class="bi bi-exclamation-triangle-fill"></i>
 
-                        Confirmar eliminación
+                        [[#{accion.confirmarEliminacion}]]
 
                     </h5>
 
@@ -156,7 +160,7 @@
 
                         <p class="mb-0">
 
-                            ¿Deseas eliminar el conductor
+                            [[#{conductor.confirmarEliminar}]]
 
                             <strong id="nombreConductor"></strong>?
 
@@ -164,7 +168,7 @@
 
                         <small class="text-danger">
 
-                            Esta acción no se puede deshacer.
+                            [[#{accion.noDeshacer}]]
 
                         </small>
 
@@ -177,7 +181,7 @@
                             class="btn btn-secondary"
                             data-bs-dismiss="modal">
 
-                            Cancelar
+                            [[#{accion.cancelar}]]
 
                         </button>
 
@@ -187,7 +191,7 @@
 
                             <i class="bi bi-trash"></i>
 
-                            Eliminar
+                            [[#{accion.eliminar}]]
 
                         </button>
 
@@ -205,6 +209,7 @@
          id="modalAgregarConductor"
          tabindex="-1"
          aria-hidden="true"
+         sec:authorize="hasAnyRole('Administrador','Supervisor')"
          th:fragment="modalAgregar">
 
         <div class="modal-dialog modal-lg">
@@ -219,7 +224,7 @@
                     <div class="modal-header">
                         <h5 class="modal-title">
                             <i class="bi bi-person-plus-fill me-2"></i>
-                            Nuevo conductor
+                            [[#{conductor.nuevo}]]
                         </h5>
 
                         <button type="button"
@@ -235,23 +240,23 @@
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Nombre completo</label>
+                                <label class="form-label">[[#{campo.nombreCompleto}]]</label>
                                 <input type="text"
                                        class="form-control"
                                        th:field="*{nombre}"
                                        required
                                        minlength="2"
                                        maxlength="100"
-                                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$">
+                                       pattern="^[A-Za-zÃÃ‰ÃÃ“ÃšÃ¡Ã©Ã­Ã³ÃºÃ‘Ã± ]+$">
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Teléfono</label>
+                                <label class="form-label">[[#{campo.telefono}]]</label>
                                 <input type="tel"
                                        class="form-control"
                                        th:field="*{telefono}"
                                        required
-                                       pattern="[0-9]{8}"
+                                       pattern="[0-9]{4}-?[0-9]{4}"
                                        maxlength="8">
                             </div>
 
@@ -260,7 +265,7 @@
                         <div class="row">
 
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Número de licencia</label>
+                                <label class="form-label">[[#{campo.numeroLicencia}]]</label>
                                 <input type="text"
                                        class="form-control"
                                        th:field="*{numeroLicencia}"
@@ -269,7 +274,7 @@
 
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">
-                                    Fecha de vencimiento
+                                    [[#{campo.fechaVencimiento}]]
                                 </label>
 
                                 <input type="date"
@@ -281,13 +286,13 @@
 
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">
-                                    Usuario asociado
+                                    [[#{campo.usuarioAsociado}]]
                                 </label>
 
                                 <select class="form-select"
                                         th:field="*{usuario}"
                                         required>
-                                    <option value="">Seleccione un usuario</option>
+                                    <option value="">[[#{campo.seleccioneUsuario}]]</option>
 
                                     <option th:each="u : ${usuariosDisponibles}"
                                             th:value="${u.idUsuario}"
@@ -299,7 +304,7 @@
                             <div class="col-md-12 mb-3">
 
                                 <label class="form-label">
-                                    Foto del frente de la licencia
+                                    [[#{campo.fotoLicenciaFrente}]]
                                 </label>
 
                                 <input type="file"
@@ -313,7 +318,7 @@
                             <div class="col-md-12 mb-3">
 
                                 <label class="form-label">
-                                    Foto del reverso de la licencia
+                                    [[#{campo.fotoLicenciaReverso}]]
                                 </label>
 
                                 <input type="file"
@@ -333,13 +338,13 @@
                         <button type="button"
                                 class="btn btn-secondary"
                                 data-bs-dismiss="modal">
-                            Cancelar
+                            [[#{accion.cancelar}]]
                         </button>
 
                         <button type="submit"
                                 class="btn btn-primary">
                             <i class="bi bi-check-circle-fill me-1"></i>
-                            Guardar conductor
+                            [[#{conductor.guardar}]]
                         </button>
 
                     </div>

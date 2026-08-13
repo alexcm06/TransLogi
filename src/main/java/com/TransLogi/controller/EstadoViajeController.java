@@ -1,18 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.TransLogi.controller;
-/**
- *
- * @author sebas
- */
+
 import com.TransLogi.domain.EstadoViaje;
 import com.TransLogi.service.EstadoViajeService;
 import jakarta.validation.Valid;
-import java.util.Locale;
 import java.util.Optional;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("/estadoViaje")
 public class EstadoViajeController {
-    
+
     private final EstadoViajeService estadoViajeService;
     private final MessageSource messageSource;
 
@@ -44,11 +37,10 @@ public class EstadoViajeController {
     @PostMapping("/guardar")
     public String guardar(@Valid EstadoViaje estadoViaje,
             RedirectAttributes redirectAttributes) {
-        //Pasamos el objeto al método save
         estadoViajeService.save(estadoViaje);
         redirectAttributes.addFlashAttribute(
                 "todoOk",
-                messageSource.getMessage("mensaje.actualizado", null, Locale.getDefault())
+                messageSource.getMessage("mensaje.actualizado", null, LocaleContextHolder.getLocale())
         );
         return "redirect:/estadoViaje/listado";
     }
@@ -62,10 +54,11 @@ public class EstadoViajeController {
         if (estadoOpt.isEmpty()) {
             redirectAttributes.addFlashAttribute(
                     "error",
-                    messageSource.getMessage("error", null, Locale.getDefault())
+                    messageSource.getMessage("error", null, LocaleContextHolder.getLocale())
             );
             return "redirect:/estadoViaje/listado";
         }
+
         model.addAttribute("estadoViaje", estadoOpt.get());
         return "/estadoViaje/modifica";
     }

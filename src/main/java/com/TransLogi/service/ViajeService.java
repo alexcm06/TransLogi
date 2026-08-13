@@ -58,7 +58,7 @@ public class ViajeService {
 
     @Transactional(readOnly = true)
     public long totalViajesProceso() {
-        return viajeRepository.totalViajesPorEstado("En Proceso");
+        return viajeRepository.totalViajesPorEstado("En proceso");
     }
 
     @Transactional(readOnly = true)

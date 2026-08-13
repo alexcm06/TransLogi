@@ -32,6 +32,38 @@ public class SecurityConfig {
         var rutas = rutaService.getRutas();
 
         http.authorizeHttpRequests(requests -> {
+            requests.requestMatchers("/usuario/**", "/rol/**").hasRole("Administrador");
+            requests.requestMatchers(
+                    "/empresa/eliminar",
+                    "/empresa/eliminar/**",
+                    "/conductor/eliminar",
+                    "/conductor/eliminar/**"
+            ).hasRole("Administrador");
+            requests.requestMatchers(
+                    "/",
+                    "/index",
+                    "/viaje/listado",
+                    "/viaje/guardar",
+                    "/viaje/modificar/**",
+                    "/viaje/eliminar",
+                    "/viaje/eliminar/**",
+                    "/ubicacion/listado",
+                    "/ubicacion/guardar",
+                    "/ubicacion/modificar/**",
+                    "/ubicacion/eliminar",
+                    "/ubicacion/eliminar/**",
+                    "/reportes",
+                    "/reportes/**"
+            ).hasAnyRole("Administrador", "Supervisor");
+            requests.requestMatchers(
+                    "/conductor/listado",
+                    "/conductor/guardar",
+                    "/conductor/modificar/**",
+                    "/empresa/listado",
+                    "/empresa/guardar",
+                    "/empresa/modificar/**"
+            ).hasAnyRole("Administrador", "Supervisor");
+
             for (Ruta ruta : rutas) {
                 if (ruta.isRequiereRol()) {
                     requests.requestMatchers(ruta.getRuta()).hasRole(ruta.getRol().getNombreRol());

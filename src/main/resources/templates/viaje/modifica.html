@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
     <head th:replace="~{general/fragmentos :: head}"></head>
@@ -14,9 +14,9 @@
                 <div class="d-flex justify-content-between align-items-center mb-4">
 
                     <div>
-                        <h2 class="page-title">Modificar Viaje</h2>
+                        <h2 class="page-title">[[#{viaje.modificar}]]</h2>
                         <p class="page-subtitle">
-                            Actualice la información del viaje.
+                            [[#{viaje.modificarSubtitulo}]]
                         </p>
                     </div>
 
@@ -24,7 +24,7 @@
                        class="btn btn-outline-secondary">
 
                         <i class="bi bi-arrow-left"></i>
-                        Volver
+                        [[#{accion.volver}]]
 
                     </a>
 
@@ -44,7 +44,7 @@
                             <div class="row">
 
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label">Fecha</label>
+                                    <label class="form-label">[[#{campo.fecha}]]</label>
                                     <input type="date"
                                            class="form-control"
                                            name="fechaProgramada"
@@ -55,7 +55,7 @@
 
                                 <div class="col-md-6 mb-3">
 
-                                    <label class="form-label">Hora</label>
+                                    <label class="form-label">[[#{campo.hora}]]</label>
 
                                     <input type="time"
                                            class="form-control"
@@ -67,7 +67,7 @@
 
                                 <div class="col-md-6 mb-3">
 
-                                    <label class="form-label">Empresa</label>
+                                    <label class="form-label">[[#{campo.empresa}]]</label>
 
                                     <select class="form-select"
                                             name="empresa"
@@ -85,7 +85,7 @@
 
                                 <div class="col-md-6 mb-3">
 
-                                    <label class="form-label">Conductor</label>
+                                    <label class="form-label">[[#{campo.conductor}]]</label>
 
                                     <select class="form-select"
                                             name="conductor"
@@ -103,7 +103,7 @@
 
                                 <div class="col-md-6 mb-3">
 
-                                    <label class="form-label">Origen</label>
+                                    <label class="form-label">[[#{campo.origen}]]</label>
 
                                     <select class="form-select"
                                             name="origen"
@@ -121,7 +121,7 @@
 
                                 <div class="col-md-6 mb-3">
 
-                                    <label class="form-label">Destino</label>
+                                    <label class="form-label">[[#{campo.destino}]]</label>
 
                                     <select class="form-select"
                                             name="destino"
@@ -139,7 +139,7 @@
 
                                 <div class="col-md-6 mb-3">
 
-                                    <label class="form-label">Estado</label>
+                                    <label class="form-label">[[#{campo.estado}]]</label>
 
                                     <select class="form-select"
                                             name="estadoViaje"
@@ -158,7 +158,7 @@
                                 <div class="col-md-6 mb-3">
 
                                     <label class="form-label">
-                                        Cantidad de pasajeros
+                                        [[#{campo.cantidadPasajeros}]]
                                     </label>
 
                                     <input type="number"
@@ -173,7 +173,7 @@
                                 <div class="col-12 mb-4">
 
                                     <label class="form-label">
-                                        Observaciones
+                                        [[#{campo.observaciones}]]
                                     </label>
 
                                     <textarea class="form-control"
@@ -191,7 +191,7 @@
                                 <a th:href="@{/viaje/listado}"
                                    class="btn btn-secondary">
 
-                                    Cancelar
+                                    [[#{accion.cancelar}]]
 
                                 </a>
 
@@ -199,7 +199,7 @@
                                         class="btn btn-primary">
 
                                     <i class="bi bi-check-lg"></i>
-                                    Guardar cambios
+                                    [[#{accion.guardarCambios}]]
 
                                 </button>
 

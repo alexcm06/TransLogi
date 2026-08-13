@@ -1,12 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.TransLogi.domain;
-/**
- *
- * @author sebas
- */
 
 import jakarta.persistence.*;
 import java.io.Serializable;
@@ -17,15 +9,13 @@ import lombok.Data;
 @Table(name = "rol")
 public class Rol implements Serializable {
 
-    // Se recomienda añadir un serialVersionUID
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_rol")
     private Integer idRol;
-// Añadir restricción de longitud y unicidad si el campo 'rol' es el nombre del rol
-    @Column(name = "nombre_rol", unique = true, length = 25)
-    private String nombreRol;
 
+    @Column(name = "nombre_rol", unique = true, length = 50)
+    private String nombreRol;
 }

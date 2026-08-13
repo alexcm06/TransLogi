@@ -1,19 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.TransLogi.controller;
 
-/**
- *
- * @author sebas
- */
 import com.TransLogi.domain.Usuario;
 import com.TransLogi.service.UsuarioService;
 import jakarta.validation.Valid;
-import java.util.Locale;
 import java.util.Optional;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,7 +31,6 @@ public class UsuarioController {
 
     @GetMapping("/listado")
     public String listado(Model model) {
-
         var usuarios = usuarioService.getUsuarios(true);
         model.addAttribute("usuarios", usuarios);
         model.addAttribute("usuario", new Usuario());
@@ -52,27 +43,29 @@ public class UsuarioController {
     public String guardar(@Valid Usuario usuario,
             BindingResult result,
             @RequestParam(required = false) MultipartFile imagenFile,
-            @RequestParam(required = false) Integer idRol,  // ← nuevo
+            @RequestParam(required = false) Integer idRol,
             RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("error", "Datos inválidos, revise el formulario.");
+            redirectAttributes.addFlashAttribute("error",
+                    messageSource.getMessage("usuario.error04", null, LocaleContextHolder.getLocale()));
             return "redirect:/usuario/listado";
         }
+
         try {
-            usuarioService.save(usuario, imagenFile,idRol);
-            redirectAttributes.addFlashAttribute("todoOk","Usuario guardado correctamente.");
+            usuarioService.save(usuario, imagenFile, idRol);
+            redirectAttributes.addFlashAttribute("todoOk",
+                    messageSource.getMessage("usuario.guardado", null, LocaleContextHolder.getLocale()));
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error",e.getMessage());
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
+
         return "redirect:/usuario/listado";
     }
 
     @PostMapping("/eliminar")
     public String eliminar(@RequestParam Integer idUsuario) {
-
         usuarioService.delete(idUsuario);
-
         return "redirect:/usuario/listado";
     }
 
@@ -84,7 +77,8 @@ public class UsuarioController {
         Optional<Usuario> usuario = usuarioService.getUsuario(idUsuario);
 
         if (usuario.isEmpty()) {
-            redirectAttributes.addFlashAttribute("error", "Usuario no encontrado");
+            redirectAttributes.addFlashAttribute("error",
+                    messageSource.getMessage("usuario.error01", null, LocaleContextHolder.getLocale()));
             return "redirect:/usuario/listado";
         }
 
