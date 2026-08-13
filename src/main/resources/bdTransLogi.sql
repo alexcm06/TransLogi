@@ -320,6 +320,25 @@ WHERE `id_rol` = 2
     '/empresa/eliminar/**',
     '/conductor/eliminar/**'
   );
+DELETE FROM `ruta`
+WHERE `ruta` IN (
+    '/usuario/eliminar',
+    '/empresa/eliminar',
+    '/conductor/eliminar',
+    '/ubicacion/eliminar',
+    '/viaje/eliminar',
+    '/reportes'
+  );
+INSERT INTO `ruta` (`ruta`, `id_rol`, `requiere_rol`, `fecha_creacion`, `fecha_modificacion`) VALUES
+('/usuario/eliminar',1,1,'2026-08-13 00:00:00','2026-08-13 00:00:00'),
+('/empresa/eliminar',1,1,'2026-08-13 00:00:00','2026-08-13 00:00:00'),
+('/conductor/eliminar',1,1,'2026-08-13 00:00:00','2026-08-13 00:00:00'),
+('/ubicacion/eliminar',1,1,'2026-08-13 00:00:00','2026-08-13 00:00:00'),
+('/ubicacion/eliminar',2,1,'2026-08-13 00:00:00','2026-08-13 00:00:00'),
+('/viaje/eliminar',1,1,'2026-08-13 00:00:00','2026-08-13 00:00:00'),
+('/viaje/eliminar',2,1,'2026-08-13 00:00:00','2026-08-13 00:00:00'),
+('/reportes',1,1,'2026-08-13 00:00:00','2026-08-13 00:00:00'),
+('/reportes',2,1,'2026-08-13 00:00:00','2026-08-13 00:00:00');
 /*!40000 ALTER TABLE `ruta` ENABLE KEYS */;
 UNLOCK TABLES;
 

@@ -10,6 +10,10 @@ package com.TransLogi;
  */
 import com.TransLogi.domain.Ruta;
 import com.TransLogi.service.RutaService;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,45 +36,21 @@ public class SecurityConfig {
         var rutas = rutaService.getRutas();
 
         http.authorizeHttpRequests(requests -> {
-            requests.requestMatchers("/usuario/**", "/rol/**").hasRole("Administrador");
-            requests.requestMatchers(
-                    "/empresa/eliminar",
-                    "/empresa/eliminar/**",
-                    "/conductor/eliminar",
-                    "/conductor/eliminar/**"
-            ).hasRole("Administrador");
-            requests.requestMatchers(
-                    "/",
-                    "/index",
-                    "/viaje/listado",
-                    "/viaje/guardar",
-                    "/viaje/modificar/**",
-                    "/viaje/eliminar",
-                    "/viaje/eliminar/**",
-                    "/ubicacion/listado",
-                    "/ubicacion/guardar",
-                    "/ubicacion/modificar/**",
-                    "/ubicacion/eliminar",
-                    "/ubicacion/eliminar/**",
-                    "/reportes",
-                    "/reportes/**"
-            ).hasAnyRole("Administrador", "Supervisor");
-            requests.requestMatchers(
-                    "/conductor/listado",
-                    "/conductor/guardar",
-                    "/conductor/modificar/**",
-                    "/empresa/listado",
-                    "/empresa/guardar",
-                    "/empresa/modificar/**"
-            ).hasAnyRole("Administrador", "Supervisor");
-
+            Map<String, Set<String>> rolesPorRuta = new LinkedHashMap<>();
             for (Ruta ruta : rutas) {
                 if (ruta.isRequiereRol()) {
-                    requests.requestMatchers(ruta.getRuta()).hasRole(ruta.getRol().getNombreRol());
+                    rolesPorRuta
+                            .computeIfAbsent(ruta.getRuta(), key -> new LinkedHashSet<>())
+                            .add(ruta.getRol().getNombreRol());
                 } else {
                     requests.requestMatchers(ruta.getRuta()).permitAll();
                 }
             }
+
+            rolesPorRuta.forEach((ruta, roles) -> requests
+                    .requestMatchers(ruta)
+                    .hasAnyRole(roles.toArray(String[]::new)));
+
             requests.anyRequest().authenticated();
         });
         http.formLogin(form -> form // Configuración de formulario de login
@@ -99,26 +79,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    //Este método será reemplazado la siguiente semana
-//    @Bean
-//    public UserDetailsService users(PasswordEncoder passwordEncoder) {
-//        UserDetails juan = User.builder()
-//                .username("juan")
-//                .password(passwordEncoder.encode("123"))
-//                .roles("ADMIN")
-//                .build();
-//        UserDetails rebeca = User.builder()
-//                .username("rebeca")
-//                .password(passwordEncoder.encode("456"))
-//                .roles("VENDEDOR")
-//                .build();
-//        UserDetails pedro = User.builder()
-//                .username("pedro")
-//                .password(passwordEncoder.encode("789"))
-//                .roles("USUARIO") // Consistent con tu configuración
-//                .build();
-//        return new InMemoryUserDetailsManager(juan, rebeca, pedro);
-//    }
+
     @Autowired
     public void configurerGlobal(AuthenticationManagerBuilder build,
             @Lazy PasswordEncoder passwordEncoder,
