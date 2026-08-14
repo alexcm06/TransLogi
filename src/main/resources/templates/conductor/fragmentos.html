@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-    <!-- TÃTULO -->
+    <!-- Titulo -->
     <section th:fragment="titulo">
 
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -247,7 +247,7 @@
                                        required
                                        minlength="2"
                                        maxlength="100"
-                                       pattern="^[A-Za-zÃÃ‰ÃÃ“ÃšÃ¡Ã©Ã­Ã³ÃºÃ‘Ã± ]+$">
+                                       pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
                             </div>
 
                             <div class="col-md-6 mb-3">
@@ -257,7 +257,7 @@
                                        th:field="*{telefono}"
                                        required
                                        pattern="[0-9]{4}-?[0-9]{4}"
-                                       maxlength="8">
+                                       maxlength="9">
                             </div>
 
                         </div>
