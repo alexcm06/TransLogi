@@ -210,7 +210,7 @@
                                             th:field="*{nombre}"
                                             minlength="2"
                                             maxlength="20"
-                                            pattern="^[A-Za-zÃÃ‰ÃÃ“ÃšÃ¡Ã©Ã­Ã³ÃºÃ‘Ã± ]+$"
+                                            pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$"
                                             required>
 
                                     </div>
@@ -230,7 +230,7 @@
                                             th:field="*{apellidos}"
                                             minlength="2"
                                             maxlength="30"
-                                            pattern="^[A-Za-zÃÃ‰ÃÃ“ÃšÃ¡Ã©Ã­Ã³ÃºÃ‘Ã± ]+$"
+                                            pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$"
                                             required>
 
                                     </div>
@@ -283,7 +283,7 @@
                                             class="form-control"
                                             th:field="*{telefono}"
                                             pattern="[0-9]{4}-?[0-9]{4}"
-                                            maxlength="8"
+                                            maxlength="9"
                                             required>
 
                                     </div>
@@ -522,7 +522,7 @@
                                         th:field="*{nombre}"
                                         minlength="2"
                                         maxlength="20"
-                                        pattern="^[A-Za-zÃÃ‰ÃÃ“ÃšÃ¡Ã©Ã­Ã³ÃºÃ‘Ã± ]+$"
+                                        pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$"
                                         required>
 
                                 </div>
@@ -541,7 +541,7 @@
                                         th:field="*{apellidos}"
                                         minlength="2"
                                         maxlength="30"
-                                        pattern="^[A-Za-zÃÃ‰ÃÃ“ÃšÃ¡Ã©Ã­Ã³ÃºÃ‘Ã± ]+$"
+                                        pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$"
                                         required>
 
                                 </div>
@@ -590,7 +590,7 @@
                                         class="form-control"
                                         th:field="*{telefono}"
                                         pattern="[0-9]{4}-?[0-9]{4}"
-                                        maxlength="8"
+                                        maxlength="9"
                                         required>
 
                                 </div>
