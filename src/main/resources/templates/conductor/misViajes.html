@@ -1,0 +1,225 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <head th:replace="~{general/fragmentos :: head}"></head>
+
+    <body>
+
+        <aside th:replace="~{general/fragmentos :: sidebar}"></aside>
+
+        <main class="main-content">
+
+            <div class="container-fluid">
+
+                <!-- TÃTULO DE LA VISTA -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="fw-bold mb-1">
+                            <i class="bi bi-truck text-primary"></i>
+                            [[#{viaje.misTitulo}]]
+                        </h2>
+                        <p class="page-subtitle">
+                            [[#{viaje.misSubtitulo}]]
+                        </p>
+                    </div>
+                </div>
+
+                <!-- ALERTA EN CASO DE ERROR -->
+                <div th:if="${error}" class="alert alert-danger shadow-sm border-0 mb-4" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <span th:text="${error}"></span>
+                </div>
+
+                <div th:if="${todoOk}" class="alert alert-success shadow-sm border-0 mb-4" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <span th:text="${todoOk}"></span>
+                </div>
+
+                <!-- TABLA DE VIAJES -->
+                <div class="card shadow-sm border-0 rounded-4">
+
+                    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                        <h5 class="mb-0 fw-semibold">[[#{viaje.delConductor}]]: <span class="text-primary" th:text="${conductor != null ? conductor.nombre : ''}"></span></h5>
+                        <span class="badge bg-primary fs-6" th:text="${totalViajes}">0</span>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th># ID</th>
+                                    <th>[[#{campo.fechaProgramada}]]</th>
+                                    <th>[[#{campo.empresa}]]</th>
+                                    <th>[[#{campo.estadoViaje}]]</th>
+                                    <th class="text-center">[[#{accion.acciones}]]</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="v : ${viajes}">
+                                    <td class="fw-bold" th:text="${v.idViaje}"></td>
+                                    <td th:text="${v.fechaProgramada}"></td>
+                                    <td th:text="${v.empresa != null ? v.empresa.nombre : 'Sin Empresa'}"></td>
+                                    <td>
+                                        <span class="badge"
+                                              th:classappend="${v.estadoViaje != null && v.estadoViaje.nombreEstado == 'Programado'} ? '  bg-primary' : 
+                                                              (${v.estadoViaje != null && v.estadoViaje.nombreEstado == 'En proceso'} ? ' bg-warning text-dark' : ' bg-success')"
+                                              th:text="${v.estadoViaje != null ? v.estadoViaje.nombreEstado : 'Desconocido'}">
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <a th:href="@{/conductor/viaje/detalle/{id}(id=${v.idViaje})}" 
+                                           class="btn btn-outline-primary btn-sm"
+                                           title="Ver detalles del viaje">
+                                            <i class="bi bi-eye"></i> [[#{accion.detalle}]]
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(viajes)}">
+                                    <td colspan="5" class="text-center py-4 text-muted">
+                                        <i class="bi bi-inbox fs-2 d-block mb-2"></i>
+                                        [[#{viaje.sinAsignados}]]
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <!-- SECCION DE GASTOS -->
+                <div class="card shadow-sm border-0 rounded-4 mt-4">
+
+                    <div class="card-header bg-white py-3">
+                        <h5 class="mb-0 fw-semibold">
+                            <i class="bi bi-cash-coin text-primary"></i>
+                            [[#{gasto.titulo}]]
+                        </h5>
+                    </div>
+
+                    <div class="card-body">
+
+                        <form th:action="@{/conductor/gasto/guardar}" method="post" class="mb-4">
+
+                            <div class="row g-3">
+
+                                <div class="col-md-4">
+                                    <label class="form-label">[[#{campo.viaje}]]</label>
+                                    <select class="form-select" name="idViaje" required>
+                                        <option value="">[[#{accion.seleccione}]]</option>
+                                        <option th:each="v : ${viajesConGastos}"
+                                                th:value="${v.idViaje}"
+                                                th:text="${'#' + v.idViaje + ' - ' + v.fechaProgramada + ' - ' + (v.empresa != null ? v.empresa.nombre : 'Sin Empresa')}">
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label class="form-label">[[#{campo.tipoGasto}]]</label>
+                                    <select class="form-select" name="idTipoGasto" required>
+                                        <option value="">[[#{accion.seleccione}]]</option>
+                                        <option th:each="t : ${tiposGasto}"
+                                                th:value="${t.idTipoGasto}"
+                                                th:text="${t.nombreTipo}">
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label class="form-label">[[#{campo.monto}]]</label>
+                                    <input type="number"
+                                           class="form-control"
+                                           name="monto"
+                                           min="0"
+                                           step="0.01"
+                                           required>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label class="form-label">[[#{campo.fecha}]]</label>
+                                    <input type="date"
+                                           class="form-control"
+                                           name="fecha"
+                                           th:value="${fechaGastoSugerida}"
+                                           required>
+                                </div>
+
+                                <div class="col-md-9">
+                                    <label class="form-label">[[#{campo.descripcion}]]</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           name="descripcion"
+                                           maxlength="255"
+                                           th:placeholder="#{gasto.placeholder}">
+                                </div>
+
+                                <div class="col-md-3 d-flex align-items-end">
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="bi bi-plus-circle"></i>
+                                        [[#{gasto.agregar}]]
+                                    </button>
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>[[#{campo.fecha}]]</th>
+                                        <th>[[#{campo.viaje}]]</th>
+                                        <th>[[#{campo.tipo}]]</th>
+                                        <th>[[#{campo.descripcion}]]</th>
+                                        <th>[[#{campo.monto}]]</th>
+                                        <th class="text-center">[[#{accion.acciones}]]</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr th:each="g : ${gastos}">
+                                        <td th:text="${g.fecha}"></td>
+                                        <td>
+                                            <span class="fw-semibold" th:text="${'#' + g.viaje.idViaje}"></span>
+                                            <small class="text-muted d-block"
+                                                   th:text="${g.viaje.empresa != null ? g.viaje.empresa.nombre : 'Sin Empresa'}"></small>
+                                        </td>
+                                        <td th:text="${g.tipoGasto.nombreTipo}"></td>
+                                        <td th:text="${g.descripcion != null && !g.descripcion.isBlank() ? g.descripcion : '-'}"></td>
+                                        <td th:text="${g.monto}"></td>
+                                        <td class="text-center">
+                                            <form th:action="@{/conductor/gasto/eliminar}"
+                                                  method="post"
+                                                  class="d-inline"
+                                                  th:onsubmit="|return confirm('#{gasto.confirmarEliminar}');|">
+                                                <input type="hidden" name="idGasto" th:value="${g.idGasto}">
+                                                <button type="submit" class="btn btn-outline-danger btn-sm">
+                                                    <i class="bi bi-trash"></i>
+                                                    [[#{accion.eliminar}]]
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+
+                                    <tr th:if="${#lists.isEmpty(gastos)}">
+                                        <td colspan="6" class="text-center py-4 text-muted">
+                                            <i class="bi bi-cash-coin fs-2 d-block mb-2"></i>
+                                            [[#{gasto.sinRegistros}]]
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+        <footer th:replace="~{general/fragmentos :: scripts}"></footer>
+
+    </body>
+</html>

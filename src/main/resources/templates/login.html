@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+    <head th:replace="~{general/fragmentos :: head}"></head>
+
+    <body class="login-body">
+
+        <div class="login-container">
+
+            <div class="login-card">
+
+                <div class="text-center mb-4">
+
+                    <h2 class="login-title">
+                        TransLogi
+                    </h2>
+
+                    <p class="login-subtitle">
+                        [[#{login.subtitulo}]]
+                    </p>
+
+                </div>
+
+                <form method="POST" th:action="@{/login}">
+
+                    <input type="hidden"
+                           th:name="${_csrf.parameterName}"
+                           th:value="${_csrf.token}" />
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            [[#{login.usuario}]]
+                        </label>
+
+                        <input
+                            class="form-control"
+                            id="username"
+                            name="username"
+                            type="text"
+                            required>
+
+                    </div>
+
+                    <div class="mb-4">
+
+                        <label class="form-label">
+                            [[#{login.clave}]]
+                        </label>
+
+                        <input
+                            class="form-control"
+                            id="password"
+                            name="password"
+                            type="password"
+                            required>
+
+                    </div>
+
+                    <button class="btn btn-primary w-100 login-btn" type="submit">
+                        [[#{login.iniciar}]]
+                    </button>
+
+                </form>
+
+                <div th:if="${param.error}" class="alert alert-danger mt-3 mb-0 text-center">
+                    [[#{login.error}]]
+                </div>
+
+            </div>
+
+        </div>
+
+        <div th:replace="~{general/fragmentos :: scripts}"></div>
+
+    </body>
+
+</html>

@@ -1,0 +1,269 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <section th:fragment="titulo"
+             sec:authorize="hasAnyRole('Administrador','Supervisor')"
+             class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold mb-1">
+                <i class="bi bi-geo-alt-fill text-primary"></i>
+                [[#{ubicacion.titulo}]]
+            </h2>
+
+            <p class="text-muted mb-0">
+                [[#{ubicacion.subtitulo}]]
+            </p>
+        </div>
+
+        <button class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#modalAgregar">
+
+            <i class="bi bi-plus-circle"></i>
+            [[#{ubicacion.nueva}]]
+
+        </button>
+
+    </section>
+
+    <section th:fragment="tablaUbicaciones">
+
+        <div class="card border-0 shadow-sm rounded-4">
+
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+
+                <h5 class="mb-0 fw-semibold">
+                    [[#{ubicacion.lista}]]
+                </h5>
+
+                <span class="badge bg-primary fs-6"
+                      th:text="${totalUbicaciones}">
+                    0
+                </span>
+
+            </div>
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle mb-0">
+
+                    <thead class="table-light">
+
+                        <tr>
+                            
+                            <th>[[#{campo.nombre}]]</th>
+                            <th>[[#{campo.direccion}]]</th>
+
+                            <th class="text-center">
+                                [[#{accion.acciones}]]
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr th:each="ubicacion : ${ubicaciones}">
+
+                            <td th:text="${ubicacion.nombre}"></td>
+
+                            <td th:text="${ubicacion.direccion}"></td>
+
+                            <td class="text-center">
+
+                                <a class="btn btn-warning btn-sm"
+                                   sec:authorize="hasAnyRole('Administrador','Supervisor')"
+                                   th:href="@{/ubicacion/modificar/{id}(id=${ubicacion.idUbicacion})}">
+
+                                    <i class="bi bi-pencil-square"></i>
+
+                                </a>
+
+                                <button
+                                    class="btn btn-danger btn-sm"
+                                    sec:authorize="hasAnyRole('Administrador','Supervisor')"
+
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalEliminarUbicacion"
+
+                                    th:attr="
+                                    data-id=${ubicacion.idUbicacion},
+                                    data-nombre=${ubicacion.nombre}">
+
+                                    <i class="bi bi-trash"></i>
+
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <div th:fragment="modalAgregar"
+         class="modal fade"
+         sec:authorize="hasAnyRole('Administrador','Supervisor')"
+         id="modalAgregar"
+         tabindex="-1">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        Nueva UbicaciÃ³n
+                    </h5>
+
+                    <button class="btn-close btn-close"
+                            data-bs-dismiss="modal">
+                    </button>
+
+                </div>
+
+                <form th:action="@{/ubicacion/guardar}"
+                      method="post">
+
+                    <div class="modal-body">
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                [[#{campo.nombre}]]
+                            </label>
+
+                            <input
+                                type="text"
+                                name="nombre"
+                                class="form-control"
+                                required
+                                maxlength="150">
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                [[#{campo.direccion}]]
+                            </label>
+
+                            <textarea
+                                name="direccion"
+                                class="form-control"
+                                rows="3"
+                                maxlength="255"
+                                required></textarea>
+
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+
+                            [[#{accion.cancelar}]]
+
+                        </button>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary">
+
+                            <i class="bi bi-check-lg"></i>
+                            [[#{ubicacion.guardar}]]
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= MODAL ELIMINAR ================= -->
+    <div th:fragment="modalEliminar"
+         class="modal fade"
+         sec:authorize="hasAnyRole('Administrador','Supervisor')"
+         id="modalEliminarUbicacion"
+         tabindex="-1">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+
+                <div class="modal-header bg-danger text-white">
+
+                    <h5 class="modal-title">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        [[#{accion.confirmarEliminacion}]]
+                    </h5>
+
+                    <button type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"></button>
+
+                </div>
+
+                <form th:action="@{/ubicacion/eliminar}"
+                      method="post">
+
+                    <div class="modal-body">
+
+                        <input type="hidden"
+                               id="idUbicacionEliminar"
+                               name="idUbicacion">
+
+                        <p class="mb-0">
+                            [[#{ubicacion.confirmarEliminar}]]
+                            <strong id="nombreUbicacion"></strong>?
+                        </p>
+
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <button type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal">
+                            [[#{accion.cancelar}]]
+                        </button>
+
+                        <button type="submit"
+                                class="btn btn-danger">
+
+                            <i class="bi bi-trash"></i>
+                            [[#{accion.eliminar}]]
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</html>

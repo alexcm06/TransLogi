@@ -1,0 +1,475 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <body>
+
+    </body>
+    <!-- TITULO -->
+    <section th:fragment="titulo">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <div>
+
+                <h2 class="fw-bold mb-1">
+                    <i class="bi bi-truck text-primary"></i>
+                    [[#{viaje.titulo}]]
+                </h2>
+
+                <p class="page-subtitle mb-0">
+                    [[#{viaje.subtitulo}]]
+                </p>
+
+            </div>
+
+            <button class="btn btn-primary"
+                    sec:authorize="hasAnyRole('Administrador','Supervisor')"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalViaje">
+
+                <i class="bi bi-plus-circle me-2"></i>
+                [[#{viaje.nuevo}]]
+
+            </button>
+
+        </div>
+
+    </section>
+
+    <!-- BUSQUEDA Y FILTROS -->
+    <section th:fragment="acciones">
+
+        <div class="card shadow-sm border-0 mb-4">
+
+            <div class="card-body">
+
+                <div class="row g-3">
+
+                    <div class="col-lg-8">
+
+                        <div class="input-group">
+
+                            <span class="input-group-text bg-white">
+
+                                <i class="bi bi-search"></i>
+
+                            </span>
+
+                            <input type="text"
+                                   id="buscarViaje"
+                                   class="form-control"
+                                   th:placeholder="#{viaje.buscarPlaceholder}">
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-4">
+
+                        <select class="form-select"
+                                id="filtroEstado">
+
+                            <option value="">[[#{accion.todos}]]</option>
+
+                            <option value="Programado">[[#{estado.programado}]]</option>
+                            <option value="En proceso">[[#{estado.enProceso}]]</option>
+                            <option value="Finalizado">[[#{estado.finalizado}]]</option>
+                            <option value="Cancelado">[[#{estado.cancelado}]]</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+    <!-- TABLA -->
+    <section th:fragment="tabla">
+
+        <div class="card shadow-sm border-0 rounded-4">
+
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+
+                <h5 class="mb-0 fw-semibold">
+                    [[#{viaje.lista}]]
+                </h5>
+
+                <span class="badge bg-primary fs-6"
+                      th:text="${totalViajes}">
+                </span>
+
+            </div>
+
+            <div class="card-body p-0">
+
+                <div class="table-responsive">
+
+                    <table id="tablaViajes"
+                           class="table table-hover align-middle mb-0">
+
+                        <thead class="table-light">
+
+                            <tr>
+
+                                <th>[[#{campo.fecha}]]</th>
+                                <th>[[#{campo.hora}]]</th>
+                                <th>[[#{campo.empresa}]]</th>
+                                <th>[[#{campo.conductor}]]</th>
+                                <th>[[#{campo.origen}]]</th>
+                                <th>[[#{campo.destino}]]</th>
+                                <th>[[#{campo.estado}]]</th>
+                                <th class="text-center">[[#{accion.acciones}]]</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr th:each="v : ${viajes}">
+
+                                <td th:text="${v.fechaProgramada}"></td>
+
+                                <td th:text="${v.horaProgramada}"></td>
+
+                                <td th:text="${v.empresa.nombre}"></td>
+
+                                <td th:text="${v.conductor.nombre}"></td>
+
+                                <td th:text="${v.origen.nombre}"></td>
+
+                                <td th:text="${v.destino.nombre}"></td>
+
+                                <td>
+
+                                    <span
+                                        class="badge estado"
+
+                                        th:classappend="
+                                        ${v.estadoViaje.nombreEstado == 'Programado'} ? ' bg-primary' :
+                                        (${v.estadoViaje.nombreEstado == 'En proceso'} ? ' bg-warning text-dark' :
+                                        (${v.estadoViaje.nombreEstado == 'Finalizado'} ? ' bg-success' :
+                                        (${v.estadoViaje.nombreEstado == 'Cancelado'} ? ' bg-danger' :
+                                        ' bg-secondary')))"
+
+                                        th:text="${v.estadoViaje.nombreEstado}">
+                                    </span>
+
+                                </td>
+
+                                <td class="text-center">
+
+                                    <a class="btn btn-outline-primary btn-sm me-1"
+                                       sec:authorize="hasAnyRole('Administrador','Supervisor')"
+                                       th:href="@{/viaje/modificar/{id}(id=${v.idViaje})}">
+
+                                        <i class="bi bi-pencil"></i>
+
+                                    </a>
+
+
+                                    <button
+                                        type="button"
+                                        class="btn btn-danger btn-sm"
+                                        sec:authorize="hasAnyRole('Administrador','Supervisor')"
+
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalEliminarViaje"
+
+                                        th:attr="data-id=${v.idViaje},
+                                        data-nombre=${v.empresa.nombre}">
+
+                                        <i class="bi bi-trash"></i>
+
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+                            <tr th:if="${#lists.isEmpty(viajes)}">
+                                <td colspan="9" class="text-center py-5 text-muted">
+
+                                    <i class="bi bi-truck fs-1 d-block mb-3"></i>
+                                    [[#{viaje.sinRegistros}]]
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <div th:fragment="modalViaje"
+         class="modal fade"
+         sec:authorize="hasAnyRole('Administrador','Supervisor')"
+         id="modalViaje"
+         tabindex="-1"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-lg">
+
+            <div class="modal-content">
+
+                <form th:action="@{/viaje/guardar}" method="post">
+
+                    <div class="modal-header">
+
+                        <h5 class="modal-title">
+                            [[#{viaje.registrar}]]
+                        </h5>
+
+                        <button class="btn-close"
+                                type="button"
+                                data-bs-dismiss="modal">
+                        </button>
+
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">[[#{campo.fecha}]]</label>
+                                <input type="date"
+                                       name="fechaProgramada"
+                                       class="form-control"
+                                       th:min="${hoy}"
+                                       required>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">[[#{campo.hora}]]</label>
+                                <input type="time"
+                                       name="horaProgramada"
+                                       class="form-control"
+                                       required>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">[[#{campo.empresa}]]</label>
+
+                                <select class="form-select"
+                                        name="empresa"
+                                        required>
+
+                                    <option value="">
+                                        [[#{accion.seleccione}]]
+                                    </option>
+
+                                    <option th:each="e : ${empresas}"
+                                            th:value="${e.idEmpresa}"
+                                            th:text="${e.nombre}">
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">[[#{campo.conductor}]]</label>
+
+                                <select class="form-select"
+                                        name="conductor"
+                                        required>
+
+                                    <option value="">
+                                        [[#{accion.seleccione}]]
+                                    </option>
+
+                                    <option th:each="c : ${conductores}"
+                                            th:value="${c.idConductor}"
+                                            th:text="${c.nombre}">
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">[[#{campo.origen}]]</label>
+
+                                <select class="form-select"
+                                        name="origen"
+                                        required>
+
+                                    <option th:each="u : ${ubicaciones}"
+                                            th:value="${u.idUbicacion}"
+                                            th:text="${u.nombre}">
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">[[#{campo.destino}]]</label>
+
+                                <select class="form-select"
+                                        name="destino"
+                                        required>
+
+                                    <option th:each="u : ${ubicaciones}"
+                                            th:value="${u.idUbicacion}"
+                                            th:text="${u.nombre}">
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    [[#{campo.cantidadPasajeros}]]
+                                </label>
+
+                                <input type="number"
+                                       class="form-control"
+                                       name="cantidadPasajeros"
+                                       min="1"
+                                       value="1"
+                                       required>
+
+                            </div>
+
+                            <div class="col-12">
+
+                                <label class="form-label">
+                                    [[#{campo.observaciones}]]
+                                </label>
+
+                                <textarea class="form-control"
+                                          rows="3"
+                                          name="observaciones">
+                                </textarea>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <button class="btn btn-secondary"
+                                type="button"
+                                data-bs-dismiss="modal">
+                            [[#{accion.cancelar}]]
+                        </button>
+
+                        <button class="btn btn-primary"
+                                type="submit">
+
+                            [[#{accion.guardar}]]
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div th:fragment="modalEliminar"
+         class="modal fade"
+         sec:authorize="hasAnyRole('Administrador','Supervisor')"
+         id="modalEliminarViaje"
+         tabindex="-1">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+
+                <div class="modal-header bg-danger text-white">
+
+                    <h5 class="modal-title">
+
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+
+                        [[#{accion.confirmarEliminacion}]]
+
+                    </h5>
+
+                    <button class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"></button>
+
+                </div>
+
+                <form th:action="@{/viaje/eliminar}"
+                      method="post">
+
+                    <div class="modal-body">
+
+                        <input type="hidden"
+                               id="idViajeEliminar"
+                               name="idViaje">
+
+                        <p class="mb-0">
+
+                            [[#{viaje.confirmarEliminar}]]
+
+                            <strong id="nombreViaje"></strong>?
+
+                        </p>
+
+                        <small class="text-danger">
+
+                            [[#{accion.noDeshacer}]]
+
+                        </small>
+
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+
+                            [[#{accion.cancelar}]]
+
+                        </button>
+
+                        <button
+                            class="btn btn-danger"
+                            type="submit">
+
+                            <i class="bi bi-trash"></i>
+
+                            [[#{accion.eliminar}]]
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+</body>
+</html>

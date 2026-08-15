@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <head th:replace="~{general/fragmentos :: head}"></head>
+
+    <body>
+
+        <aside th:replace="~{general/fragmentos :: sidebar}"></aside>
+
+        <main class="main-content">
+
+            <section th:replace="~{reporte/fragmentos :: titulo}"></section>
+
+            <section th:replace="~{reporte/fragmentos :: filtros}"></section>
+
+            <section th:replace="~{reporte/fragmentos :: tablaReportes}"></section>
+
+        </main>
+
+        <footer th:replace="~{general/fragmentos :: scripts}"></footer>
+
+    </body>
+
+</html>

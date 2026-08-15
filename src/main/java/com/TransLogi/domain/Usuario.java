@@ -1,12 +1,12 @@
-
 package com.TransLogi.domain;
-/**
- *
- * @author sebas
- */
+
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.Data;
 
 @Data
@@ -21,26 +21,50 @@ public class Usuario implements Serializable {
     @Column(name = "id_usuario")
     private Integer idUsuario;
 
-    @Column(nullable = false, length = 100)
-    @NotBlank(message = "El nombre no puede estar vacío.")
-    @Size(max = 100, message = "El nombre no puede tener más de 100 caracteres.")
+    @NotBlank
+    @Column(unique = true, length = 30)
+    private String username;
+
+    @Column(length = 512)
+    private String password;
+
+    @Column(length = 20)
+    @NotBlank
+    @Pattern(
+            regexp = "^[\\p{L} ]+$",
+            message = "El nombre solo puede contener letras"
+    )
     private String nombre;
 
-    @Column(nullable = false, unique = true, length = 150)
-    @NotBlank(message = "El correo no puede estar vacío.")
-    @Email(message = "El correo no tiene un formato válido.")
-    @Size(max = 150, message = "El correo no puede tener más de 150 caracteres.")
+    @Column(length = 30)
+    @NotBlank
+    @Pattern(
+            regexp = "^[\\p{L} ]+$",
+            message = "Los apellidos solo pueden contener letras"
+    )
+    private String apellidos;
+
+    @Column(unique = true, length = 75)
+    @Email
     private String correo;
 
-    @Column(nullable = false, length = 255)
-    @NotBlank(message = "La contraseña no puede estar vacía.")
-    private String contrasena;
+    @Column(length = 25)
+    @Pattern(
+            regexp = "^[0-9]{4}-?[0-9]{4}$",
+            message = "Debe tener 8 digitos, con guion opcional"
+    )
+    private String telefono;
 
-    @Column(nullable = false)
-    private boolean estado = true;
+    @Column(length = 1024)
+    private String rutaImagen;
 
-    @ManyToOne
-    @JoinColumn(name = "id_rol", nullable = false)
-    @NotNull(message = "Debe seleccionar un rol.")
-    private Rol rol;
+    private boolean activo;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "usuario_rol",
+            joinColumns = @JoinColumn(name = "id_usuario"),
+            inverseJoinColumns = @JoinColumn(name = "id_rol")
+    )
+    private Set<Rol> roles = new HashSet<>();
 }

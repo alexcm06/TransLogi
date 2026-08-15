@@ -1,15 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.TransLogi.domain;
-/**
- *
- * @author sebas
- */
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import lombok.Data;
 
@@ -25,8 +16,6 @@ public class Rol implements Serializable {
     @Column(name = "id_rol")
     private Integer idRol;
 
-    @Column(name = "nombre_rol", nullable = false, unique = true, length = 50)
-    @NotBlank(message = "El nombre del rol no puede estar vacío.")
-    @Size(max = 50, message = "El nombre del rol no puede tener más de 50 caracteres.")
+    @Column(name = "nombre_rol", unique = true, length = 50)
     private String nombreRol;
 }

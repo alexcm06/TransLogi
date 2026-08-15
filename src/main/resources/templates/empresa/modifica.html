@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <head th:replace="~{general/fragmentos :: head}"></head>
+
+    <body>
+
+        <aside th:replace="~{general/fragmentos :: sidebar}"></aside>
+
+        <main class="main-content">
+
+            <div class="container-fluid">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+
+                    <div>
+                        <h2 class="page-title">[[#{empresa.modificar}]]</h2>
+                        <p class="page-subtitle">
+                            [[#{empresa.modificarSubtitulo}]]
+                        </p>
+                    </div>
+
+                    <a th:href="@{/empresa/listado}"
+                       class="btn btn-outline-secondary">
+
+                        <i class="bi bi-arrow-left"></i>
+                        [[#{accion.volver}]]
+
+                    </a>
+
+                </div>
+
+                <div class="card shadow-sm">
+
+                    <div class="card-body">
+
+                        <form th:action="@{/empresa/guardar}"
+                              method="post"
+                              th:object="${empresa}">
+
+                            <input type="hidden"
+                                   th:field="*{idEmpresa}">
+
+                            <div class="row">
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label class="form-label">
+                                        [[#{campo.nombre}]]
+                                    </label>
+
+                                    <input type="text"
+                                           class="form-control"
+                                           th:field="*{nombre}"
+                                           required
+                                           maxlength="150">
+
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label class="form-label">
+                                        [[#{campo.telefono}]]
+                                    </label>
+
+                                    <input class="form-control"
+                                           type="tel"
+                                           th:field="*{telefono}"
+                                           pattern="[0-9]{4}-?[0-9]{4}"
+                                           maxlength="9"
+                                           required>
+
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label class="form-label">
+                                        [[#{login.correo}]]
+                                    </label>
+
+                                    <input type="email"
+                                           class="form-control"
+                                           th:field="*{correoContacto}"
+                                           required>
+
+                                </div>
+                                
+                                <div class="form-check form-switch">
+
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           th:field="*{activo}">
+
+                                    <label class="form-check-label">
+                                        [[#{campo.empresaActiva}]]
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                            <div class="text-end">
+
+                                <a th:href="@{/empresa/listado}"
+                                   class="btn btn-secondary">
+
+                                    [[#{accion.cancelar}]]
+
+                                </a>
+
+                                <button type="submit"
+                                        class="btn btn-primary">
+
+                                    <i class="bi bi-check-lg"></i>
+                                    [[#{accion.guardarCambios}]]
+
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+        <footer th:replace="~{general/fragmentos :: footer}"></footer>
+
+        <div th:replace="~{general/fragmentos :: scripts}"></div>
+
+    </body>
+
+</html>

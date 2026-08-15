@@ -1,0 +1,255 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <head th:replace="~{general/fragmentos :: head}"></head>
+
+    <body>
+
+        <aside th:replace="~{general/fragmentos :: sidebar}"></aside>
+
+        <main class="main-content">
+
+            <div class="container-fluid">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+
+                    <div>
+                        <h2 class="page-title">[[#{conductor.modificar}]]</h2>
+                        <p class="page-subtitle">
+                            [[#{conductor.modificarSubtitulo}]]
+                        </p>
+                    </div>
+
+                    <a th:href="@{/conductor/listado}"
+                       class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i>
+                        [[#{accion.volver}]]
+                    </a>
+
+                </div>
+
+                <div class="card shadow-sm">
+
+                    <div class="card-body">
+
+                        <form th:action="@{/conductor/guardar}"
+                              method="post"
+                              enctype="multipart/form-data"
+                              th:object="${conductor}">
+
+                            <input type="hidden" th:field="*{idConductor}"/>
+
+                            <input type="hidden" th:field="*{fotoLicenciaFrente}"/>
+                            <input type="hidden" th:field="*{fotoLicenciaReverso}"/>
+
+                            <!-- LICENCIA ACTUAL -->
+                            <div class="row mb-4">
+
+                                <div class="col-md-6 text-center">
+
+                                    <label class="form-label fw-bold">
+                                        [[#{campo.licenciaFrente}]]
+                                    </label>
+
+                                    <div>
+
+                                        <img th:if="${conductor.fotoLicenciaFrente != null}"
+                                             th:src="${conductor.fotoLicenciaFrente}"
+                                             class="img-thumbnail"
+                                             style="max-width:350px;">
+
+                                        <p th:unless="${conductor.fotoLicenciaFrente != null}"
+                                           class="text-muted">
+
+                                            [[#{conductor.licenciaFrenteVacia}]]
+
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-6 text-center">
+
+                                    <label class="form-label fw-bold">
+                                        [[#{campo.licenciaReverso}]]
+                                    </label>
+
+                                    <div>
+
+                                        <img th:if="${conductor.fotoLicenciaReverso != null}"
+                                             th:src="${conductor.fotoLicenciaReverso}"
+                                             class="img-thumbnail"
+                                             style="max-width:350px;">
+
+                                        <p th:unless="${conductor.fotoLicenciaReverso != null}"
+                                           class="text-muted">
+
+                                            [[#{conductor.licenciaReversoVacia}]]
+
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!-- NUEVAS IMÃGENES -->
+                            <div class="row mb-4">
+
+                                <div class="col-md-6">
+
+                                    <label class="form-label">
+                                        [[#{conductor.reemplazarLicenciaFrente}]]
+                                    </label>
+
+                                    <input type="file"
+                                           class="form-control"
+                                           name="fotoFrontal"
+                                           accept=".jpg,.jpeg,.png">
+
+                                    <small class="text-muted">
+                                        [[#{conductor.conservarImagen}]]
+                                    </small>
+
+                                </div>
+
+                                <div class="col-md-6">
+
+                                    <label class="form-label">
+                                        [[#{conductor.reemplazarLicenciaReverso}]]
+                                    </label>
+
+                                    <input type="file"
+                                           class="form-control"
+                                           name="fotoReverso"
+                                           accept=".jpg,.jpeg,.png">
+
+                                    <small class="text-muted">
+                                        [[#{conductor.conservarImagen}]]
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                            <!-- DATOS -->
+                            <div class="row">
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label class="form-label">
+                                        [[#{campo.nombre}]]
+                                    </label>
+
+                                    <input type="text"
+                                           class="form-control"
+                                           th:field="*{nombre}"
+                                           required
+                                           minlength="2"
+                                           maxlength="100"
+                                           pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
+
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label class="form-label">
+                                        [[#{campo.telefono}]]
+                                    </label>
+
+                                    <input type="tel"
+                                           class="form-control"
+                                           th:field="*{telefono}"
+                                           required
+                                           pattern="[0-9]{4}-?[0-9]{4}"
+                                           maxlength="9">
+
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label class="form-label">
+                                        [[#{campo.numeroLicencia}]]
+                                    </label>
+
+                                    <input type="text"
+                                           class="form-control"
+                                           th:field="*{numeroLicencia}"
+                                           required>
+
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label class="form-label">
+                                        [[#{campo.fechaVencimiento}]]
+                                    </label>
+
+                                    <input type="date"
+                                           class="form-control"
+                                           th:field="*{fechaVencimientoLicencia}"
+                                           required
+                                           th:min="${hoy}">
+
+                                </div>
+
+                                <div class="col-md-6 mb-4">
+
+                                    <label class="form-label">
+                                        [[#{campo.estado}]]
+                                    </label>
+
+                                    <select class="form-select"
+                                            th:field="*{activo}">
+
+                                        <option th:value="true">
+                                            [[#{campo.activo}]]
+                                        </option>
+
+                                        <option th:value="false">
+                                            [[#{campo.inactivo}]]
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+                            <div class="text-end">
+
+                                <a th:href="@{/conductor/listado}"
+                                   class="btn btn-secondary">
+
+                                    [[#{accion.cancelar}]]
+
+                                </a>
+
+                                <button type="submit"
+                                        class="btn btn-primary">
+
+                                    <i class="bi bi-check-lg"></i>
+                                    [[#{accion.guardarCambios}]]
+
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+        <footer th:replace="~{general/fragmentos :: footer}"></footer>
+        <div th:replace="~{general/fragmentos :: scripts}"></div>
+
+    </body>
+
+</html>

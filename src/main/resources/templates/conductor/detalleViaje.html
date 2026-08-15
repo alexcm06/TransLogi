@@ -1,0 +1,280 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <head th:replace="~{general/fragmentos :: head}"></head>
+
+    <body>
+
+        <aside th:replace="~{general/fragmentos :: sidebar}"></aside>
+
+        <main class="main-content">
+
+            <div class="container-fluid">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="fw-bold mb-1">
+                            <i class="bi bi-truck text-primary"></i>
+                            [[#{accion.detalle}]] del [[#{campo.viaje}]] #<span th:text="${viaje.idViaje}"></span>
+                        </h2>
+                        <p class="text-muted mb-0">
+                            [[#{viaje.detalleSubtitulo}]]
+                        </p>
+                    </div>
+
+                    <a th:href="@{/conductor/mis-viajes}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i>
+                        [[#{accion.volver}]]
+                    </a>
+                </div>
+
+                <div th:if="${todoOk}" class="alert alert-success shadow-sm border-0 mb-4">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <span th:text="${todoOk}"></span>
+                </div>
+
+                <div th:if="${error}" class="alert alert-danger shadow-sm border-0 mb-4">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <span th:text="${error}"></span>
+                </div>
+
+                <div class="card shadow-sm border-0 rounded-4 mb-4">
+
+                    <div class="card-body">
+
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="text-muted small">[[#{campo.fechaProgramada}]]</label>
+                                <p class="fw-semibold" th:text="${viaje.fechaProgramada}"></p>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="text-muted small">[[#{campo.horaProgramada}]]</label>
+                                <p class="fw-semibold" th:text="${viaje.horaProgramada}"></p>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="text-muted small">[[#{campo.empresa}]]</label>
+                                <p class="fw-semibold" th:text="${viaje.empresa.nombre}"></p>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="text-muted small">[[#{campo.origen}]]</label>
+                                <p class="fw-semibold">
+                                    <i class="bi bi-geo-alt text-success"></i>
+                                    <span th:text="${viaje.origen.nombre}"></span>
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="text-muted small">[[#{campo.destino}]]</label>
+                                <p class="fw-semibold">
+                                    <i class="bi bi-geo-alt-fill text-danger"></i>
+                                    <span th:text="${viaje.destino.nombre}"></span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-4">
+                                <label class="text-muted small">[[#{campo.estadoActual}]]</label>
+                                <p>
+                                    <span class="badge fs-6"
+                                          th:classappend="
+                                          ${viaje.estadoViaje.nombreEstado == 'Programado'} ? ' bg-primary' :
+                                          (${viaje.estadoViaje.nombreEstado == 'En proceso' || viaje.estadoViaje.nombreEstado == 'En Proceso'} ? ' bg-warning text-dark' :
+                                          (${viaje.estadoViaje.nombreEstado == 'Finalizado'} ? ' bg-success' :
+                                          (${viaje.estadoViaje.nombreEstado == 'Cancelado'} ? ' bg-danger' :
+                                          ' bg-secondary')))"
+                                          th:text="${viaje.estadoViaje.nombreEstado}">
+                                    </span>
+                                </p>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="text-muted small">[[#{campo.kilometros}]]</label>
+                                <p class="fw-semibold" th:text="${viaje.kilometrosRecorridos != null ? viaje.kilometrosRecorridos : '-'}"></p>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="text-muted small">[[#{campo.pasajeros}]]</label>
+                                <p class="fw-semibold" th:text="${viaje.cantidadPasajeros}"></p>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="text-muted small">[[#{campo.inicioViaje}]]</label>
+                                <p class="fw-semibold" th:text="${viaje.fechaHoraInicio != null ? viaje.fechaHoraInicio : '-'}"></p>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="text-muted small">[[#{campo.finViaje}]]</label>
+                                <p class="fw-semibold" th:text="${viaje.fechaHoraFin != null ? viaje.fechaHoraFin : '-'}"></p>
+                            </div>
+                        </div>
+
+                        <div th:if="${viaje.observaciones != null && !viaje.observaciones.isBlank()}">
+                            <label class="text-muted small">[[#{campo.observaciones}]]</label>
+                            <p class="fw-semibold mb-0" th:text="${viaje.observaciones}"></p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div th:if="${viaje.estadoViaje.nombreEstado == 'Programado'}"
+                     class="card shadow-sm border-0 rounded-4 mb-4">
+
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0 fw-semibold">
+                            [[#{viaje.control}]]
+                        </h5>
+                    </div>
+
+                    <div class="card-body">
+
+                        <form th:action="@{/conductor/viaje/iniciar}" method="post">
+
+                            <input type="hidden" name="idViaje" th:value="${viaje.idViaje}">
+
+                            <button type="submit"
+                                    class="btn btn-success"
+                                    th:disabled="${!puedeIniciar}">
+                                <i class="bi bi-play-circle"></i>
+                                [[#{viaje.iniciar}]]
+                            </button>
+
+                            <small th:if="${!puedeIniciar}" class="text-muted ms-2">
+                                [[#{viaje.disponibleInicio}]]
+                            </small>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+                <div th:if="${viaje.estadoViaje.nombreEstado == 'En proceso' || viaje.estadoViaje.nombreEstado == 'En Proceso'}"
+                     class="card shadow-sm border-0 rounded-4 mb-4">
+
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0 fw-semibold">
+                            [[#{viaje.control}]]
+                        </h5>
+                    </div>
+
+                    <div class="card-body">
+
+                        <button type="button"
+                                class="btn btn-primary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modalFinalizarViaje">
+                            <i class="bi bi-check-circle"></i>
+                            [[#{viaje.finalizar}]]
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div th:if="${viaje.estadoViaje.nombreEstado == 'Finalizado'}"
+                     class="alert alert-success shadow-sm border-0">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    [[#{viaje.finalizado}]]
+                </div>
+
+                <div class="modal fade"
+                     id="modalFinalizarViaje"
+                     tabindex="-1"
+                     aria-hidden="true"
+                     th:if="${viaje.estadoViaje.nombreEstado == 'En proceso' || viaje.estadoViaje.nombreEstado == 'En Proceso'}">
+
+                    <div class="modal-dialog modal-lg">
+
+                        <div class="modal-content">
+
+                            <form th:action="@{/conductor/viaje/finalizar}" method="post">
+
+                                <div class="modal-header">
+                                    <h5 class="modal-title">
+                                        <i class="bi bi-check-circle me-2"></i>
+                                        [[#{viaje.finalizar}]]
+                                    </h5>
+
+                                    <button type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="modal">
+                                    </button>
+                                </div>
+
+                                <div class="modal-body">
+
+                                    <input type="hidden" name="idViaje" th:value="${viaje.idViaje}">
+
+                                    <div class="row">
+
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label">[[#{campo.kilometrosRecorridos}]]</label>
+                                            <input type="number"
+                                                   class="form-control"
+                                                   name="kilometrosRecorridos"
+                                                   min="0"
+                                                   step="0.01"
+                                                   th:value="${viaje.kilometrosRecorridos}"
+                                                   required>
+                                        </div>
+
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label">[[#{campo.fechaHoraInicio}]]</label>
+                                            <input type="datetime-local"
+                                                   class="form-control"
+                                                   name="fechaHoraInicio"
+                                                   th:value="${fechaHoraInicioInput}"
+                                                   required>
+                                        </div>
+
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label">[[#{campo.fechaHoraFin}]]</label>
+                                            <input type="datetime-local"
+                                                   class="form-control"
+                                                   name="fechaHoraFin"
+                                                   th:value="${fechaHoraFinInput}"
+                                                   required>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="modal-footer">
+
+                                    <button type="button"
+                                            class="btn btn-secondary"
+                                            data-bs-dismiss="modal">
+                                        [[#{accion.cancelar}]]
+                                    </button>
+
+                                    <button type="submit"
+                                            class="btn btn-primary">
+                                        <i class="bi bi-check-circle"></i>
+                                        [[#{viaje.finalizar}]]
+                                    </button>
+
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+        <footer th:replace="~{general/fragmentos :: scripts}"></footer>
+
+    </body>
+
+</html>
