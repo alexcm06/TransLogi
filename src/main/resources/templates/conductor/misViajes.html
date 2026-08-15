@@ -61,13 +61,12 @@
                                     <td th:text="${v.empresa != null ? v.empresa.nombre : 'Sin Empresa'}"></td>
                                     <td>
                                         <span class="badge"
-                                              th:classappend="${v.estadoViaje != null && v.estadoViaje.nombreEstado == 'Programado'} ? ' bg-warning text-dark' : 
-                                                              (${v.estadoViaje != null && v.estadoViaje.nombreEstado == 'En proceso'} ? ' bg-info text-dark' : ' bg-success')"
+                                              th:classappend="${v.estadoViaje != null && v.estadoViaje.nombreEstado == 'Programado'} ? '  bg-primary' : 
+                                                              (${v.estadoViaje != null && v.estadoViaje.nombreEstado == 'En proceso'} ? ' bg-warning text-dark' : ' bg-success')"
                                               th:text="${v.estadoViaje != null ? v.estadoViaje.nombreEstado : 'Desconocido'}">
                                         </span>
                                     </td>
                                     <td class="text-center">
-                                        <!-- Enlace futuro para ver el detalle de la ruta o mapa -->
                                         <a th:href="@{/conductor/viaje/detalle/{id}(id=${v.idViaje})}" 
                                            class="btn btn-outline-primary btn-sm"
                                            title="Ver detalles del viaje">
@@ -75,7 +74,6 @@
                                         </a>
                                     </td>
                                 </tr>
-                                <!-- Mensaje por si la lista viene vacÃ­a -->
                                 <tr th:if="${#lists.isEmpty(viajes)}">
                                     <td colspan="5" class="text-center py-4 text-muted">
                                         <i class="bi bi-inbox fs-2 d-block mb-2"></i>
