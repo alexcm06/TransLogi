@@ -86,14 +86,20 @@ public class UsuarioService {
 
         boolean nuevoUsuario = usuario.getIdUsuario() == null;
 
-        // Evita correos duplicados entre usuarios.
+        // Evita usuarios y correos duplicados entre registros.
         Optional<Usuario> usuarioDuplicado =
-            usuarioRepository.findByUsernameOrCorreo(null, usuario.getCorreo());
+            usuarioRepository.findByUsernameOrCorreo(usuario.getUsername(), usuario.getCorreo());
 
         if (usuarioDuplicado.isPresent()) {
             Usuario encontrado = usuarioDuplicado.get();
             if (nuevoUsuario || !encontrado.getIdUsuario().equals(usuario.getIdUsuario())) {
-                throw new DataIntegrityViolationException("El correo ya está registrado.");
+                if (encontrado.getUsername().equalsIgnoreCase(usuario.getUsername())) {
+                    throw new DataIntegrityViolationException("El usuario ya esta registrado.");
+                }
+
+                if (encontrado.getCorreo().equalsIgnoreCase(usuario.getCorreo())) {
+                    throw new DataIntegrityViolationException("El correo ya esta registrado.");
+                }
             }
         }
         if (nuevoUsuario) {

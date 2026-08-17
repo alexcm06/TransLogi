@@ -11,6 +11,28 @@
 
             <section th:replace="~{usuario/fragmentos :: titulo}"></section>
 
+            <div th:if="${todoOk}"
+                 class="alert alert-success alert-dismissible fade show"
+                 role="alert">
+                <i class="bi bi-check-circle me-2"></i>
+                <span th:text="${todoOk}"></span>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert">
+                </button>
+            </div>
+
+            <div th:if="${error}"
+                 class="alert alert-danger alert-dismissible fade show"
+                 role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <span th:text="${error}"></span>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert">
+                </button>
+            </div>
+
             <section th:replace="~{usuario/fragmentos :: tablaUsuarios}"></section>
 
         </main>
