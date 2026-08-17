@@ -102,7 +102,7 @@ public class ConductorService {
     }
 
     @Transactional
-    public void delete(Integer idConductor) {
+    public boolean delete(Integer idConductor) {
         Conductor conductor = conductorRepository.findById(idConductor)
             .orElseThrow(() -> new IllegalArgumentException(
             "El conductor con ID " + idConductor + " no existe."));
