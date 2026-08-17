@@ -23,26 +23,25 @@ public class UsuarioDetailsService implements UserDetailsService {
         this.session = session;
     }
 
-    //Este método busca el registro con el username pasado (del login), en la tabla usuario
-    //Si lo encuentra guarda la foto del usuario en una sessión, y general los roles del usuario
+    // Busca el usuario activo y prepara sus datos para Spring Security.
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
-        //Se busca el usuario de ese username
+        // Solo usuarios activos pueden autenticarse.
         Usuario usuario = usuarioRepository.findByUsernameAndActivoTrue(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
 
-        //Si estamos acá... se encontró el usuario, guardamos la foto...
+        // La imagen queda disponible para el sidebar.
         session.removeAttribute("imagenUsuario");
         session.setAttribute("imagenUsuario", usuario.getRutaImagen());
 
-        //Se cargan los roles del usuario y se generan como roles de seguridad...
+        // Spring Security requiere el prefijo ROLE_ para validar permisos.
         var roles = usuario.getRoles().stream()
                 .map(rol -> new SimpleGrantedAuthority("ROLE_" + rol.getNombreRol()))
                 .collect(Collectors.toSet());
 
-        //Se retorna el usuario con la información de él
+        // Retorna username, password encriptado y roles cargados desde BD.
         return new User(usuario.getUsername(), usuario.getPassword(), roles);
     }
 }

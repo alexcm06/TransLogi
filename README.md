@@ -1,48 +1,115 @@
 # TransLogi
 
-Sistema web orientado a la gestión de servicios de transporte empresarial.
+Sistema web para administrar servicios de transporte empresarial.
 
-## Descripción
+## Descripcion
 
-TransLogi es una aplicación web desarrollada para apoyar la gestión de servicios de transporte empresarial mediante el control de conductores, empresas clientes, viajes y gastos operativos.
+TransLogi permite controlar usuarios, roles, conductores, empresas, ubicaciones,
+viajes, gastos y reportes. El proyecto esta construido con Spring Boot,
+Thymeleaf, Spring Security, MySQL, Bootstrap y servicios de Firebase Storage
+para guardar imagenes.
 
 ## Objetivo
 
-Centralizar la información relacionada con la operación diaria de una empresa de transporte y facilitar el seguimiento de los servicios realizados.
+Centralizar la operacion diaria de una empresa de transporte y facilitar el
+seguimiento de viajes programados, viajes en proceso, viajes finalizados y
+gastos asociados.
 
 ## Integrantes
 
-- Alexander Campos Marín
-- Sebastián Picado Vargas
+- Alexander Campos Marin
+- Sebastian Picado Vargas
 - Fernando Valverde Cubero
 
-## Tecnologías previstas
+## Tecnologias
 
-- Java
+- Java 17 o superior
 - Spring Boot
+- Spring MVC
+- Spring Security
+- Spring Data JPA
+- Thymeleaf
 - MySQL
-- HTML
-- CSS
+- Bootstrap
+- Apache POI para reportes Excel
+- iText para reportes PDF
+- Firebase Storage para imagenes
 
-## Estructura de ramas
+## Estructura principal
 
-main
-└── develop
-    ├── features
+- `controller`: recibe peticiones web, prepara modelos y retorna vistas.
+- `domain`: contiene las entidades que se relacionan con las tablas de la BD.
+- `repository`: define consultas y acceso a datos con Spring Data JPA.
+- `service`: concentra reglas de negocio, validaciones y operaciones externas.
+- `templates`: contiene las pantallas Thymeleaf por modulo.
+- `static`: contiene estilos, imagenes y scripts JavaScript.
+- `resources/messages*.properties`: contiene textos para internacionalizacion.
 
-## Convención de trabajo
+## Modulos
 
-- No trabajar directamente sobre main.
-- Toda funcionalidad se desarrolla en una rama feature.
-- Los cambios serán integrados mediante pull requests.
-- El código deberá ser revisado antes de realizar merge a develop.
+- Dashboard: muestra resumen general del sistema.
+- Usuarios: administra cuentas, imagenes y roles.
+- Conductores: administra datos del conductor y fotos de licencia.
+- Empresas: administra clientes empresariales.
+- Ubicaciones: administra origenes y destinos.
+- Viajes: programa, edita, elimina y consulta viajes.
+- Mis Viajes: vista del conductor para iniciar, finalizar y registrar gastos.
+- Reportes: filtra viajes y exporta resultados a Excel o PDF.
 
-## Estado del proyecto
+## Seguridad
 
-Fase de análisis y planificación
-Avance II: Estructura del Proyecto y Capas del Sistema
-   Para este segundo avance del proyecto, nos enfocamos en ordenar toda la estructura y los archivos del sistema. Por el lado del código, creamos el paquete principal com.TransLogi y lo dividimos en capas claras: los controladores para manejar las peticiones web, el dominio para definir las entidades, los repositorios para conectarnos con la base de datos, el módulo de seguridad para controlar los accesos y los servicios para manejar toda la lógica del negocio.
+La autenticacion usa Spring Security con usuarios de la base de datos. Las rutas
+y sus permisos se cargan desde la tabla `ruta`, por medio de `RutaService` y
+`SecurityConfig`. Esto permite controlar el acceso desde la BD sin dejar las
+rutas fijas en el codigo.
 
-    En paralelo, se estructuró la sección de recursos bajo src/main/resources, donde se centralizaron los estilos CSS y los scripts de JavaScript estáticos para dar identidad visual e interactividad al sistema. Asimismo, se crearon los paquetes de plantillas HTML organizados por módulos funcionales para segmentar la interfaz de usuario: plantillas generales para la estructura común, un panel de control (dashboard), y módulos específicos dedicados a la gestión de conductores, empresas, ubicaciones y los viajes de la plataforma logística.
+Roles principales:
 
-    Cabe destacar que, respecto a la seguridad y el sistema de login, se presentaron algunos inconvenientes técnicos relacionados con la encriptación de las credenciales. Debido a estas complicaciones, y considerando que este manejo específico no se ha abarcado detalladamente en las lecciones de clase, se prefirió postergar su implementación completa. La decisión se tomó con el fin de validar y confirmar previamente con el docente la forma correcta en que se debe estructurar este apartado, garantizando así el cumplimiento de las buenas prácticas requeridas.
+- Administrador: acceso completo.
+- Supervisor: acceso operativo segun permisos definidos.
+- Conductor: acceso a sus viajes y gastos.
+
+## Flujo de viajes
+
+Un viaje inicia como Programado. El conductor puede iniciarlo cuando la hora
+actual esta cerca o despues de la hora programada. Al iniciar, pasa a En proceso.
+Luego puede finalizarlo llenando kilometros recorridos, fecha y hora de inicio,
+y fecha y hora de fin. Al guardar esos datos, el viaje pasa al estado final del
+sistema.
+
+Los gastos se registran aparte desde Mis Viajes. Solo se aceptan para viajes En
+proceso o Finalizados, no para viajes Programados.
+
+## Reportes
+
+La pantalla de reportes permite filtrar por rango de fechas, empresa, conductor
+y estado. Esos mismos filtros se reutilizan para la vista HTML, la descarga de
+Excel y la generacion de PDF.
+
+El Excel se genera en `ReporteExcelServiceImpl` usando Apache POI. El servicio
+crea un libro, agrega titulo, resumen por estado, tabla de viajes y estilos para
+encabezados y celdas. El archivo se devuelve como stream para descargarlo desde
+el navegador.
+
+## Firebase Storage
+
+Las imagenes de usuarios y licencias se suben a Firebase Storage. La
+configuracion de credenciales esta en `StorageConfig`. El archivo JSON se lee
+desde una ruta externa para que en despliegue, como Render, pueda venir desde
+Secret Files y no quede guardado dentro del proyecto.
+
+## Ejecucion local
+
+1. Crear la base de datos MySQL con el script del proyecto.
+2. Revisar credenciales y propiedades en `application.properties`.
+3. Configurar el archivo JSON de Firebase en la ruta indicada por las
+   propiedades `firebase.json.path` y `firebase.json.file`.
+4. Ejecutar el proyecto desde el IDE o con Maven.
+5. Abrir la aplicacion en el navegador usando el puerto configurado.
+
+## Convencion de trabajo
+
+- No trabajar directamente sobre `main`.
+- Crear ramas `feature` para nuevas funcionalidades.
+- Revisar cambios antes de integrarlos a `develop`.
+- Mantener comentarios breves, claros y sin afectar la funcionalidad.

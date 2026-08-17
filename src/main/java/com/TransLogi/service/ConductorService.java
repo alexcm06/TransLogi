@@ -50,7 +50,7 @@ public class ConductorService {
             MultipartFile fotoFrontal,
             MultipartFile fotoReverso) {
 
-        // Si es edición, recuperar las imágenes actuales
+        // En edicion conserva las fotos actuales si no llegan archivos nuevos.
         if (conductor.getIdConductor() != null) {
 
             Conductor existente = conductorRepository.findById(conductor.getIdConductor())
@@ -65,7 +65,7 @@ public class ConductorService {
             }
         }
 
-        // Guardar primero para obtener el ID si es nuevo
+        // Guarda primero para obtener el ID usado en el nombre de las fotos.
         conductor = conductorRepository.save(conductor);
 
         try {

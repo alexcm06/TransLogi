@@ -28,7 +28,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-    //Este método es quien genera el proceso de autorización...
+    // Carga las reglas de autorizacion desde la tabla ruta.
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, @Lazy RutaService rutaService)
             throws Exception {
@@ -39,6 +39,7 @@ public class SecurityConfig {
             Map<String, Set<String>> rolesPorRuta = new LinkedHashMap<>();
             for (Ruta ruta : rutas) {
                 if (ruta.isRequiereRol()) {
+                    // Agrupa roles para permitir varias entradas con la misma ruta.
                     rolesPorRuta
                             .computeIfAbsent(ruta.getRuta(), key -> new LinkedHashSet<>())
                             .add(ruta.getRol().getNombreRol());
@@ -53,21 +54,21 @@ public class SecurityConfig {
 
             requests.anyRequest().authenticated();
         });
-        http.formLogin(form -> form // Configuración de formulario de login
+        http.formLogin(form -> form // Configuracion del formulario de login.
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
                 .defaultSuccessUrl("/home", true)
                 .failureUrl("/login?error=true")
                 .permitAll()
-        ).logout(logout -> logout // Configuración de logout
+        ).logout(logout -> logout // Configuracion de cierre de sesion.
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout=true")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .permitAll()
-        ).exceptionHandling(exceptions -> exceptions // Manejo de excepciones
+        ).exceptionHandling(exceptions -> exceptions // Vista usada cuando no hay permisos.
                 .accessDeniedPage("/acceso_denegado")
-        ).sessionManagement(session -> session // Configuración de sesiones
+        ).sessionManagement(session -> session // Limita sesiones activas por usuario.
                 .maximumSessions(1)
                 .maxSessionsPreventsLogin(false)
         );

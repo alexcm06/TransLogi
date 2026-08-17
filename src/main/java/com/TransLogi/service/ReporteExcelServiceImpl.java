@@ -99,6 +99,7 @@ public class ReporteExcelServiceImpl implements ReporteExcelService {
             //===========================
             // RESUMEN
             //===========================
+            // Cuenta viajes por estado para mostrar un bloque de totales.
             long programados = viajes.stream()
                     .filter(v -> v.getEstadoViaje().getNombreEstado().equalsIgnoreCase("Programado"))
                     .count();
@@ -161,6 +162,7 @@ public class ReporteExcelServiceImpl implements ReporteExcelService {
 
             DateTimeFormatter formatoHora = DateTimeFormatter.ofPattern("HH:mm");
 
+            // Cada viaje se escribe en una fila con el mismo orden del encabezado.
             for (Viaje v : viajes) {
 
                 Row row = sheet.createRow(fila++);

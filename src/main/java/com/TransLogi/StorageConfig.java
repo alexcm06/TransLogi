@@ -22,6 +22,7 @@ public class StorageConfig {
 
     @Bean
     public Storage storage() throws IOException {
+        // Lee credenciales externas. En Render se usa la ruta de Secret Files.
         File credentialsFile = new File(jsonPath, jsonFile);
         try (InputStream inputStream = new FileInputStream(credentialsFile)) {
 

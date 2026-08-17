@@ -17,6 +17,7 @@ public class RutaService {
     
     @Transactional(readOnly=true)
     public List<Ruta> getRutas() {
+        // Las rutas publicas se cargan primero para registrar permitAll antes.
         return rutaRepository.findAllByOrderByRequiereRolAsc();
     }
     

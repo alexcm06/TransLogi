@@ -16,7 +16,7 @@ public class LoginController {
         return "login";
     }
 
-    //Método puente para redirigir según el rol tras el login exitoso
+    // Redirige al usuario segun su rol despues del login.
     @GetMapping("/home")
     public String redirigirSegunRol(Authentication authentication) {
 
