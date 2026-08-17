@@ -9,6 +9,7 @@ import com.TransLogi.service.ConductorService;
 import com.TransLogi.service.EmpresaService;
 import com.TransLogi.service.EstadoViajeService;
 import com.TransLogi.service.ReporteExcelService;
+import com.TransLogi.service.ReportePdfService;
 import com.TransLogi.service.ViajeService;
 import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
@@ -35,6 +36,7 @@ public class ReporteController {
     private final ConductorService conductorService;
     private final EstadoViajeService estadoViajeService;
     private final ReporteExcelService reporteExcelService;
+    private final ReportePdfService reportePdfService;
 
     @GetMapping("/listado")
     public String listado(
@@ -101,5 +103,33 @@ public class ReporteController {
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(new InputStreamResource(excel));
     }
+    
+    @GetMapping("/pdf")
+    public ResponseEntity<InputStreamResource> exportarPdf(
+            @RequestParam(required = false) LocalDate fechaInicio,
+            @RequestParam(required = false) LocalDate fechaFin,
+            @RequestParam(required = false) Integer empresa,
+            @RequestParam(required = false) Integer conductor,
+            @RequestParam(required = false) Integer estado) {
 
+        List<Viaje> viajes = viajeService.obtenerReporte(
+                fechaInicio,
+                fechaFin,
+                empresa,
+                conductor,
+                estado);
+
+        ByteArrayInputStream pdf = reportePdfService.exportarPdf(viajes);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(
+                HttpHeaders.CONTENT_DISPOSITION,
+                "inline; filename=Reporte_Viajes.pdf");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(pdf));
+    }
+    
 }

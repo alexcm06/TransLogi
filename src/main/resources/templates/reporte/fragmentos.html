@@ -178,8 +178,14 @@
 
                             </a>
 
+                            
                             <a class="btn btn-danger"
-                               href="#">
+                                th:href="@{/reportes/pdf(
+                                fechaInicio=${fechaInicio},
+                                fechaFin=${fechaFin},
+                                empresa=${empresa},
+                                conductor=${conductor},
+                                estado=${estado})}">
 
                                 <i class="bi bi-file-earmark-pdf"></i>
                                 [[#{accion.pdf}]]
