@@ -80,7 +80,10 @@ public class ConductorController {
         String detalle = "mensaje.eliminado";
 
         try {
-            conductorService.delete(idConductor);
+            boolean eliminado = conductorService.delete(idConductor);
+            if (!eliminado) {
+                detalle = "conductor.desactivado";
+            }
         } catch (IllegalArgumentException e) {
             titulo = "error";
             detalle = "conductor.error01";
