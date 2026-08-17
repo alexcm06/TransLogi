@@ -2,6 +2,7 @@ package com.TransLogi.service;
 
 import com.TransLogi.domain.Conductor;
 import com.TransLogi.repository.ConductorRepository;
+import com.TransLogi.repository.ViajeRepository;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -14,11 +15,14 @@ import org.springframework.web.multipart.MultipartFile;
 public class ConductorService {
 
     private final ConductorRepository conductorRepository;
+    private final ViajeRepository viajeRepository;
     private final FirebaseStorageService firebaseStorageService;
 
     public ConductorService(ConductorRepository conductorRepository,
+            ViajeRepository viajeRepository,
             FirebaseStorageService firebaseStorageService) {
         this.conductorRepository = conductorRepository;
+        this.viajeRepository = viajeRepository;
         this.firebaseStorageService = firebaseStorageService;
     }
 
@@ -99,11 +103,17 @@ public class ConductorService {
 
     @Transactional
     public void delete(Integer idConductor) {
-        if (!conductorRepository.existsById(idConductor)) {
-            throw new IllegalArgumentException("El conductor con ID " + idConductor + " no existe.");
+        Conductor conductor = conductorRepository.findById(idConductor)
+            .orElseThrow(() -> new IllegalArgumentException(
+            "El conductor con ID " + idConductor + " no existe."));
+        if (viajeRepository.existsByConductorIdConductor(idConductor)) {
+            conductor.setActivo(false);
+            conductorRepository.save(conductor);
+            return false;
         }
         try {
             conductorRepository.deleteById(idConductor);
+            return true;
         } catch (DataIntegrityViolationException e) {
             throw new IllegalStateException("No se puede eliminar el conductor. Tiene datos asociados.", e);
         }

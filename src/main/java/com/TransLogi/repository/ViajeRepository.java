@@ -16,6 +16,8 @@ public interface ViajeRepository extends JpaRepository<Viaje, Integer> {
 
     List<Viaje> findByConductor(Conductor conductor);
 
+    boolean existsByConductorIdConductor(Integer idConductor);
+
     List<Viaje> findByEmpresa(Empresa empresa);
 
     List<Viaje> findByEstadoViaje(EstadoViaje estadoViaje);
