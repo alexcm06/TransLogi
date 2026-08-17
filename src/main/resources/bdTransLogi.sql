@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.44, for Win64 (x86_64)
 --
--- Host: localhost    Database: translogi
+-- Host: aiven    Database: translogi
 -- ------------------------------------------------------
 -- Server version	9.5.0
 
@@ -296,49 +296,83 @@ CREATE TABLE `ruta` (
 
 LOCK TABLES `ruta` WRITE;
 /*!40000 ALTER TABLE `ruta` DISABLE KEYS */;
-INSERT INTO `ruta` VALUES (44,'/js/**',NULL,0,'2026-07-20 00:02:50','2026-07-20 00:02:50'),(45,'/css/**',NULL,0,'2026-07-20 00:02:50','2026-07-20 00:02:50'),(46,'/webjars/**',NULL,0,'2026-07-20 00:02:50','2026-07-20 00:02:50'),(47,'/login',NULL,0,'2026-07-20 00:02:50','2026-07-20 00:02:50'),(48,'/error',NULL,0,'2026-07-20 00:02:50','2026-07-20 00:02:50'),(49,'/acceso_denegado',NULL,0,'2026-07-20 00:02:50','2026-07-20 00:02:50'),(50,'/usuario/nuevo',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(51,'/usuario/nuevo',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(52,'/usuario/guardar',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(53,'/usuario/guardar',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(54,'/usuario/modificar/**',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(55,'/usuario/modificar/**',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(56,'/usuario/eliminar/**',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(57,'/usuario/eliminar/**',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(58,'/rol/nuevo',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(59,'/rol/nuevo',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(60,'/rol/guardar',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(61,'/rol/guardar',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(62,'/rol/modificar/**',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(63,'/rol/modificar/**',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(64,'/empresa/nuevo',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(65,'/empresa/nuevo',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(66,'/empresa/guardar',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(67,'/empresa/guardar',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(68,'/empresa/modificar/**',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(69,'/empresa/modificar/**',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(70,'/empresa/eliminar/**',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(71,'/empresa/eliminar/**',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(72,'/usuario/listado',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(73,'/usuario/listado',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(74,'/rol/listado',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(75,'/rol/listado',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(76,'/empresa/listado',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(77,'/empresa/listado',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(78,'/conductor/listado',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(79,'/conductor/listado',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(80,'/conductor/nuevo',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(81,'/conductor/nuevo',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(82,'/conductor/guardar',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(83,'/conductor/guardar',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(84,'/conductor/modificar/**',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(85,'/conductor/modificar/**',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(86,'/conductor/eliminar/**',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(87,'/conductor/eliminar/**',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(88,'/ubicacion/listado',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(89,'/ubicacion/listado',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(90,'/ubicacion/nuevo',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(91,'/ubicacion/nuevo',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(92,'/ubicacion/guardar',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(93,'/ubicacion/guardar',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(94,'/ubicacion/modificar/**',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(95,'/ubicacion/modificar/**',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(96,'/ubicacion/eliminar/**',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(97,'/ubicacion/eliminar/**',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(98,'/estadoViaje/listado',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(99,'/estadoViaje/listado',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(100,'/estadoViaje/nuevo',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(101,'/estadoViaje/nuevo',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(102,'/estadoViaje/guardar',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(103,'/estadoViaje/guardar',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(104,'/viaje/listado',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(105,'/viaje/listado',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(106,'/viaje/nuevo',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(107,'/viaje/nuevo',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(108,'/viaje/guardar',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(109,'/viaje/guardar',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(110,'/viaje/modificar/**',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(111,'/viaje/modificar/**',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(112,'/viaje/eliminar/**',1,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(113,'/viaje/eliminar/**',2,1,'2026-07-20 16:48:45','2026-07-20 16:48:45'),(116,'/',1,1,'2026-07-21 18:26:03','2026-07-21 18:26:03'),(117,'/index',1,1,'2026-07-21 18:26:03','2026-07-21 18:26:03'),(118,'/',2,1,'2026-07-21 18:26:03','2026-07-21 18:26:03'),(119,'/index',2,1,'2026-07-21 18:26:03','2026-07-21 18:26:03'),(120,'/reportes',1,1,'2026-07-29 07:42:52','2026-07-29 07:42:52'),(121,'/reportes/**',1,1,'2026-07-29 07:42:52','2026-07-29 07:42:52');
-INSERT INTO `ruta` VALUES
-(122,'/reportes/**',2,1,'2026-08-12 00:00:00','2026-08-12 00:00:00'),
-(123,'/conductor/mis-viajes',3,1,'2026-08-12 00:00:00','2026-08-12 00:00:00'),
-(124,'/conductor/viaje/detalle/**',3,1,'2026-08-12 00:00:00','2026-08-12 00:00:00'),
-(125,'/conductor/viaje/iniciar',3,1,'2026-08-12 00:00:00','2026-08-12 00:00:00'),
-(126,'/conductor/viaje/finalizar',3,1,'2026-08-12 00:00:00','2026-08-12 00:00:00'),
-(127,'/conductor/gasto/guardar',3,1,'2026-08-12 00:00:00','2026-08-12 00:00:00'),
-(128,'/conductor/gasto/eliminar',3,1,'2026-08-12 00:00:00','2026-08-12 00:00:00');
-DELETE FROM `ruta`
-WHERE `id_rol` = 2
-  AND `ruta` IN (
-    '/usuario/nuevo',
-    '/usuario/guardar',
-    '/usuario/modificar/**',
-    '/usuario/eliminar/**',
-    '/usuario/listado',
-    '/rol/nuevo',
-    '/rol/guardar',
-    '/rol/modificar/**',
-    '/rol/listado',
-    '/empresa/eliminar/**',
-    '/conductor/eliminar/**'
-  );
-DELETE FROM `ruta`
-WHERE `ruta` IN (
-    '/usuario/eliminar',
-    '/empresa/eliminar',
-    '/conductor/eliminar',
-    '/ubicacion/eliminar',
-    '/viaje/eliminar',
-    '/reportes'
-  );
 INSERT INTO `ruta` (`ruta`, `id_rol`, `requiere_rol`, `fecha_creacion`, `fecha_modificacion`) VALUES
-('/usuario/eliminar',1,1,'2026-08-13 00:00:00','2026-08-13 00:00:00'),
-('/empresa/eliminar',1,1,'2026-08-13 00:00:00','2026-08-13 00:00:00'),
-('/conductor/eliminar',1,1,'2026-08-13 00:00:00','2026-08-13 00:00:00'),
-('/ubicacion/eliminar',1,1,'2026-08-13 00:00:00','2026-08-13 00:00:00'),
-('/ubicacion/eliminar',2,1,'2026-08-13 00:00:00','2026-08-13 00:00:00'),
-('/viaje/eliminar',1,1,'2026-08-13 00:00:00','2026-08-13 00:00:00'),
-('/viaje/eliminar',2,1,'2026-08-13 00:00:00','2026-08-13 00:00:00'),
-('/reportes',1,1,'2026-08-13 00:00:00','2026-08-13 00:00:00'),
-('/reportes',2,1,'2026-08-13 00:00:00','2026-08-13 00:00:00');
+-- PUBLICAS
+('/css/**', NULL, 0, NOW(), NOW()),
+('/js/**', NULL, 0, NOW(), NOW()),
+('/webjars/**', NULL, 0, NOW(), NOW()),
+('/login', NULL, 0, NOW(), NOW()),
+('/error', NULL, 0, NOW(), NOW()),
+('/acceso_denegado', NULL, 0, NOW(), NOW()),
+('/favicon.ico', NULL, 0, NOW(), NOW()),
+
+-- REDIRECCION POST-LOGIN
+('/home', 1, 1, NOW(), NOW()),
+('/home', 2, 1, NOW(), NOW()),
+('/home', 3, 1, NOW(), NOW()),
+
+-- ADMIN + SUPERVISOR: DASHBOARD
+('/', 1, 1, NOW(), NOW()),
+('/', 2, 1, NOW(), NOW()),
+
+-- ADMIN: USUARIOS
+('/usuario/listado', 1, 1, NOW(), NOW()),
+('/usuario/guardar', 1, 1, NOW(), NOW()),
+('/usuario/modificar/**', 1, 1, NOW(), NOW()),
+('/usuario/eliminar', 1, 1, NOW(), NOW()),
+
+-- ADMIN + SUPERVISOR: VIAJES
+('/viaje/listado', 1, 1, NOW(), NOW()),
+('/viaje/listado', 2, 1, NOW(), NOW()),
+('/viaje/guardar', 1, 1, NOW(), NOW()),
+('/viaje/guardar', 2, 1, NOW(), NOW()),
+('/viaje/modificar/**', 1, 1, NOW(), NOW()),
+('/viaje/modificar/**', 2, 1, NOW(), NOW()),
+('/viaje/eliminar', 1, 1, NOW(), NOW()),
+('/viaje/eliminar', 2, 1, NOW(), NOW()),
+
+-- ADMIN + SUPERVISOR: CONDUCTORES, SIN PARTE OPERATIVA DEL CONDUCTOR
+('/conductor/listado', 1, 1, NOW(), NOW()),
+('/conductor/listado', 2, 1, NOW(), NOW()),
+('/conductor/guardar', 1, 1, NOW(), NOW()),
+('/conductor/guardar', 2, 1, NOW(), NOW()),
+('/conductor/modificar/**', 1, 1, NOW(), NOW()),
+('/conductor/modificar/**', 2, 1, NOW(), NOW()),
+('/conductor/eliminar', 1, 1, NOW(), NOW()),
+
+-- ADMIN + SUPERVISOR: EMPRESAS, PERO ELIMINAR SOLO ADMIN
+('/empresa/listado', 1, 1, NOW(), NOW()),
+('/empresa/listado', 2, 1, NOW(), NOW()),
+('/empresa/guardar', 1, 1, NOW(), NOW()),
+('/empresa/guardar', 2, 1, NOW(), NOW()),
+('/empresa/modificar/**', 1, 1, NOW(), NOW()),
+('/empresa/modificar/**', 2, 1, NOW(), NOW()),
+('/empresa/eliminar', 1, 1, NOW(), NOW()),
+
+-- ADMIN + SUPERVISOR: UBICACIONES
+('/ubicacion/listado', 1, 1, NOW(), NOW()),
+('/ubicacion/listado', 2, 1, NOW(), NOW()),
+('/ubicacion/guardar', 1, 1, NOW(), NOW()),
+('/ubicacion/guardar', 2, 1, NOW(), NOW()),
+('/ubicacion/modificar/**', 1, 1, NOW(), NOW()),
+('/ubicacion/modificar/**', 2, 1, NOW(), NOW()),
+('/ubicacion/eliminar', 1, 1, NOW(), NOW()),
+('/ubicacion/eliminar', 2, 1, NOW(), NOW()),
+
+-- ADMIN + SUPERVISOR: REPORTES
+('/reportes/**', 1, 1, NOW(), NOW()),
+('/reportes/**', 2, 1, NOW(), NOW()),
+
+-- ADMIN: ESTADOS DE VIAJE
+('/estadoViaje/**', 1, 1, NOW(), NOW()),
+
+-- CONDUCTOR: SOLO SU PARTE
+('/conductor/mis-viajes', 3, 1, NOW(), NOW()),
+('/conductor/viaje/detalle/**', 3, 1, NOW(), NOW()),
+('/conductor/viaje/iniciar', 3, 1, NOW(), NOW()),
+('/conductor/viaje/finalizar', 3, 1, NOW(), NOW()),
+('/conductor/gasto/guardar', 3, 1, NOW(), NOW()),
+('/conductor/gasto/eliminar', 3, 1, NOW(), NOW());
 /*!40000 ALTER TABLE `ruta` ENABLE KEYS */;
 UNLOCK TABLES;
 
