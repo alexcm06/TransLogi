@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // Prepara el modal de eliminacion con el viaje elegido.
     const modalEliminar = document.getElementById("modalEliminarViaje");
     if (modalEliminar) {
         modalEliminar.addEventListener("show.bs.modal", function (event) {
@@ -13,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 document.addEventListener("DOMContentLoaded", () => {
 
+    // Aplica busqueda y filtro de estado sobre la tabla actual.
     const buscador = document.getElementById("buscarViaje");
     const filtroEstado = document.getElementById("filtroEstado");
     const filas = document.querySelectorAll("#tablaViajes tbody tr");

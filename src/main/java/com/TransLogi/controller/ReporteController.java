@@ -56,6 +56,7 @@ public class ReporteController {
         model.addAttribute("estados",
                 estadoViajeService.getEstados());
 
+        // Reutiliza los mismos filtros para pantalla, Excel y PDF.
         List<Viaje> viajes = viajeService.obtenerReporte(
                 fechaInicio,
                 fechaFin,
@@ -82,6 +83,7 @@ public class ReporteController {
             @RequestParam(required = false) Integer conductor,
             @RequestParam(required = false) Integer estado) {
 
+        // Genera el archivo Excel con los viajes filtrados.
         List<Viaje> viajes = viajeService.obtenerReporte(
                 fechaInicio,
                 fechaFin,
@@ -112,6 +114,7 @@ public class ReporteController {
             @RequestParam(required = false) Integer conductor,
             @RequestParam(required = false) Integer estado) {
 
+        // Genera el PDF con los mismos filtros de reportes.
         List<Viaje> viajes = viajeService.obtenerReporte(
                 fechaInicio,
                 fechaFin,

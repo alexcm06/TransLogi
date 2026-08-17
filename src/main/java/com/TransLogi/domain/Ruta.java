@@ -8,7 +8,7 @@ import lombok.Data;
 @Entity
 @Table(name = "ruta")
 public class Ruta implements Serializable {
-    // Se recomienda añadir un serialVersionUID
+    // Evita advertencias de serializacion.
     private static final long serialVersionUID = 1L;
 
     @Id

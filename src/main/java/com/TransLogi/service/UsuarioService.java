@@ -86,7 +86,7 @@ public class UsuarioService {
 
         boolean nuevoUsuario = usuario.getIdUsuario() == null;
 
-        // Validar correo repetido
+        // Evita correos duplicados entre usuarios.
         Optional<Usuario> usuarioDuplicado =
             usuarioRepository.findByUsernameOrCorreo(null, usuario.getCorreo());
 
@@ -104,11 +104,9 @@ public class UsuarioService {
         } else {
             Usuario existente = usuarioRepository.findById(usuario.getIdUsuario())
                     .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado."));
-            // Mantener roles
+            // Conserva roles, imagen y password si el formulario no los cambia.
             usuario.setRoles(existente.getRoles());
-            // Mantener imagen
             usuario.setRutaImagen(existente.getRutaImagen());
-            // Mantener contraseña
             if (usuario.getPassword() == null || usuario.getPassword().isBlank()) {
                 usuario.setPassword(existente.getPassword());
             } else {
@@ -117,7 +115,7 @@ public class UsuarioService {
         }
         usuario = usuarioRepository.save(usuario);
 
-        // Si seleccionó imagen nueva
+        // Si llega una imagen nueva, se sube y se guarda su URL.
         if (imagenFile != null && !imagenFile.isEmpty()) {
 
             try {
@@ -132,9 +130,9 @@ public class UsuarioService {
             }
 
         }
-        // Rol por defecto para usuarios nuevos
+        // Los usuarios nuevos reciben el rol indicado o Conductor por defecto.
         if (nuevoUsuario) {
-            Integer idRolFinal = (idRol != null) ? idRol : 3; // Si el formulario no envía un rol (idRol es null) se asigna Conductor (id 3) por defecto
+            Integer idRolFinal = (idRol != null) ? idRol : 3;
             Rol rol = rolRepository.findById(idRolFinal)
                 .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
 
@@ -145,16 +143,15 @@ public class UsuarioService {
 
     @Transactional
     public void delete(Integer idUsuario) {
-        // Verifica si la categoría existe antes de intentar eliminarlo
+        // Verifica que exista antes de eliminarlo.
         if (!usuarioRepository.existsById(idUsuario)) {
-            // Lanza una excepción para indicar que el usuario no fue encontrado
             throw new IllegalArgumentException(
                     "El usuario con ID " + idUsuario + " no existe.");
         }
         try {
             usuarioRepository.deleteById(idUsuario);
         } catch (DataIntegrityViolationException e) {
-            // Excepción para encapsular el problema de integridad de datos
+            // Evita borrar usuarios con datos asociados.
             throw new IllegalStateException(
                     "No se puede eliminar el usuario. Tiene datos asociados.", e);
         }

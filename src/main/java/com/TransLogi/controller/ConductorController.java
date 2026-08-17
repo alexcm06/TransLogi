@@ -132,6 +132,7 @@ public class ConductorController {
             Model model,
             RedirectAttributes redirectAttributes) {
 
+        // Muestra solo los viajes asignados al conductor autenticado.
         String username = authentication.getName();
         Conductor conductor = conductorService.getConductorPorUsername(username);
 
@@ -164,6 +165,7 @@ public class ConductorController {
             Model model,
             RedirectAttributes redirectAttributes) {
 
+        // Valida que el viaje pertenezca al conductor antes de mostrarlo.
         String username = authentication.getName();
         Conductor conductor = conductorService.getConductorPorUsername(username);
 
@@ -185,6 +187,7 @@ public class ConductorController {
                 viaje.getFechaHoraInicio() != null ? viaje.getFechaHoraInicio() : ahora;
         DateTimeFormatter formatoFechaHora = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
+        // El inicio se habilita desde 30 minutos antes de la hora programada.
         model.addAttribute("viaje", viaje);
         model.addAttribute("puedeIniciar",
                 !ahora.isBefore(fechaHoraProgramada.minusMinutes(30)));
@@ -219,6 +222,7 @@ public class ConductorController {
                 viaje.getHoraProgramada());
         LocalDateTime ahora = LocalDateTime.now();
 
+        // Evita iniciar viajes antes de la ventana permitida.
         if (ahora.isBefore(fechaHoraProgramada.minusMinutes(30))) {
             redirectAttributes.addFlashAttribute("error",
                     messageSource.getMessage("viaje.inicioNoDisponible", null, Locale.getDefault()));
@@ -263,6 +267,7 @@ public class ConductorController {
 
         Viaje viaje = viajeOpt.get();
 
+        // Solo un viaje en proceso puede pasar a finalizado.
         if (!viaje.getEstadoViaje().getNombreEstado().equalsIgnoreCase("En proceso")) {
             redirectAttributes.addFlashAttribute("error",
                     messageSource.getMessage("viaje.soloProceso", null, Locale.getDefault()));
@@ -281,6 +286,7 @@ public class ConductorController {
             return "redirect:/conductor/viaje/detalle/" + idViaje;
         }
 
+        // Guarda los datos reales del cierre antes de cambiar el estado.
         viaje.setKilometrosRecorridos(kilometrosRecorridos);
         viaje.setFechaHoraInicio(fechaHoraInicio);
         viaje.setFechaHoraFin(fechaHoraFin);
@@ -321,6 +327,7 @@ public class ConductorController {
         }
 
         Viaje viaje = viajeOpt.get();
+        // Los gastos se registran solo en viajes iniciados o finalizados.
         if (viaje.getEstadoViaje() == null
                 || viaje.getEstadoViaje().getNombreEstado().equalsIgnoreCase("Programado")) {
             redirectAttributes.addFlashAttribute("error",

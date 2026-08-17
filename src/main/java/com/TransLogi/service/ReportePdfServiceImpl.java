@@ -32,16 +32,16 @@ public class ReportePdfServiceImpl implements ReportePdfService {
             PdfDocument pdf = new PdfDocument(writer);
             Document document = new Document(pdf);
 
-            // Título
+            // Titulo principal del reporte.
             document.add(new Paragraph("TRANSLOGI - Reporte de Viajes")
                     .setBold()
                     .setFontSize(18));
 
-            // Tabla con las 9 columnas (igual al Excel)
+            // Tabla con las mismas columnas usadas en el Excel.
             Table table = new Table(UnitValue.createPercentArray(new float[]{8, 12, 10, 15, 15, 12, 12, 10, 6}));
             table.setWidth(UnitValue.createPercentValue(100));
 
-            // Encabezados
+            // Encabezados visibles del reporte.
             String[] columnas = {"ID", "Fecha", "Hora", "Empresa", "Conductor", "Origen", "Destino", "Estado", "Pasajeros"};
             for (String col : columnas) {
                 table.addHeaderCell(col);
@@ -49,7 +49,7 @@ public class ReportePdfServiceImpl implements ReportePdfService {
 
             DateTimeFormatter formatoHora = DateTimeFormatter.ofPattern("HH:mm");
 
-            // Filas
+            // Filas generadas desde los viajes filtrados.
             for (Viaje v : viajes) {
                 table.addCell(v.getIdViaje() != null ? String.valueOf(v.getIdViaje()) : "");
                 table.addCell(v.getFechaProgramada() != null ? v.getFechaProgramada().toString() : "");

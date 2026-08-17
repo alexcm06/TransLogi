@@ -38,7 +38,7 @@
 //
 //    @GetMapping("/listado")
 //    public String listado(Model model) {
-//        // 2. Invocamos getEstados() de tu service (este método no recibe parámetros booleanos)
+//        // 2. Invoca getRoles() del servicio para cargar el listado.
 //        var roles = rolService.getRoles();
 //        model.addAttribute("roles", roles);
 //        model.addAttribute("totalRoles", roles.size());

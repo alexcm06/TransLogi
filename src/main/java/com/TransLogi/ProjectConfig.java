@@ -17,7 +17,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 @Configuration
 public class ProjectConfig implements WebMvcConfigurer {
 
-    /* El siguiente método se utilizar para publicar en la nube, independientemente  */
+    // Permite resolver plantillas HTML desde resources/templates.
     @Bean
     public SpringResourceTemplateResolver templateResolver_0() {
         SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
@@ -31,30 +31,31 @@ public class ProjectConfig implements WebMvcConfigurer {
     
     @Bean
     public LocaleResolver localeResolver() {
-    var slr = new SessionLocaleResolver();
-    slr.setDefaultLocale(Locale.getDefault());
-    slr.setLocaleAttributeName("session.current.locale");
-    slr.setTimeZoneAttributeName("session.current.timezone");
-    return slr;
+        var slr = new SessionLocaleResolver();
+        slr.setDefaultLocale(Locale.getDefault());
+        slr.setLocaleAttributeName("session.current.locale");
+        slr.setTimeZoneAttributeName("session.current.timezone");
+        return slr;
     }
+
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
-    var lci = new LocaleChangeInterceptor();
-    lci.setParamName("lang");
-    return lci;
+        var lci = new LocaleChangeInterceptor();
+        lci.setParamName("lang");
+        return lci;
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registro) {
-    registro.addInterceptor(localeChangeInterceptor());
+        registro.addInterceptor(localeChangeInterceptor());
     }
     
-    // Bean para poder acceder a los messages.properties en código...
+    // Expone los textos de messages.properties para Java y Thymeleaf.
     @Bean("messageSource")
     public MessageSource messageSource() {
-    ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-    messageSource.setBasenames("messages");
-    messageSource.setDefaultEncoding("UTF-8");
-    return messageSource;
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasenames("messages");
+        messageSource.setDefaultEncoding("UTF-8");
+        return messageSource;
     }
 }
