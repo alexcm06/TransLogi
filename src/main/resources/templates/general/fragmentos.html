@@ -29,7 +29,7 @@
 
         <nav class="sidebar-menu">
 
-            <!-- MenÃº general accesible para administradores y supervisores -->
+            <!-- Menú general accesible para administradores y supervisores -->
             <div sec:authorize="hasAnyRole('Administrador','Supervisor')">
 
                 <a th:href="@{/}">
@@ -65,7 +65,7 @@
                 </a>
             </div>
 
-            <!-- MenÃº exclusivo para [[#{menu.conductores}]] -->
+            <!-- Menú exclusivo para [[#{menu.conductores}]] -->
             <div sec:authorize="hasRole('Conductor')">
                 <a th:href="@{/conductor/mis-viajes}">
                     <i class="bi bi-journal-text"></i> [[#{menu.misViajes}]]
@@ -105,14 +105,14 @@
 
             <hr class="text-secondary">
 
-            <!-- SecciÃ³n cuando NO estÃ¡ autenticado ([[#{login.iniciar}]]) -->
+            <!-- Sección cuando NO está autenticado ([[#{login.iniciar}]]) -->
             <div sec:authorize="!isAuthenticated()" class="px-3 mb-2">
                 <a th:href="@{/login}" class="btn btn-primary btn-sm w-100">
                     <i class="bi bi-box-arrow-in-right"></i> [[#{login.iniciar}]]
                 </a>
             </div>
 
-            <!-- SecciÃ³n cuando SÃ estÃ¡ autenticado ([[#{campo.usuario}]] + [[#{menu.cerrarSesion}]]) -->
+            <!-- Sección cuando SÍ está autenticado ([[#{campo.usuario}]] + [[#{menu.cerrarSesion}]]) -->
             <ul class="navbar-nav" sec:authorize="isAuthenticated()">
                 <li class="nav-item my-auto px-2">
                     <a class="nav-link text-white d-flex align-items-center p-0 mb-2">

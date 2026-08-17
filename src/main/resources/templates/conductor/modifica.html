@@ -149,7 +149,7 @@
                                            required
                                            minlength="2"
                                            maxlength="100"
-                                           pattern="^[A-Za-zÃÃ‰ÃÃ“ÃšÃ¡Ã©Ã­Ã³ÃºÃ‘Ã± ]+$">
+                                           pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
 
                                 </div>
 
@@ -164,7 +164,7 @@
                                            th:field="*{telefono}"
                                            required
                                            pattern="[0-9]{4}-?[0-9]{4}"
-                                           maxlength="8">
+                                           maxlength="9">
 
                                 </div>
 
